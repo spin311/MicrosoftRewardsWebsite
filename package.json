@@ -1,0 +1,24 @@
+{
+  "name": "mrb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "background.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spin311/MicrosoftRewardsBot.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/spin311/MicrosoftRewardsBot/issues"
+  },
+  "homepage": "https://github.com/spin311/MicrosoftRewardsBot#readme",
+  "devDependencies": {
+    "@types/chrome": "^0.0.244",
+    "typescript": "^5.2.2"
+  }
+}
