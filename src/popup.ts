@@ -5,7 +5,6 @@ function popup(): void{
     let searches: string[] = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
     for (let i: number = 0; i < searches.length; i++) {
       let url: string = format + searches[i];
-      setTimeout(function(){
         chrome.tabs.create({url: url, active: false}, function (tab: any) {
           let idCurr: number = tab.id; 
           chrome.tabs.onUpdated.addListener(function listener(tabId:number, changeInfo:chrome.tabs.TabChangeInfo) {
@@ -17,7 +16,6 @@ function popup(): void{
           });
           
         });
-      },1000);
 
       
     }
@@ -37,22 +35,30 @@ function () {
   });
   }
   if(autoBool) {
+    chrome.storage.sync.get("active", function(result){
+      if(result.active === true) {
+        autoBool.checked = true;
+      }
+    });
     active = autoBool.checked;
     autoBool.addEventListener("click", function(){
       active = autoBool.checked;
+      chrome.storage.sync.set({"active": active});
+
+      if(active) {
+        checkLastOpened();
+     }
+
     });
-    autoTabs(active);
+    if(active) {
+      checkLastOpened();
+   }
   }
 }); 
 
-function autoTabs(active: boolean): void {
-  if(active) {
-    checkLastOpened();
-
-  }
-}
 
 function checkLastOpened(): void {
+  console.log("checking...");
   const today = new Date().toLocaleDateString();
   chrome.storage.sync.get("lastOpened", function(result) {
     if(result.lastOpened === today) {
