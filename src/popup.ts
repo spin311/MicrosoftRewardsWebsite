@@ -2,7 +2,7 @@
 
 function popup(): void {
   let format: string = "https://www.bing.com/search?q=";
-  let searches: string[] = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
+  let searches: string[] = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants", "nba", "world cup"];
   for (let i: number = 0; i < searches.length; i++) {
     let url: string = format + searches[i];
     chrome.tabs.create({
@@ -28,6 +28,7 @@ let active = false;
 
 
 chrome.runtime.onStartup.addListener(function(){
+  console.log("startup");
   chrome.storage.sync.get("active", function (result) {
     if (result.active === true) {
       active = true;
