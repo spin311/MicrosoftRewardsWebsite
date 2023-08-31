@@ -22,16 +22,19 @@ function popup(){
 
 document.addEventListener('DOMContentLoaded',
 function () {
+  // popup(); 
+  const button = document.getElementById("button");
+  if (button) {
+  button.addEventListener("click", function(){
+
   popup();
+  });
+  }
+  else {
+  }
 }); 
 
-const button: any = document.getElementById("button");
-// if (button) {
-  button.addEventListener("click", popup);
-// }
-// else {
-//   console.log("button not found");
-// }
+
     
 
 

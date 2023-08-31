@@ -2,13 +2,26 @@
 <html>
   <head>
     <title>Microsoft rewards bot</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI" crossorigin="anonymous">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link href="popup.css" rel="stylesheet">
   </head>
   <body>
-    <h1>Microsoft rewards bot</h1>
+    <h4 class="container-fluid text-center mt-2">Microsoft rewards bot</h1>
 
-    <button id="button" class="btn btn-primary" onclick="popup()">Start</button>
+    <div class="text-center m3">
+    <button id="button" class="btn btn-primary my-2">Start</button>
+
+    <div class="form-check text-center d-flex justify-content-center ml-3 my-2">
+      <input class="form-check-input me-2" type="checkbox" value="" id="autoCheckbox">
+      <label class="form-check-label" for="autoCheckbox">
+        Open tabs automatically every day
+      </label>
+    </div>
+    <a href="https://www.microsoft.com/sl-si/rewards/" target="_blank">Open Microsoft rewards</a>
+
+    </div>
+
   </body>
 </html>
 
-<script src="dist/popup.js"></script>
+<script src="src/popup.js"></script>

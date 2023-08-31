@@ -15,15 +15,16 @@ function popup() {
     }
 }
 document.addEventListener('DOMContentLoaded', function () {
-    popup();
+    // popup(); 
+    var button = document.getElementById("button");
+    if (button) {
+        button.addEventListener("click", function () {
+            popup();
+        });
+    }
+    else {
+    }
 });
-var button = document.getElementById("button");
-// if (button) {
-button.addEventListener("click", popup);
-// }
-// else {
-//   console.log("button not found");
-// }
 function waitAndClose(id) {
     console.log("waitAndClose");
     setTimeout(function () {
