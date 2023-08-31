@@ -3,7 +3,9 @@ function popup() {
     var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
     for (var i = 0; i < searches.length; i++) {
         var url = format + searches[i];
-        chrome.tabs.create({ url: url, active: false }, function (tab) {
+        chrome.tabs.create({
+            url: url, active: false
+        }, function (tab) {
             var idCurr = tab.id;
             chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
                 if (tabId === idCurr && changeInfo.status === "complete") {
@@ -14,9 +16,18 @@ function popup() {
         });
     }
 }
+var active = false;
+chrome.runtime.onStartup.addListener(function () {
+    chrome.storage.sync.get("active", function (result) {
+        if (result.active === true) {
+            active = true;
+        }
+    });
+    if (active) {
+        checkLastOpened();
+    }
+});
 document.addEventListener('DOMContentLoaded', function () {
-    // popup(); 
-    var active = false;
     var autoBool = document.getElementById("autoCheckbox");
     var button = document.getElementById("button");
     if (button) {
@@ -25,19 +36,21 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     if (autoBool) {
-        chrome.storage.sync.get("active", function (result) {
-            if (result.active === true) {
-                autoBool.checked = true;
-            }
-        });
-        active = autoBool.checked;
+        // chrome.storage.sync.get("active", function (result) {
+        //   if (result.active === true) {
+        //     active = true;
+        //   }
+        // });
+        autoBool.checked = active;
         autoBool.addEventListener("click", function () {
             active = autoBool.checked;
             chrome.storage.sync.set({ "active": active });
+            //maybe comment this part out
             if (active) {
                 checkLastOpened();
             }
         });
+        //maybe comment this part out
         if (active) {
             checkLastOpened();
         }

@@ -24,11 +24,23 @@ function popup(): void {
   }
 
 }
+let active = false;
+
+
+chrome.runtime.onStartup.addListener(function(){
+  chrome.storage.sync.get("active", function (result) {
+    if (result.active === true) {
+      active = true;
+    }
+  });
+  if (active) {
+    checkLastOpened();
+  }
+
+});
 
 document.addEventListener('DOMContentLoaded',
   function () {
-    // popup(); 
-    let active: boolean = false;
     let autoBool = document.getElementById("autoCheckbox") as HTMLInputElement;
     const button = document.getElementById("button");
     if (button) {
@@ -38,26 +50,28 @@ document.addEventListener('DOMContentLoaded',
       });
     }
     if (autoBool) {
-      chrome.storage.sync.get("active", function (result) {
-        if (result.active === true) {
-          autoBool.checked = true;
-        }
-      });
-      active = autoBool.checked;
+      // chrome.storage.sync.get("active", function (result) {
+      //   if (result.active === true) {
+      //     active = true;
+      //   }
+      // });
+      autoBool.checked = active;
       autoBool.addEventListener("click", function () {
         active = autoBool.checked;
         chrome.storage.sync.set({ "active": active });
-
+        //maybe comment this part out
         if (active) {
           checkLastOpened();
         }
 
       });
+        //maybe comment this part out
       if (active) {
         checkLastOpened();
       }
     }
   });
+
 
 
 function checkLastOpened(): void {
