@@ -1,20 +1,24 @@
 
-function popup(){
+
+function popup(): void{
   let format: string = "https://www.bing.com/search?q=";
     let searches: string[] = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
     for (let i: number = 0; i < searches.length; i++) {
       let url: string = format + searches[i];
-      chrome.tabs.create({url: url, active: false}, function (tab: any) {
-        let idCurr: number = tab.id; // id of the tab that was just opened
-        chrome.tabs.onUpdated.addListener(function listener(tabId:number, changeInfo:chrome.tabs.TabChangeInfo) {
-          if(tabId === idCurr && changeInfo.status === "complete"){
-            chrome.tabs.onUpdated.removeListener(listener);
-            waitAndClose(idCurr);
-          }
-
+      setTimeout(function(){
+        chrome.tabs.create({url: url, active: false}, function (tab: any) {
+          let idCurr: number = tab.id; 
+          chrome.tabs.onUpdated.addListener(function listener(tabId:number, changeInfo:chrome.tabs.TabChangeInfo) {
+            if(tabId === idCurr && changeInfo.status === "complete"){
+              chrome.tabs.onUpdated.removeListener(listener);
+              waitAndClose(idCurr);
+            }
+  
+          });
+          
         });
-        
-      });
+      },1000);
+
       
     }
   
@@ -23,6 +27,8 @@ function popup(){
 document.addEventListener('DOMContentLoaded',
 function () {
   // popup(); 
+  let active: boolean = false;
+  let autoBool = document.getElementById("autoCheckbox") as HTMLInputElement;
   const button = document.getElementById("button");
   if (button) {
   button.addEventListener("click", function(){
@@ -30,16 +36,39 @@ function () {
   popup();
   });
   }
-  else {
+  if(autoBool) {
+    active = autoBool.checked;
+    autoBool.addEventListener("click", function(){
+      active = autoBool.checked;
+    });
+    autoTabs(active);
   }
 }); 
 
+function autoTabs(active: boolean): void {
+  if(active) {
+    checkLastOpened();
 
+  }
+}
+
+function checkLastOpened(): void {
+  const today = new Date().toLocaleDateString();
+  chrome.storage.sync.get("lastOpened", function(result) {
+    if(result.lastOpened === today) {
+      console.log("already opened today");
+    }
+    else {
+      popup();
+      chrome.storage.sync.set({"lastOpened": today});
+    }
+  });
+}
     
 
 
 
-function waitAndClose(id: number){
+function waitAndClose(id: number): void{
   console.log("waitAndClose");
   setTimeout(function(){
     chrome.tabs.remove(id);

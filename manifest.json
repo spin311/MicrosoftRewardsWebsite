@@ -7,8 +7,7 @@
   "permissions": [
     "activeTab",
     "tabs",
-    "http://*/*",
-    "https://*/*"
+    "storage"
   ],
   "background": {
     "scripts": ["src/popup.js"],
