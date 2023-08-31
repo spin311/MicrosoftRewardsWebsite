@@ -1,5 +1,5 @@
 # MicrosoftRewardsBot
-<p>Script that gives you microsoft rewards points every day automatically or by a click of a button. </p>
+<p>Script that gives you maximum ammout of microsoft rewards points every day automatically or by a click of a button. </p>
 
 ## Features
 <br>

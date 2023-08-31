@@ -1,4 +1,4 @@
-
+import { getActive } from "./background";
 
 function popup(): void {
   let format: string = "https://www.bing.com/search?q=";
@@ -27,18 +27,7 @@ function popup(): void {
 let active = false;
 
 
-chrome.runtime.onStartup.addListener(function(){
-  console.log("startup");
-  chrome.storage.sync.get("active", function (result) {
-    if (result.active === true) {
-      active = true;
-    }
-  });
-  if (active) {
-    checkLastOpened();
-  }
 
-});
 
 document.addEventListener('DOMContentLoaded',
   function () {
@@ -56,7 +45,7 @@ document.addEventListener('DOMContentLoaded',
       //     active = true;
       //   }
       // });
-      autoBool.checked = active;
+      autoBool.checked = getActive();
       autoBool.addEventListener("click", function () {
         active = autoBool.checked;
         chrome.storage.sync.set({ "active": active });
@@ -75,7 +64,7 @@ document.addEventListener('DOMContentLoaded',
 
 
 
-function checkLastOpened(): void {
+export function checkLastOpened(): void {
   console.log("checking...");
   const today = new Date().toLocaleDateString();
   chrome.storage.sync.get("lastOpened", function (result) {

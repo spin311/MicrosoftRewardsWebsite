@@ -1,8 +1,8 @@
 {
-  "manifest_version": 2,
+  "manifest_version": 3,
   "name": "Microsoft rewards bot",
   "version": "1.0.0",
-  "description": "Bot for Microsoft rewards",
+  "description": "Automatic Microsoft rewards bot",
 
   "permissions": [
     "activeTab",
@@ -10,8 +10,7 @@
     "storage"
   ],
   "background": {
-    "scripts": ["src/popup.js"],
-    "persistent": false
+    "service_worker": "src/background.js"
   },
   "content_scripts": [
     {
@@ -19,9 +18,14 @@
       "js": ["src/popup.js"]
     }
   ],
-  "browser_action": {
-    "default_icon": "imgs/logo2.png",
+  "action": {
+    "default_icon":  {
+      "16": "imgs/logo.png",
+      "32": "imgs/logo2.png",
+      "48": "imgs/logo2.png",
+      "128": "imgs/logo3.png"
+    },
     "default_popup": "./popup.html",
-    "default_title": "Microsoft rewards bot"
+    "title": "Microsoft rewards bot"
   }
 }

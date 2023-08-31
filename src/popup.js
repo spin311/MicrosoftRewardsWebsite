@@ -1,6 +1,10 @@
+"use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.checkLastOpened = void 0;
+var background_1 = require("./background");
 function popup() {
     var format = "https://www.bing.com/search?q=";
-    var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
+    var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants", "nba", "world cup"];
     for (var i = 0; i < searches.length; i++) {
         var url = format + searches[i];
         chrome.tabs.create({
@@ -17,16 +21,6 @@ function popup() {
     }
 }
 var active = false;
-chrome.runtime.onStartup.addListener(function () {
-    chrome.storage.sync.get("active", function (result) {
-        if (result.active === true) {
-            active = true;
-        }
-    });
-    if (active) {
-        checkLastOpened();
-    }
-});
 document.addEventListener('DOMContentLoaded', function () {
     var autoBool = document.getElementById("autoCheckbox");
     var button = document.getElementById("button");
@@ -41,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
         //     active = true;
         //   }
         // });
-        autoBool.checked = active;
+        autoBool.checked = (0, background_1.getActive)();
         autoBool.addEventListener("click", function () {
             active = autoBool.checked;
             chrome.storage.sync.set({ "active": active });
@@ -69,6 +63,7 @@ function checkLastOpened() {
         }
     });
 }
+exports.checkLastOpened = checkLastOpened;
 function waitAndClose(id) {
     console.log("waitAndClose");
     setTimeout(function () {
