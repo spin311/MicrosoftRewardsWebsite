@@ -1,0 +1,13 @@
+#dirs
+node_modules/
+dist/
+.cache/
+
+#logs
+*.log
+*.log.*
+
+#npm cache
+.npm
+
+.vscode/
