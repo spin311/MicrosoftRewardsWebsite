@@ -1,4 +1,4 @@
-// import { getActive } from "./background";
+//opens 10 tabs with bing searches
 function popup() {
     var format = "https://www.bing.com/search?q=";
     var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants", "nba", "world cup"];
@@ -8,6 +8,7 @@ function popup() {
             url: url, active: false
         }, function (tab) {
             var idCurr = tab.id;
+            //wait for tab to load before closing
             chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
                 if (tabId === idCurr && changeInfo.status === "complete") {
                     chrome.tabs.onUpdated.removeListener(listener);
@@ -18,6 +19,7 @@ function popup() {
     }
 }
 var active = false;
+//wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded', function () {
     var autoBool = document.getElementById("autoCheckbox");
     var button = document.getElementById("button");
@@ -26,6 +28,7 @@ document.addEventListener('DOMContentLoaded', function () {
             popup();
         });
     }
+    //check if user has already clicked the checkbox
     if (autoBool) {
         chrome.storage.sync.get("active", function (result) {
             if (result.active === true) {
@@ -36,17 +39,13 @@ document.addEventListener('DOMContentLoaded', function () {
         autoBool.addEventListener("click", function () {
             active = autoBool.checked;
             chrome.storage.sync.set({ "active": active });
-            //maybe comment this part out
             if (active) {
                 checkLastOpened();
             }
         });
-        //maybe comment this part out
-        if (active) {
-            checkLastOpened();
-        }
     }
 });
+//check if user has already opened tabs today
 function checkLastOpened() {
     console.log("checking...");
     var today = new Date().toLocaleDateString();
@@ -60,11 +59,13 @@ function checkLastOpened() {
         }
     });
 }
+//listen for message from background.ts
 chrome.runtime.onMessage.addListener(function (message) {
     if (message.active === true) {
         checkLastOpened();
     }
 });
+//wait 1 second before closing tab
 function waitAndClose(id) {
     console.log("waitAndClose");
     setTimeout(function () {
