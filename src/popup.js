@@ -1,7 +1,4 @@
-"use strict";
-Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkLastOpened = void 0;
-var background_1 = require("./background");
+// import { getActive } from "./background";
 function popup() {
     var format = "https://www.bing.com/search?q=";
     var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants", "nba", "world cup"];
@@ -30,12 +27,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
     if (autoBool) {
-        // chrome.storage.sync.get("active", function (result) {
-        //   if (result.active === true) {
-        //     active = true;
-        //   }
-        // });
-        autoBool.checked = (0, background_1.getActive)();
+        chrome.storage.sync.get("active", function (result) {
+            if (result.active === true) {
+                active = true;
+                autoBool.checked = active;
+            }
+        });
         autoBool.addEventListener("click", function () {
             active = autoBool.checked;
             chrome.storage.sync.set({ "active": active });
@@ -63,7 +60,11 @@ function checkLastOpened() {
         }
     });
 }
-exports.checkLastOpened = checkLastOpened;
+chrome.runtime.onMessage.addListener(function (message) {
+    if (message.active === true) {
+        checkLastOpened();
+    }
+});
 function waitAndClose(id) {
     console.log("waitAndClose");
     setTimeout(function () {

@@ -1,4 +1,4 @@
-import { getActive } from "./background";
+// import { getActive } from "./background";
 
 function popup(): void {
   let format: string = "https://www.bing.com/search?q=";
@@ -40,12 +40,13 @@ document.addEventListener('DOMContentLoaded',
       });
     }
     if (autoBool) {
-      // chrome.storage.sync.get("active", function (result) {
-      //   if (result.active === true) {
-      //     active = true;
-      //   }
-      // });
-      autoBool.checked = getActive();
+      chrome.storage.sync.get("active", function (result) {
+        if (result.active === true) {
+          active = true;
+          autoBool.checked = active;
+
+        }
+      });
       autoBool.addEventListener("click", function () {
         active = autoBool.checked;
         chrome.storage.sync.set({ "active": active });
@@ -64,7 +65,7 @@ document.addEventListener('DOMContentLoaded',
 
 
 
-export function checkLastOpened(): void {
+function checkLastOpened(): void {
   console.log("checking...");
   const today = new Date().toLocaleDateString();
   chrome.storage.sync.get("lastOpened", function (result) {
@@ -77,6 +78,13 @@ export function checkLastOpened(): void {
     }
   });
 }
+
+chrome.runtime.onMessage.addListener(function(message){
+  if(message.active === true){
+    checkLastOpened();
+  }
+
+});
 
 
 
