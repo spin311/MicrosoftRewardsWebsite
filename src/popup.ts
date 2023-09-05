@@ -1,29 +1,7 @@
 
 //opens 10 tabs with bing searches
 function popup(): void {
-  let format: string = "https://www.bing.com/search?q=";
-  let searches: string[] = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants", "nba", "world cup"];
-  for (let i: number = 0; i < searches.length; i++) {
-    let url: string = format + searches[i];
-    chrome.tabs.create({
-      url: url, active: false
-    },
-      function (tab: any) {
-        let idCurr: number = tab.id;
-        //wait for tab to load before closing
-        chrome.tabs.onUpdated.addListener(function listener(tabId: number, changeInfo: chrome.tabs.TabChangeInfo) {
-          if (tabId === idCurr && changeInfo.status === "complete") {
-            chrome.tabs.onUpdated.removeListener(listener);
-            waitAndClose(idCurr);
-          }
-
-        });
-
-      });
-
-
-  }
-
+  chrome.runtime.sendMessage({action: "popup"});
 }
 let active = false;
 
@@ -33,11 +11,12 @@ let active = false;
 document.addEventListener('DOMContentLoaded',
   function () {
     let autoBool = document.getElementById("autoCheckbox") as HTMLInputElement;
-    const button = document.getElementById("button");
+    const button = document.getElementById("button") as HTMLButtonElement;
     if (button) {
       button.addEventListener("click", function () {
-
+        disableButton(button);
         popup();
+
       });
     }
     //check if user has already clicked the checkbox
@@ -53,7 +32,7 @@ document.addEventListener('DOMContentLoaded',
         active = autoBool.checked;
         chrome.storage.sync.set({ "active": active });
         if (active) {
-          checkLastOpened();
+          checkLastOpenedPopup();
         }
 
       });
@@ -62,35 +41,18 @@ document.addEventListener('DOMContentLoaded',
   });
 
 
-//check if user has already opened tabs today
-function checkLastOpened(): void {
-  console.log("checking...");
-  const today = new Date().toLocaleDateString();
-  chrome.storage.sync.get("lastOpened", function (result) {
-    if (result.lastOpened === today) {
-      console.log("already opened today");
-    }
-    else {
-      popup();
-      chrome.storage.sync.set({ "lastOpened": today });
-    }
-  });
+
+function disableButton(button: HTMLButtonElement): void {
+  button.disabled = true;
+  button.classList.replace("btn-primary","btn-secondary");
+  setTimeout(function(){
+    button.disabled = false;
+    button.classList.replace("btn-secondary","btn-primary");
+  },3000);
+
+
 }
 
-//listen for message from background.ts
-chrome.runtime.onMessage.addListener(function(message){
-  if(message.active === true){
-    checkLastOpened();
-  }
-
-});
-
-
-
-//wait 1 second before closing tab
-function waitAndClose(id: number): void {
-  console.log("waitAndClose");
-  setTimeout(function () {
-    chrome.tabs.remove(id);
-  }, 1000);
+function checkLastOpenedPopup(): void{
+  chrome.runtime.sendMessage({action: "check"});
 }
