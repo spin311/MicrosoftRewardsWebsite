@@ -28,6 +28,7 @@ document.addEventListener('DOMContentLoaded',
 
         }
       });
+      //listen for checkbox click
       autoBool.addEventListener("click", function () {
         active = autoBool.checked;
         chrome.storage.sync.set({ "active": active });
@@ -41,7 +42,7 @@ document.addEventListener('DOMContentLoaded',
   });
 
 
-
+//disable button for 3 seconds
 function disableButton(button: HTMLButtonElement): void {
   button.disabled = true;
   button.classList.replace("btn-primary","btn-secondary");
@@ -53,6 +54,7 @@ function disableButton(button: HTMLButtonElement): void {
 
 }
 
+//check if user has already opened tabs today
 function checkLastOpenedPopup(): void{
   chrome.runtime.sendMessage({action: "check"});
 }
