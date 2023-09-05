@@ -8,7 +8,7 @@
     "48": "imgs/logo2.png",
     "128": "imgs/logo3.png"
   },
-  "description": "Automatic Microsoft rewards bot",
+  "description": "Script that gives you maximum ammout of microsoft rewards points every day automatically or by a click of a button.",
 
   "permissions": [
     "activeTab",
