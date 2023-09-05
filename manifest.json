@@ -2,6 +2,12 @@
   "manifest_version": 3,
   "name": "Microsoft rewards bot",
   "version": "1.0.0",
+  "icons": {
+    "16": "imgs/logo.png",
+    "32": "imgs/logo2.png",
+    "48": "imgs/logo2.png",
+    "128": "imgs/logo3.png"
+  },
   "description": "Automatic Microsoft rewards bot",
 
   "permissions": [
