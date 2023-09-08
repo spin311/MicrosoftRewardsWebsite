@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "Microsoft rewards bot",
+  "name": "Microsoft automatic rewards",
   "version": "1.0.0",
   "icons": {
     "16": "imgs/logo.png",
