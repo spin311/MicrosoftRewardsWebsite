@@ -14,7 +14,7 @@
 ## HOW TO USE
 
 <ol>
-    <li>In command prompt: Git fork https://github.com/spin311/MicrosoftRewardsBot</li>
+    <li>In command prompt: git fork https://github.com/spin311/MicrosoftRewardsBot</li>
     <li> Google-> 3 dots in the right corner-> manage extensions </li>
     <li> In the top right corner toggle on Developer mode</li>
     <li> In the top left corner click Load unpacked</li>

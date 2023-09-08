@@ -21,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 autoBool.checked = active;
             }
         });
+        //listen for checkbox click
         autoBool.addEventListener("click", function () {
             active = autoBool.checked;
             chrome.storage.sync.set({ "active": active });
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+//disable button for 3 seconds
 function disableButton(button) {
     button.disabled = true;
     button.classList.replace("btn-primary", "btn-secondary");
@@ -38,6 +40,7 @@ function disableButton(button) {
         button.classList.replace("btn-secondary", "btn-primary");
     }, 3000);
 }
+//check if user has already opened tabs today
 function checkLastOpenedPopup() {
     chrome.runtime.sendMessage({ action: "check" });
 }

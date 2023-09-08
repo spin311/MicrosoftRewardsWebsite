@@ -1,15 +1,12 @@
 // on startup, check if user has already clicked the checkbox
 chrome.runtime.onStartup.addListener(function () {
-    console.log("startup");
     chrome.storage.sync.get("active", function (result) {
         if (result.active === true) {
             checkLastOpened();
         }
-        else {
-            console.log("not sending message");
-        }
     });
 });
+//listen for messages from popup.ts
 chrome.runtime.onMessage.addListener(function (request) {
     if (request.action === "popup") {
         popupBg();
@@ -18,6 +15,7 @@ chrome.runtime.onMessage.addListener(function (request) {
         checkLastOpened();
     }
 });
+//opens 10 tabs with bing search
 function popupBg() {
     var format = "https://www.bing.com/search?q=";
     var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
@@ -44,11 +42,9 @@ function popupBg() {
 }
 //check if user has already opened tabs today
 function checkLastOpened() {
-    console.log("checking...");
     var today = new Date().toLocaleDateString();
     chrome.storage.sync.get("lastOpened", function (result) {
         if (result.lastOpened === today) {
-            console.log("already opened today");
         }
         else {
             popupBg();
@@ -58,7 +54,6 @@ function checkLastOpened() {
 }
 //wait 0.3 second before closing tab
 function waitAndClose(id) {
-    console.log("waitAndClose");
     setTimeout(function () {
         chrome.tabs.remove(id);
     }, 300);
