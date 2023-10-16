@@ -1,0 +1,3 @@
+Automatic Microsoft rewards. Need to be logged in with microsoft rewards to work: https://www.microsoft.com//rewards 
+
+You can either click button to open 10 tabs to get the rewards, or you can check checkbox and tabs will open and close automatically every day when you open chrome. Extension gives you 30 microsoft points every day. Points can be redeemed for different game currency or donated to charity.
