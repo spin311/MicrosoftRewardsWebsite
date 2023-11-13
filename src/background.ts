@@ -1,7 +1,7 @@
 // on startup, check if user has already clicked the checkbox
 chrome.runtime.onStartup.addListener(function(){
     chrome.storage.sync.get("active", function (result) {
-      if (result.active === true) {
+      if (result.active) {
         checkLastOpened();
       }
     });
