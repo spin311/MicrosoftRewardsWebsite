@@ -58,6 +58,10 @@ body {
     background-color: #28a745;
     border-color: #28a745;
   }
+
+  .btn-fail {
+    background-color: #5b5f5c;border-color: #5b5f5c;
+  }
   
   .my-2 {
     margin-top: 0.5rem !important;
