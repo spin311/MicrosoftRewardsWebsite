@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Noto+Sans+JP:wght@300&family=Poppins:wght@500&family=Rubik+Marker+Hatch&display=swap');
+
+h3 {
+    font-family: 'Poppins', sans-serif;
+}
+label, a {
+    font-family: 'Noto Sans JP', sans-serif;
+}
+
+body {
+    width: 20em;
+    height: 10em;
+    font-size: 18px;
+    background-color: #e6f5f1;
+
+}
+
+.container-fluid {
+    margin-right: auto;
+    margin-left: auto;
+    padding-right: 15px;
+    padding-left: 15px;
+  }
+  
+  .text-center {
+    text-align: center;
+  }
+  
+  .mt-2 {
+    margin-top: 0.5rem !important;
+  }
+  
+  .m-3 {
+    margin: 1rem !important;
+  }
+  
+  .btn {
+    display: inline-block;
+    font-weight: 400;
+    color: #fff;
+    text-align: center;
+    vertical-align: middle;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    background-color: #28a745;
+    border-color: #28a745;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    border-radius: 0.25rem;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  
+  .btn-success {
+    color: #fff;
+    background-color: #28a745;
+    border-color: #28a745;
+  }
+  
+  .my-2 {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
+  
+  .form-check {
+    position: relative;
+    display: block;
+    padding-left: 1.25rem;
+  }
+  
+  .form-check-input {
+    position: absolute;
+    margin-top: 0.3rem;
+    margin-left: -1.25rem;
+  }
+  
+  .me-2 {
+    margin-right: 0.5rem !important;
+  }
+  
+  .my-2 {
+    margin-top: 0.5rem !important;
+    margin-bottom: 0.5rem !important;
+  }
