@@ -34,7 +34,7 @@ function popupBg() {
                     }
                 });
             });
-        }, 200);
+        }, 100);
     };
     for (var i = 0; i < searches.length; i++) {
         _loop_1(i);
@@ -56,5 +56,5 @@ function checkLastOpened() {
 function waitAndClose(id) {
     setTimeout(function () {
         chrome.tabs.remove(id);
-    }, 300);
+    }, 100);
 }

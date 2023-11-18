@@ -22,7 +22,7 @@ document.addEventListener('DOMContentLoaded',
     //check if user has already clicked the checkbox
     if (autoBool) {
       chrome.storage.sync.get("active", function (result) {
-        if (result.active === true) {
+        if (result.active) {
           active = true;
           autoBool.checked = active;
 
@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded',
         active = autoBool.checked;
         chrome.storage.sync.set({ "active": active });
         if (active) {
-          checkLastOpenedPopup();
+          checkLastOpenedPopup(); //yer or no?
         }
 
       });
@@ -42,14 +42,14 @@ document.addEventListener('DOMContentLoaded',
   });
 
 
-//disable button for 3 seconds
+//disable button for 2 seconds
 function disableButton(button: HTMLButtonElement): void {
   button.disabled = true;
   button.classList.replace("btn-primary","btn-secondary");
   setTimeout(function(){
     button.disabled = false;
     button.classList.replace("btn-secondary","btn-primary");
-  },3000);
+  },2000);
 
 
 }

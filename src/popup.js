@@ -16,7 +16,7 @@ document.addEventListener('DOMContentLoaded', function () {
     //check if user has already clicked the checkbox
     if (autoBool) {
         chrome.storage.sync.get("active", function (result) {
-            if (result.active === true) {
+            if (result.active) {
                 active = true;
                 autoBool.checked = active;
             }
