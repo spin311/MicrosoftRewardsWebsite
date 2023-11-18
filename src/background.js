@@ -1,6 +1,6 @@
 chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.sync.set({ "active": true });
-    chrome.tabs.create({ url: "https://www.bing.com", active: true });
+    chrome.tabs.create({ url: "https://spin311.github.io/MicrosoftRewardsBotSite/", active: true });
 });
 // on startup, check if user has already clicked the checkbox
 chrome.runtime.onStartup.addListener(function () {
