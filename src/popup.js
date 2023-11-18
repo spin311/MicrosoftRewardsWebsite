@@ -2,7 +2,7 @@
 function popup() {
     chrome.runtime.sendMessage({ action: "popup" });
 }
-var active = false;
+var active = true;
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded', function () {
     var autoBool = document.getElementById("autoCheckbox");
@@ -26,19 +26,19 @@ document.addEventListener('DOMContentLoaded', function () {
             active = autoBool.checked;
             chrome.storage.sync.set({ "active": active });
             if (active) {
-                checkLastOpenedPopup();
+                checkLastOpenedPopup(); //yer or no?
             }
         });
     }
 });
-//disable button for 3 seconds
+//disable button for 2 seconds
 function disableButton(button) {
     button.disabled = true;
     button.classList.replace("btn-primary", "btn-secondary");
     setTimeout(function () {
         button.disabled = false;
         button.classList.replace("btn-secondary", "btn-primary");
-    }, 3000);
+    }, 2000);
 }
 //check if user has already opened tabs today
 function checkLastOpenedPopup() {

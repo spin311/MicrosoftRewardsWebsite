@@ -1,5 +1,7 @@
 # MicrosoftRewardsBot
-<p>Script that gives you maximum ammout of microsoft rewards points every day automatically or by a click of a button. </p>
+<p>Script that gives you maximum ammout of microsoft rewards points every day automatically or by a click of a button. <br> Website: </p>
+
+<h4> <a href="https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo?pli=1"> DOWNLOAD  </a></h4>
 
 ## Features
 <br>
@@ -12,6 +14,10 @@
 </ol>
 
 ## HOW TO USE
+Simplest way: download extension from: https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo?pli=1
+
+<br>
+<strong>OR </strong>
 
 <ol>
     <li>In command prompt: git fork https://github.com/spin311/MicrosoftRewardsBot</li>

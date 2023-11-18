@@ -3,7 +3,7 @@
 function popup(): void {
   chrome.runtime.sendMessage({action: "popup"});
 }
-let active = false;
+let active = true;
 
 
 
