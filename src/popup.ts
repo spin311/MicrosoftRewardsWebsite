@@ -33,7 +33,7 @@ document.addEventListener('DOMContentLoaded',
         active = autoBool.checked;
         chrome.storage.sync.set({ "active": active });
         if (active) {
-          checkLastOpenedPopup(); //yer or no?
+          checkLastOpenedPopup();
         }
 
       });

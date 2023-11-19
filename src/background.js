@@ -1,11 +1,13 @@
 chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.sync.set({ "active": true });
-    chrome.tabs.create({ url: "https://spin311.github.io/MicrosoftRewardsBotSite/", active: true });
+    setTimeout(function () {
+        chrome.tabs.create({ url: "https://spin311.github.io/MicrosoftRewardsWebsite/", active: true });
+    }, 500);
 });
 // on startup, check if user has already clicked the checkbox
 chrome.runtime.onStartup.addListener(function () {
     chrome.storage.sync.get("active", function (result) {
-        chrome.action.setIcon({ path: "imgs/logo.png" });
+        chrome.action.setIcon({ path: "../imgs/logoActive.png" });
         if (result.active) {
             checkLastOpened();
         }
@@ -66,5 +68,5 @@ function waitAndClose(id) {
     }, 100);
 }
 function changeIconToActive() {
-    chrome.action.setIcon({ path: "imgs/logoActive.png" });
+    chrome.action.setIcon({ path: "../imgs/logo2.png" });
 }
