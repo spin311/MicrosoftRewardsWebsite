@@ -2,12 +2,11 @@ chrome.runtime.onInstalled.addListener(function () {
     chrome.storage.sync.set({ "active": true });
     setTimeout(function () {
         chrome.tabs.create({ url: "https://spin311.github.io/MicrosoftRewardsWebsite/", active: true });
-    }, 500);
+    }, 1000);
 });
 // on startup, check if user has already clicked the checkbox
 chrome.runtime.onStartup.addListener(function () {
     chrome.storage.sync.get("active", function (result) {
-        chrome.action.setIcon({ path: "../imgs/logoActive.png" });
         if (result.active) {
             checkLastOpened();
         }
@@ -24,7 +23,6 @@ chrome.runtime.onMessage.addListener(function (request) {
 });
 //opens 10 tabs with bing search
 function popupBg() {
-    changeIconToActive();
     var format = "https://www.bing.com/search?q=";
     var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
     var _loop_1 = function (i) {
@@ -52,10 +50,7 @@ function popupBg() {
 function checkLastOpened() {
     var today = new Date().toLocaleDateString();
     chrome.storage.sync.get("lastOpened", function (result) {
-        if (result.lastOpened === today) {
-            changeIconToActive();
-        }
-        else {
+        if (result.lastOpened !== today) {
             popupBg();
             chrome.storage.sync.set({ "lastOpened": today });
         }
@@ -66,7 +61,4 @@ function waitAndClose(id) {
     setTimeout(function () {
         chrome.tabs.remove(id);
     }, 100);
-}
-function changeIconToActive() {
-    chrome.action.setIcon({ path: "../imgs/logo2.png" });
 }

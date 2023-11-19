@@ -1,22 +1,17 @@
 chrome.runtime.onInstalled.addListener(function () {
   chrome.storage.sync.set({ "active": true });
-
   setTimeout(function () {
     chrome.tabs.create( {url: "https://spin311.github.io/MicrosoftRewardsWebsite/", active: true});
-  }, 500);
+  }, 1000);
 });
-
 // on startup, check if user has already clicked the checkbox
 chrome.runtime.onStartup.addListener(function(){
     chrome.storage.sync.get("active", function (result) {
-      chrome.action.setIcon({path: "../imgs/logoActive.png"});
       if (result.active) {
         checkLastOpened();
       }
     });
-    });
-
-
+});
 //listen for messages from popup.ts
 chrome.runtime.onMessage.addListener(function(request){
   if (request.action === "popup"){
@@ -25,15 +20,9 @@ chrome.runtime.onMessage.addListener(function(request){
   else if (request.action === "check"){
     checkLastOpened();
   }
-
 });
-
-
-
-
 //opens 10 tabs with bing search
 function popupBg(): void {
-  changeIconToActive();
   let format: string = "https://www.bing.com/search?q=";
   let searches: string[] = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
   for (let i: number = 0; i < searches.length; i++) {
@@ -55,35 +44,23 @@ function popupBg(): void {
   
         });
     }, 100);
-
   }
-
 }
-
 //check if user has already opened tabs today
 function checkLastOpened(): void {
   const today = new Date().toLocaleDateString();
   chrome.storage.sync.get("lastOpened", function (result) {
-    if (result.lastOpened === today) {
-      changeIconToActive();
-    }
-    else {
+    if (result.lastOpened !== today) {
       popupBg();
       chrome.storage.sync.set({ "lastOpened": today });
     }
   });
 }
-
 //wait 0.1 second before closing tab
 function waitAndClose(id: number): void {
   setTimeout(function () {
     chrome.tabs.remove(id);
   }, 100);
-}
-
-function changeIconToActive(): void{
-  chrome.action.setIcon({path: "../imgs/logo2.png"});
-  
 }
 
 

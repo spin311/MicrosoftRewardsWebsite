@@ -43,15 +43,13 @@ document.addEventListener('DOMContentLoaded',
 
 
 //disable button for 2 seconds
-function disableButton(button: HTMLButtonElement): void {
+function disableButton(button: HTMLButtonElement) {
   button.disabled = true;
-  button.classList.replace("btn-primary","btn-secondary");
-  setTimeout(function(){
-    button.disabled = false;
-    button.classList.replace("btn-secondary","btn-primary");
-  },2000);
-
-
+  button.classList.replace("btn-success", "btn-fail");
+  setTimeout(function () {
+      button.disabled = false;
+      button.classList.replace("btn-fail", "btn-success");
+  }, 2000);
 }
 
 //check if user has already opened tabs today
