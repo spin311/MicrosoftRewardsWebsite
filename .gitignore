@@ -11,3 +11,4 @@ dist/
 .npm
 
 .vscode/
+.DS_Store
