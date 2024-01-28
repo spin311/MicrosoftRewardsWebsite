@@ -1,15 +1,6 @@
-@import url('https://fonts.googleapis.com/css2?family=Gloria+Hallelujah&family=Noto+Sans+JP:wght@300&family=Poppins:wght@500&family=Rubik+Marker+Hatch&display=swap');
-
-h3 {
-    font-family: 'Poppins', sans-serif;
-}
-label, a {
-    font-family: 'Noto Sans JP', sans-serif;
-}
-
 body {
     width: 20em;
-    height: 10em;
+    height: 11em;
     font-size: 18px;
     background-color: #e6f5f1;
 
@@ -20,6 +11,34 @@ body {
     margin-left: auto;
     padding-right: 15px;
     padding-left: 15px;
+  }
+  .form-group {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.5rem;
+  }
+  
+  .form-label {
+    flex: 0 0 30%;
+    margin-right: 1rem;
+  }
+  
+  .form-select {
+    flex: 1;
+    padding: 0.375rem 0.75rem;
+    font-size: 1rem;
+    line-height: 1.5;
+    color: #212529;
+    background-color: #fff;
+    background-clip: padding-box;
+    border: 1px solid #ced4da;
+    border-radius: 0.25rem;
+    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+  .form-select:focus {
+    border-color: #80bdff;
+    outline: 0;
+    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
   }
   
   .text-center {
@@ -67,6 +86,10 @@ body {
     margin-top: 0.5rem !important;
     margin-bottom: 0.5rem !important;
   }
+  .my-1 {
+    margin-top: 0.25rem !important;
+    margin-bottom: 0.25rem !important;
+  }
   
   .form-check {
     position: relative;
@@ -87,4 +110,17 @@ body {
   .my-2 {
     margin-top: 0.5rem !important;
     margin-bottom: 0.5rem !important;
+  }
+  .float-start {
+    float: left;
+    margin-right: 10px;
+  }
+  
+  .float-end {
+    float: right;
+    margin-left: 10px;
+  }
+  .imgSmall {
+    width: 16px;
+    height: 16px;
   }

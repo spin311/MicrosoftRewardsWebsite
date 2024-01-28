@@ -7,6 +7,7 @@ var active = true;
 document.addEventListener('DOMContentLoaded', function () {
     var autoBool = document.getElementById("autoCheckbox");
     var button = document.getElementById("button");
+    var selectLevel = document.getElementById("selectLevel");
     if (button) {
         button.addEventListener("click", function () {
             disableButton(button);
@@ -26,18 +27,26 @@ document.addEventListener('DOMContentLoaded', function () {
             active = autoBool.checked;
             chrome.storage.sync.set({ "active": active });
             if (active) {
-                checkLastOpenedPopup(); //yer or no?
+                checkLastOpenedPopup();
             }
+        });
+    }
+    if (selectLevel) {
+        chrome.storage.sync.get("level", function (result) {
+            selectLevel.value = result.level;
+        });
+        selectLevel.addEventListener("change", function () {
+            chrome.storage.sync.set({ "level": selectLevel.value });
         });
     }
 });
 //disable button for 2 seconds
 function disableButton(button) {
     button.disabled = true;
-    button.classList.replace("btn-primary", "btn-secondary");
+    button.classList.replace("btn-success", "btn-fail");
     setTimeout(function () {
         button.disabled = false;
-        button.classList.replace("btn-secondary", "btn-primary");
+        button.classList.replace("btn-fail", "btn-success");
     }, 2000);
 }
 //check if user has already opened tabs today

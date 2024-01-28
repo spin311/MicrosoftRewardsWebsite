@@ -1,10 +1,13 @@
-chrome.runtime.onInstalled.addListener(function () {
-  chrome.storage.sync.set({ "active": true });
-  setTimeout(function () {
-    chrome.tabs.create( {url: "https://spin311.github.io/MicrosoftRewardsWebsite/", active: true});
-  }, 1000);
+chrome.runtime.onInstalled.addListener(function (details) {
+  if(details.reason === "install"){
+    chrome.storage.sync.set({ "active": true });
+    chrome.storage.sync.set({ "level": 1 });
+    setTimeout(function () {
+      chrome.tabs.create( {url: "https://spin311.github.io/MicrosoftRewardsWebsite/", active: true});
+    }, 1000);
+  }
 });
-// on startup, check if user has already clicked the checkbox
+// on startup, check if user has already clicked the checkboxx§
 chrome.runtime.onStartup.addListener(function(){
     chrome.storage.sync.get("active", function (result) {
       if (result.active) {
@@ -21,30 +24,44 @@ chrome.runtime.onMessage.addListener(function(request){
     checkLastOpened();
   }
 });
-//opens 10 tabs with bing search
+//opens 10 tabs with bing searches
 function popupBg(): void {
   let format: string = "https://www.bing.com/search?q=";
-  let searches: string[] = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
-  for (let i: number = 0; i < searches.length; i++) {
-    let url: string = format + searches[i];
-    setTimeout(function(){
-      chrome.tabs.create({
-        url: url, active: false
-      },
-        function (tab: any) {
-          let idCurr: number = tab.id;
-          //wait for tab to load before closing
-          chrome.tabs.onUpdated.addListener(function listener(tabId: number, changeInfo: chrome.tabs.TabChangeInfo) {
-            if (tabId === idCurr &&  changeInfo.status === "complete") {
-              chrome.tabs.onUpdated.removeListener(listener);
-              waitAndClose(idCurr);
-            }
-  
-          });
-  
-        });
-    }, 100);
+  let format2: string = "&qs=n&form=QBLH&sp=-1&pq=";
+  let level: number = 1;
+  chrome.storage.sync.get("level", function(result){
+    if (result.level > 1) level = 3;
+    for (let xp = 0; xp < level; xp++) { 
+      let timeout: number = 1500 * xp;
+      setTimeout(function(){
+        for (let i: number = 0; i < 10; i++) {
+          let randomString: string = Math.random().toString(36).substring(2,7);
+          let url: string = format + randomString + format2;
+          openAndClose(url);
+        }
+      }, timeout);
   }
+  });
+
+  function openAndClose(url: string): void {
+    chrome.tabs.create({
+      url: url, active: false
+    },
+      function (tab: any) {
+        let idCurr: number = tab.id;
+        //wait for tab to load before closing
+        chrome.tabs.onUpdated.addListener(function listener(tabId: number, changeInfo: chrome.tabs.TabChangeInfo) {
+          if (tabId === idCurr &&  changeInfo.status === "complete") {
+            chrome.tabs.onUpdated.removeListener(listener);
+            waitAndClose(idCurr);
+          }
+        });
+      });
+  }
+
+
+
+
 }
 //check if user has already opened tabs today
 function checkLastOpened(): void {
@@ -60,7 +77,7 @@ function checkLastOpened(): void {
 function waitAndClose(id: number): void {
   setTimeout(function () {
     chrome.tabs.remove(id);
-  }, 100);
+  }, 1000);
 }
 
 

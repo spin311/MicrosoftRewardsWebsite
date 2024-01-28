@@ -1,10 +1,13 @@
-chrome.runtime.onInstalled.addListener(function () {
-    chrome.storage.sync.set({ "active": true });
-    setTimeout(function () {
-        chrome.tabs.create({ url: "https://spin311.github.io/MicrosoftRewardsWebsite/", active: true });
-    }, 1000);
+chrome.runtime.onInstalled.addListener(function (details) {
+    if (details.reason === "install") {
+        chrome.storage.sync.set({ "active": true });
+        chrome.storage.sync.set({ "level": 1 });
+        setTimeout(function () {
+            chrome.tabs.create({ url: "https://spin311.github.io/MicrosoftRewardsWebsite/", active: true });
+        }, 1000);
+    }
 });
-// on startup, check if user has already clicked the checkbox
+// on startup, check if user has already clicked the checkboxx§
 chrome.runtime.onStartup.addListener(function () {
     chrome.storage.sync.get("active", function (result) {
         if (result.active) {
@@ -21,29 +24,38 @@ chrome.runtime.onMessage.addListener(function (request) {
         checkLastOpened();
     }
 });
-//opens 10 tabs with bing search
+//opens 10 tabs with bing searches
 function popupBg() {
     var format = "https://www.bing.com/search?q=";
-    var searches = ["weather", "sport", "news", "stocks", "movies", "music", "games", "maps", "travel", "restaurants"];
-    var _loop_1 = function (i) {
-        var url = format + searches[i];
-        setTimeout(function () {
-            chrome.tabs.create({
-                url: url, active: false
-            }, function (tab) {
-                var idCurr = tab.id;
-                //wait for tab to load before closing
-                chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
-                    if (tabId === idCurr && changeInfo.status === "complete") {
-                        chrome.tabs.onUpdated.removeListener(listener);
-                        waitAndClose(idCurr);
-                    }
-                });
+    var format2 = "&qs=n&form=QBLH&sp=-1&pq=";
+    var level = 1;
+    chrome.storage.sync.get("level", function (result) {
+        if (result.level > 1)
+            level = 3;
+        for (var xp = 0; xp < level; xp++) {
+            var timeout = 1500 * xp;
+            setTimeout(function () {
+                for (var i = 0; i < 10; i++) {
+                    var randomString = Math.random().toString(36).substring(2, 7);
+                    var url = format + randomString + format2;
+                    openAndClose(url);
+                }
+            }, timeout);
+        }
+    });
+    function openAndClose(url) {
+        chrome.tabs.create({
+            url: url, active: false
+        }, function (tab) {
+            var idCurr = tab.id;
+            //wait for tab to load before closing
+            chrome.tabs.onUpdated.addListener(function listener(tabId, changeInfo) {
+                if (tabId === idCurr && changeInfo.status === "complete") {
+                    chrome.tabs.onUpdated.removeListener(listener);
+                    waitAndClose(idCurr);
+                }
             });
-        }, 100);
-    };
-    for (var i = 0; i < searches.length; i++) {
-        _loop_1(i);
+        });
     }
 }
 //check if user has already opened tabs today
@@ -60,5 +72,5 @@ function checkLastOpened() {
 function waitAndClose(id) {
     setTimeout(function () {
         chrome.tabs.remove(id);
-    }, 100);
+    }, 5000);
 }

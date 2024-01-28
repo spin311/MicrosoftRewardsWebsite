@@ -10,8 +10,9 @@ let active = true;
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded',
   function () {
-    let autoBool = document.getElementById("autoCheckbox") as HTMLInputElement;
-    const button = document.getElementById("button") as HTMLButtonElement;
+    let autoBool: HTMLInputElement = document.getElementById("autoCheckbox") as HTMLInputElement;
+    const button: HTMLButtonElement = document.getElementById("button") as HTMLButtonElement;
+    const selectLevel: HTMLSelectElement = document.getElementById("selectLevel") as HTMLSelectElement;
     if (button) {
       button.addEventListener("click", function () {
         disableButton(button);
@@ -37,8 +38,16 @@ document.addEventListener('DOMContentLoaded',
         }
 
       });
-
     }
+    if(selectLevel) {
+      chrome.storage.sync.get("level", function (result) {
+        selectLevel.value = result.level;
+      });
+      selectLevel.addEventListener("change", function () {
+        chrome.storage.sync.set({ "level": selectLevel.value });
+      });
+    }
+
   });
 
 
