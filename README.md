@@ -31,7 +31,6 @@ Simplest way: download extension from: https://chromewebstore.google.com/detail/
     <li> Click the puzzle icon in the top right corner (extensions) and pin the new extension</li>
     <li> Click on the extension icon to use it</li>
 
-
-
-
 </ol>
+
+<p>If you have any suggestions or questions, you can contact me at <u><b> <mark> spin311pro@gmail.com </mark></b></u>.</p>
