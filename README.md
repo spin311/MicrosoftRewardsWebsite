@@ -33,4 +33,4 @@ Simplest way: download extension from: https://chromewebstore.google.com/detail/
 
 </ol>
 
-<p>If you have any suggestions or questions, you can contact me at <u><b> <mark> spin311pro@gmail.com </mark></b></u>.</p>
+<p>If you have any suggestions or questions, you can contact me at <u><b> <mark> <a href="mailto:spin311pro@gmail.com">spin311pro@gmail.com </a> </mark></b></u></p>
