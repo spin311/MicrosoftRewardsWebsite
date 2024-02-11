@@ -5,12 +5,15 @@
 
 ## Features
 <br>
-<img src="./imgs/popup.png">
+<img src="./imgs/help.png">
 <br>
 <ol>
-    <li>Opens 10 random tabs in bing and closes them once they are loaded (max search points)</li>
-    <li> Automatic max search points every day you open browser </li>
-    <li> Microsoft rewards site, where you can log in</li>
+                <li>Open 10 random tabs in Bing and close them once they are loaded to get maximum search points.</li>
+                <li>Automatically open 10 tabs every day when you open the browser (turned on by default on install).</li>
+                <li>Select Microsoft Rewards level (If you have the automatic checkmark, you should reach lvl 2 after 1 month)</li>
+                <li>Get help</li>
+                <li>Visit the Microsoft Rewards site and log in.</li>
+                <li><a href="https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY" target="_blank">Donate with PayPal or any credit card </a></li>
 </ol>
 
 ## HOW TO USE
