@@ -2,6 +2,7 @@
 node_modules/
 dist/
 .cache/
+.idea/*
 
 #logs
 *.log
@@ -11,4 +12,5 @@ dist/
 .npm
 
 .vscode/
+.DS_Store
 .DS_Store
