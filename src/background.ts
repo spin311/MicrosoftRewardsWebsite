@@ -54,7 +54,6 @@ async function createTabs(format: string, format2: string, searchTimeout: number
     let randomString = Math.random().toString(36).substring(2, 7);
     let url = format + randomString + format2;
     openAndClose(url);
-    console.log(searchTimeout);
     await delay(searchTimeout * 1000 - 500);
   }
 }
@@ -90,13 +89,9 @@ function checkLastOpened(): void {
 function waitAndClose(id: number): void {
   setTimeout(function () {
     chrome.tabs.get(id, function(tab) {
-      if (chrome.runtime.lastError) {
-        // The tab could not be found, it was probably already closed
-        console.log(`Tab with ID ${id} was not found.`);
-      } else {
-        // The tab exists, proceed to close it
+      if (!chrome.runtime.lastError) {
         chrome.tabs.remove(id);
-      }
+        }
     });
   }, 500);
 }

@@ -16,12 +16,6 @@
   "background": {
     "service_worker": "dist/background.js"
   },
-  "content_scripts": [
-    {
-      "matches": ["https://www.bing.com/*"],
-      "js": ["dist/popup.js"]
-    }
-  ],
   "action": {
     "default_icon":  {
       "16": "imgs/logo.png",
