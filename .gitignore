@@ -14,3 +14,5 @@ dist/
 .vscode/
 .DS_Store
 .DS_Store
+.DS_Store
+gulpfile.js

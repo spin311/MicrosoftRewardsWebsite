@@ -3,7 +3,9 @@
 function popup(): void {
   chrome.runtime.sendMessage({action: "popup"});
 }
-let active = true;
+let active: boolean = true;
+let level: number = 1;
+let timeout: number = 7;
 
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded',
@@ -39,18 +41,26 @@ document.addEventListener('DOMContentLoaded',
     }
     if (timeoutInput) {
         chrome.storage.sync.get("timeout", function (result) {
-            if (result.timeout) timeoutInput.value = result.timeout;
+            if (result.timeout) {
+            timeout = parseInt(result.timeout);
+            timeoutInput.value = result.timeout;
+            }
         });
         timeoutInput.addEventListener("change", function () {
             chrome.storage.sync.set({ "timeout": timeoutInput.value });
+            timeout = parseInt(timeoutInput.value);
         });
     }
     if(selectLevel) {
       chrome.storage.sync.get("level", function (result) {
-        if (result.level) selectLevel.value = result.level;
+        if (result.level) {
+        level = parseInt(result.level);
+        selectLevel.value = result.level;
+        }
       });
       selectLevel.addEventListener("change", function () {
         chrome.storage.sync.set({ "level": selectLevel.value });
+        level = parseInt(selectLevel.value);
       });
     }
 
@@ -63,7 +73,7 @@ function disableButton(button: HTMLButtonElement) {
   setTimeout(function () {
       button.disabled = false;
       button.classList.replace("btn-fail", "btn-success");
-  }, 2000);
+  }, 1000 + (level * 10 * timeout * 1000));
 }
 
 //check if user has already opened tabs today
