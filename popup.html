@@ -1,43 +1,47 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
   <head>
     <title>Microsoft automatic rewards</title>
-    <link href="./dist/css/styles.min.css" rel="stylesheet">
+    <link href="/styles/popup.css" rel="stylesheet">
   </head>
   <body>
-    <h3 class="container-fluid text-center mt-2">Microsoft automatic rewards</h3>
+    <h3 class="container-fluid text-center mt-2 heading">Microsoft automatic rewards</h3>
 
     <div class="text-center">
     <button id="button" class="btn btn-success my-1">Get rewards</button>
 
-    <div class="form-check text-center d-flex justify-content-center ml-3 my-2">
-      <input class="form-check-input me-2" type="checkbox" value="" id="autoCheckbox">
-      <label class="form-check-label" for="autoCheckbox">
-        Get rewards automatically every day
-      </label>
-    </div>
+            <div class="form-check text-center d-flex justify-content-center ml-3 my-2">
+              <input class="form-check-input me-2" type="checkbox" id="autoCheckbox">
+              <label class="form-check-label" for="autoCheckbox">
+                Get rewards automatically
+              </label>
+            </div>
+            <div class="my-2">
+                    <input type="number" id="timeout" value="7" min="0" max="9999">
+                <label for="timeout">
+                    Timeout between searches (s)
+                </label>
+            </div>
+              <div class="my-2" style="margin-right: 0.8em;">
+                <select name="selectLevel" id="selectLevel" class="form-select">
+                <option value="1">1 (10 searches)</option>
+                <option value="2">2 (30 searches)</option>
+                </select>
+                <label for="selectLevel" class="form-label">Rewards level</label>
 
-
-      <div class="my-2">
-        <label for="selectLevel" class="form-label">Select rewards level: 
-</label>
-        <select name="selectLevel" id="selectLevel" class="form-select">
-        <option value="1">1 (10 searches)</option>
-        <option value="2">2 (30 searches)</option>
-        </select>
-
-      </div>
-
-    </div>
+              </div>
+        </div>
 
     <div class="container-fluid text-center mt-2">
-      <a href="https://spin311.github.io/MicrosoftRewardsWebsite/" class="float-start" target="_blank">Help</a>
-      <a class="my-1" href="https://www.microsoft.com/rewards" target="_blank">Microsoft rewards</a>
-      
-      <a href="https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY" class="float-end" target="_blank">Donate</a>
+        <a href="https://spin311.github.io/MicrosoftRewardsWebsite/" class="float-start links" target="_blank">Help</a>
+        <a class="my-1 links" href="https://www.microsoft.com/rewards" target="_blank">Microsoft rewards</a>
+        <span class="float-end" style="display: flex; align-items: center;">
+    <a href="https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY" class="links" target="_blank">Donate</a>
+    <img src="imgs/justAGirlSmol.png" alt="Cat">
+  </span>
     </div>
 
   </body>
 </html>
 
-<script src="src/popup.js"></script>
+<script src="dist/popup.js"></script>

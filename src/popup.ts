@@ -5,12 +5,11 @@ function popup(): void {
 }
 let active = true;
 
-
-
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded',
   function () {
     let autoBool: HTMLInputElement = document.getElementById("autoCheckbox") as HTMLInputElement;
+    let timeoutInput: HTMLInputElement = document.getElementById("timeout") as HTMLInputElement;
     const button: HTMLButtonElement = document.getElementById("button") as HTMLButtonElement;
     const selectLevel: HTMLSelectElement = document.getElementById("selectLevel") as HTMLSelectElement;
     if (button) {
@@ -36,12 +35,19 @@ document.addEventListener('DOMContentLoaded',
         if (active) {
           checkLastOpenedPopup();
         }
-
       });
+    }
+    if (timeoutInput) {
+        chrome.storage.sync.get("timeout", function (result) {
+            if (result.timeout) timeoutInput.value = result.timeout;
+        });
+        timeoutInput.addEventListener("change", function () {
+            chrome.storage.sync.set({ "timeout": timeoutInput.value });
+        });
     }
     if(selectLevel) {
       chrome.storage.sync.get("level", function (result) {
-        selectLevel.value = result.level;
+        if (result.level) selectLevel.value = result.level;
       });
       selectLevel.addEventListener("change", function () {
         chrome.storage.sync.set({ "level": selectLevel.value });
@@ -49,7 +55,6 @@ document.addEventListener('DOMContentLoaded',
     }
 
   });
-
 
 //disable button for 2 seconds
 function disableButton(button: HTMLButtonElement) {
