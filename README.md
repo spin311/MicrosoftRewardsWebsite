@@ -5,16 +5,17 @@
 
 ## Features
 <br>
-<img src="./imgs/help.png">
+<img src="./imgs/help2text.jpeg" alt="Extension Features">
 <br>
-<ol>
+            <ol>
                 <li>Open 10 random tabs in Bing and close them once they are loaded to get maximum search points.</li>
                 <li>Automatically open 10 tabs every day when you open the browser (turned on by default on install).</li>
                 <li>Select Microsoft Rewards level (If you have the automatic checkmark, you should reach lvl 2 after 1 month)</li>
+                <li>Choose duration between tabs opening in seconds (choose 0 to open all tabs at the same time)</li>
                 <li>Get help</li>
                 <li>Visit the Microsoft Rewards site and log in.</li>
                 <li><a href="https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY" target="_blank">Donate with PayPal or any credit card </a></li>
-</ol>
+            </ol>
 
 ## HOW TO USE
 Simplest way: download extension from: https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo?pli=1
@@ -30,7 +31,6 @@ Simplest way: download extension from: https://chromewebstore.google.com/detail/
     <li> Select the folder where you have forked the repository</li>
     <li> Click the puzzle icon in the top right corner (extensions) and pin the new extension</li>
     <li> Click on the extension icon to use it</li>
-
 </ol>
 
 <p>If you have any suggestions or questions, you can contact me at <u><b> <mark> <a href="mailto:spin311pro@gmail.com">spin311pro@gmail.com </a> </mark></b></u></p>
