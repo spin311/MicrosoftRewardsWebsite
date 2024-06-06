@@ -1,36 +1,42 @@
-# MicrosoftRewardsBot
-<p>Script that gives you maximum ammout of microsoft rewards points every day automatically or by a click of a button. <br> Website: </p>
+# Microsoft Rewards Google Extension
 
-<h4> <a href="https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo?pli=1"> DOWNLOAD  </a></h4>
+![banner](imgs/banner.png)
+
+Get the most out of your Microsoft rewards account and earn points every day!
+
+If you like the extension, please give it a star on GitHub! <img src="imgs/github-star.png" alt="icon" height="32">
+
+## Download
+
+[Google Chrome Store](https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo)  
+  If you enjoy the extension, 5 star rating would mean a lot:) <img src="imgs/stars5.jpeg" alt="5 Stars" height="16">
+
+## Donate <img src="imgs/justAGirl.png" alt="Cat" height="64">
+
+Donations help me make tools like this for free in my spare time. Any amount helps! ❤️
+
+[![Donate with PayPal button](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY)
+
+
 
 ## Features
-<br>
-<img src="./imgs/help2text.jpeg" alt="Extension Features">
-<br>
-            <ol>
-                <li>Open 10 random tabs in Bing and close them once they are loaded.</li>
-                <li>Automatically open tabs every day when browser is opened (turned on by default).</li>
-                <li>Choose duration between tabs opening in seconds (choose 0 to open all tabs at the same time)</li>
-                <li>Select Microsoft Rewards level</li>
-                <li>Get help</li>
-                <li>Visit the Microsoft Rewards site and log in.</li>
-                <li><a href="https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY" target="_blank">Donate with PayPal or any credit card </a></li>
-            </ol>
 
-## HOW TO USE
-Simplest way: download extension from: https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo?pli=1
+![Popup Screenshot](imgs/help2text.jpeg)
 
-<br>
-<strong>OR </strong>
+1. Open 10 random tabs in Bing and close them once they are loaded.
+2. Automatically open tabs every day when the browser is opened (turned on by default).
+3. Choose duration between tabs opening in seconds (choose 0 to open all tabs at the same time).
+4. Select Microsoft Rewards level.
+5. Get help.
+6. Visit the Microsoft Rewards site and log in.
+7. [Donate with PayPal or any credit card](https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY).
 
-<ol>
-    <li>In command prompt: git fork https://github.com/spin311/MicrosoftRewardsBot</li>
-    <li> Google-> 3 dots in the right corner-> manage extensions </li>
-    <li> In the top right corner toggle on Developer mode</li>
-    <li> In the top left corner click Load unpacked</li>
-    <li> Select the folder where you have forked the repository</li>
-    <li> Click the puzzle icon in the top right corner (extensions) and pin the new extension</li>
-    <li> Click on the extension icon to use it</li>
-</ol>
+<img src="imgs/pin.png" alt="Pin extension" height="64">
 
-<p>If you have any suggestions or questions, you can contact me at <u><b> <mark> <a href="mailto:spin311pro@gmail.com">spin311pro@gmail.com </a> </mark></b></u></p>
+Make sure to pin the extension.
+
+## Contact
+
+If you have any suggestions or questions, you can contact me at [spin311pro@gmail.com](mailto:spin311pro@gmail.com).
+
+Enjoy your rewards! 😊
