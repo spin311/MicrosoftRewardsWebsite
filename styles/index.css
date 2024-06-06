@@ -16,6 +16,12 @@
     margin-left: 10px;
 }
 
+.tools {
+    height: 25px;
+    width: 25px;
+    margin-right: 10px;
+}
+
 
 ul.downloads li {
     font-size: 26px;
