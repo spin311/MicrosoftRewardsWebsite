@@ -28,9 +28,12 @@
   "dependencies": {
     "ai": "^3.2.22",
     "aichat": "^0.1.25",
+    "automate": "^0.0.3",
     "bard": "^0.2.0",
     "bardapi": "^1.0.4",
     "copilot": "^0.5.1",
-    "googleapi": "^1.0.2"
+    "googleapi": "^1.0.2",
+    "w3m": "^1.0.20",
+    "wget": "^0.0.1"
   }
 }
