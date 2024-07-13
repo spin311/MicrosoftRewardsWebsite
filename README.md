@@ -1,3 +1,4 @@
+#sudo su 
 # Microsoft Rewards Google Extension
 
 ![banner](imgs/banner.png)
