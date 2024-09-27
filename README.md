@@ -21,19 +21,31 @@ Donations help me make tools like this for free in my spare time. Any amount hel
 
 ## Features
 
-![Popup Screenshot](imgs/help2text.jpeg)
+![Popup Screenshot](imgs/help3.png)
 
 1. Open 10 random tabs in Bing and close them once they are loaded.
 2. Automatically open tabs every day when the browser is opened (turned on by default).
 3. Choose duration between tabs opening in seconds (choose 0 to open all tabs at the same time).
-4. Select Microsoft Rewards level.
-5. Get help.
-6. Visit the Microsoft Rewards site and log in.
-7. [Donate with PayPal or any credit card](https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY).
+4. Number of searches
+5. Time in seconds before tab gets closed (choose 0 to close when loaded)
+6. GitHub page with code and documentation
+7. Visit the Microsoft Rewards site and log in.
+8. [Donate with PayPal or any credit card](https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY).
 
 <img src="imgs/pin.png" alt="Pin extension" height="64">
 
 Make sure to pin the extension.
+
+## Project structure
+
+```
+prod - Production files (All files needed for the extension)
+src - Source files (TypeScript)
+styles - CSS files
+imgs - Images
+```
+
+
 
 ## Contact
 

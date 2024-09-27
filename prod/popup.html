@@ -16,28 +16,30 @@
                 Get rewards automatically
               </label>
             </div>
-            <div class="my-2">
+        <div class="inputs">
+            <div>
                     <input type="number" id="timeout" value="7" min="0" max="9999">
                 <label for="timeout">
                     Time between searches (s)
                 </label>
             </div>
-              <div class="my-2" style="margin-right: 0.8em;">
-                <select name="selectLevel" id="selectLevel" class="form-select">
-                <option value="1">1 (10 searches)</option>
-                <option value="2">2 (30 searches)</option>
-                </select>
-                <label for="selectLevel" class="form-label">Rewards level</label>
-
+              <div>
+                <input type="number" id="searches" value="10" min="1" max="999">
+                <label for="searches" class="form-label">Number of searches</label>
               </div>
+            <div>
+                <input type="number" id="closeTime" value="2" min="0" max="300">
+                <label for="closeTime" class="form-label">Time before closing tabs (s)</label>
+            </div>
+        </div>
         </div>
 
     <div class="container-fluid text-center mt-2">
         <span>
-            <a href="https://spin311.github.io/MicrosoftRewardsWebsite#features" class="float-start links" target="_blank">Github</a>
+            <a href="https://github.com/spin311/MicrosoftRewardsWebsite" class="float-start links" target="_blank">Github</a>
             <img src="./imgs/github.png" alt="github-logo">
         </span>
-        <a class="my-1 links" href="https://www.microsoft.com/rewards" target="_blank">Microsoft rewards</a>
+        <a class="my-1 links" href="https://www.microsoft.com/rewards" target="_blank">Rewards</a>
         <span class="float-end" style="display: flex; align-items: center;">
             <a href="https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY" class="links" target="_blank" id="donateText">Donate</a>
             <img src="imgs/justAGirlSmol.png" alt="Cat" id="donateImg">

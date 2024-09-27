@@ -1,0 +1,29 @@
+{
+  "manifest_version": 3,
+  "name": "Microsoft automatic rewards",
+  "version": "1.5.0",
+  "icons": {
+    "16": "imgs/logo.png",
+    "32": "imgs/logo2.png",
+    "48": "imgs/logo2.png",
+    "128": "imgs/logo3.png"
+  },
+  "description": "Script that gives you maximum amount of microsoft rewards points every day automatically or by a click of a button.",
+
+  "permissions": [
+    "storage"
+  ],
+  "background": {
+    "service_worker": "dist/background.js"
+  },
+  "action": {
+    "default_icon":  {
+      "16": "imgs/logo.png",
+      "32": "imgs/logo2.png",
+      "48": "imgs/logo2.png",
+      "128": "imgs/logo3.png"
+    },
+    "default_popup": "./popup.html",
+    "title": "Microsoft automatic rewards"
+  }
+}

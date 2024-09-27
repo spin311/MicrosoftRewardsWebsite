@@ -166,3 +166,16 @@ a:hover::before {
   bottom: 0;
   height: 100%;
 }
+
+.inputs {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  align-items: flex-start;
+  margin-left: 2em;
+  input {
+    width: 5em;
+  }
+}
+
+

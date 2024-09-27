@@ -2,17 +2,19 @@
 function popup() {
     chrome.runtime.sendMessage({ action: "popup" });
 }
-var active = true;
-var level = 1;
-var timeout = 7;
+
+let active = true;
+let searchesNu = 10;
+let timeout = 7;
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded', function () {
-    var autoBool = document.getElementById("autoCheckbox");
-    var timeoutInput = document.getElementById("timeout");
-    var button = document.getElementById("button");
-    var selectLevel = document.getElementById("selectLevel");
-    var donateText = document.getElementById('donateText');
-    var donateImg = document.getElementById('donateImg');
+    const autoBool = document.getElementById("autoCheckbox");
+    const timeoutInput = document.getElementById("timeout");
+    const button = document.getElementById("button");
+    const searches = document.getElementById("searches");
+    const donateText = document.getElementById('donateText');
+    const donateImg = document.getElementById('donateImg');
+    const closeTime = document.getElementById('closeTime');
     if (donateImg && donateText) {
         donateText.addEventListener('mouseover', function () {
             donateImg.style.visibility = 'visible';
@@ -53,16 +55,26 @@ document.addEventListener('DOMContentLoaded', function () {
             timeout = parseInt(timeoutInput.value);
         });
     }
-    if (selectLevel) {
-        chrome.storage.sync.get("level", function (result) {
-            if (result.level) {
-                level = parseInt(result.level);
-                selectLevel.value = result.level;
+    if (searches) {
+        chrome.storage.sync.get("searches", function (result) {
+            if (result.searches) {
+                searchesNu = parseInt(result.searches);
+                searches.value = result.searches;
             }
         });
-        selectLevel.addEventListener("change", function () {
-            chrome.storage.sync.set({ "level": selectLevel.value });
-            level = parseInt(selectLevel.value);
+        searches.addEventListener("change", function () {
+            chrome.storage.sync.set({ "searches": searches.value });
+            searchesNu = parseInt(searches.value);
+        });
+    }
+    if (closeTime) {
+        chrome.storage.sync.get("closeTime", function (result) {
+            if (result.closeTime) {
+                closeTime.value = result.closeTime;
+            }
+        });
+        closeTime.addEventListener("change", function () {
+            chrome.storage.sync.set({ "closeTime": closeTime.value });
         });
     }
 });
@@ -70,10 +82,12 @@ document.addEventListener('DOMContentLoaded', function () {
 function disableButton(button) {
     button.disabled = true;
     button.classList.replace("btn-success", "btn-fail");
+    button.innerHTML = "Loading rewards...";
     setTimeout(function () {
         button.disabled = false;
+        button.innerHTML = "Get rewards";
         button.classList.replace("btn-fail", "btn-success");
-    }, 1000 + (level * 10 * timeout * 1000));
+    }, 1000 + ((searchesNu  - 1)* timeout * 1000));
 }
 //check if user has already opened tabs today
 function checkLastOpenedPopup() {

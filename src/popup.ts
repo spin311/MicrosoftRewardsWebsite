@@ -14,6 +14,14 @@ document.addEventListener('DOMContentLoaded',
     let timeoutInput: HTMLInputElement = document.getElementById("timeout") as HTMLInputElement;
     const button: HTMLButtonElement = document.getElementById("button") as HTMLButtonElement;
     const selectLevel: HTMLSelectElement = document.getElementById("selectLevel") as HTMLSelectElement;
+      const donateText: HTMLElement | null = document.getElementById('donateText');
+      const donateImg: HTMLElement | null = document.getElementById('donateImg');
+
+      if (donateImg && donateText) {
+          donateText.addEventListener('mouseover', function() {
+              donateImg.style.visibility = 'visible';
+          });
+      }
     if (button) {
       button.addEventListener("click", function () {
         disableButton(button);
