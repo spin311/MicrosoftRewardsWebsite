@@ -43,19 +43,13 @@ chrome.runtime.onMessage.addListener(handleMessage);
 
 // Event Handlers
 function handleInstallOrUpdate(details) {
-    if (details.reason === "install") {
+    if (details.reason === "install" || details.reason === "update") {
         chrome.storage.sync.set({
             active: true,
             timeout: DEFAULT_TIMEOUT,
             searches: DEFAULT_SEARCHES,
-            closeTime: DEFAULT_CLOSE_TIME,
-            useWords: true
+            closeTime: DEFAULT_CLOSE_TIME
         });
-        if (details.reason === "update") {
-            chrome.storage.sync.set({
-                useWords: true
-            });
-        }
         setTimeout(() => {
             chrome.tabs.create({ url: WEBSITE_URL, active: true });
         }, 1000);
@@ -80,12 +74,11 @@ function handleMessage(request) {
 
 // Main Functions
 function popupBg() {
-    chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords"], (results) => {
+    chrome.storage.sync.get(["searches", "timeout", "closeTime"], (results) => {
         const searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
         const searches = parseInt(results.searches) ?? DEFAULT_SEARCHES;
         const closeTime = parseInt(results.closeTime) ?? DEFAULT_CLOSE_TIME;
-        const useWords = results.useWords ?? true;
-        createTabs(searchTimeout, searches, closeTime, useWords);
+        createTabs(searchTimeout, searches, closeTime);
     });
 }
 
@@ -97,7 +90,7 @@ function getRandomElement(array) {
     return array[getRandomNumber(0, array.length - 1)];
 }
 
-async function createTabs(searchTimeout, searches, closeTime, useWords = true) {
+async function createTabs(searchTimeout, searches, closeTime, useWords = false) {
     if (searchTimeout <= 0) searchTimeout = 0.5;
     for (let i = 0; i < searches; i++) {
         let randomString;

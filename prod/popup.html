@@ -18,21 +18,34 @@
             </div>
         <div class="inputs">
             <div>
+                <input type="number" id="searches" value="10" min="1" max="999">
+                <label for="searches" class="form-label">Number of searches</label>
+            </div>
+            <div>
                     <input type="number" id="timeout" value="7" min="0" max="9999">
                 <label for="timeout">
                     Time between searches (s)
                 </label>
             </div>
-              <div>
-                <input type="number" id="searches" value="10" min="1" max="999">
-                <label for="searches" class="form-label">Number of searches</label>
-              </div>
             <div>
                 <input type="number" id="closeTime" value="2" min="0" max="300">
                 <label for="closeTime" class="form-label">Time before closing tabs (s)</label>
             </div>
         </div>
         </div>
+
+    <div class="d-flex justify-content-center  my-2">
+        <div class="form-check-label mb-2">
+            For searches use:
+            <span class="tooltip-icon" data-tooltip="Website is the new way that checks Prolific website directly for study changes. Title is the old way that checks Prolific title changes">i</span>
+        </div>
+        <div class="search mb-4">
+            <ul>
+                <li id="wordsBtn"> <span>words (new)</span></li>
+                <li id="stringsBtn"><span>letters (old)</span></li>
+            </ul>
+        </div>
+    </div>
 
     <div class="container-fluid text-center mt-2">
         <span>

@@ -178,4 +178,84 @@ a:hover::before {
   }
 }
 
+.search ul {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  padding: 0;
+  margin: 0;
+  list-style-type: none;
+}
+
+.search li {
+  padding: 0.5em;
+  font-weight: 600;
+  border: 1px solid #2282ad;
+  display: flex;
+  align-content: center;
+  gap: 0.2em;
+  font-size: 12px;
+}
+
+.search li:hover {
+  cursor: pointer;
+  color: white;
+  background-color: #2282ad;
+}
+
+.active {
+  background-color: #1a6f8c;
+  color: white;
+  font-weight: bold;
+}
+
+.mb-4 {
+  margin-bottom: 1rem !important;
+}
+
+.tooltip-icon {
+  cursor: pointer;
+  border: 1px solid;
+  border-radius: 50%;
+  margin-left: 5px;
+  position: relative;
+  width: 20px;
+  height: 20px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Arial', sans-serif;
+  font-weight: bold;
+  background-color: #2282ad;
+  color: white;
+}
+
+.tooltip-icon::after {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 100%; /* Position directly above the icon */
+  left: 0; /* Start at the left edge of the popup */
+  transform: translateX(-90%); /* Adjust to align with the left edge of the popup */
+  font: unset;
+  font-weight: unset;
+  background-color: #333;
+  color: #fff;
+  padding: 5px;
+  border-radius: 5px;
+  white-space: normal; /* Allow text to wrap */
+  width: max-content; /* Adjust width to fit content */
+  max-width: 200px; /* Set a maximum width to prevent overflow */
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s;
+  z-index: 1;
+  text-align: left; /* Align text to the left */
+  word-wrap: break-word; /* Allow long words to break and wrap */
+  box-sizing: border-box; /* Ensure padding is included in width calculation */
+}
+
+.tooltip-icon:hover::after {
+  opacity: 1;
+  visibility: visible;
+}
+
 
