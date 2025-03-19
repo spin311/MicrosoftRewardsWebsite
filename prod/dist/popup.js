@@ -1,6 +1,20 @@
+chrome.runtime.onMessage.addListener(handlePopupMessages);
+
+function handlePopupMessages(request) {
+    if (request.action === "searchEnded") {
+        const button = document.getElementById("button");
+        enableButton( button);
+    }
+}
+
+
 //opens 10 tabs with bing searches
-function popup() {
+function openSearches() {
     chrome.runtime.sendMessage({ action: "popup" });
+}
+
+function stopSearches() {
+    chrome.runtime.sendMessage({action: "stop"});
 }
 
 function setupDonateImage(donateImg, donateText) {
@@ -11,17 +25,20 @@ function setupDonateImage(donateImg, donateText) {
     }
 }
 
-function setupDonateButton(button) {
+function setupSearchButton(button) {
     if (button) {
-        button.addEventListener("click", function () {
-            disableButton(button);
-            popup();
+        button.addEventListener("click", async function () {
+            if (button.classList.contains('btn-fail')) {
+                enableButton(button);
+                stopSearches();
+            } else {
+                disableButton(button);
+                openSearches();
+            }
+
         });
     }
 }
-
-let active = true;
-let searchesNu = 10;
 let timeout = 7;
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded', async function () {
@@ -30,7 +47,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const donateImg = document.getElementById('donateImg');
 
     setupDonateImage(donateImg, donateText);
-    setupDonateButton(button);
+    setupSearchButton(button);
 
     await setCheckboxState("autoCheckbox", "active");
     await setInputState("timeout", "timeout");
@@ -41,14 +58,13 @@ document.addEventListener('DOMContentLoaded', async function () {
 });
 //disable button for time it takes to complete searches
 function disableButton(button) {
-    button.disabled = true;
     button.classList.replace("btn-success", "btn-fail");
-    button.innerHTML = "Loading rewards...";
-    setTimeout(function () {
-        button.disabled = false;
-        button.innerHTML = "Get rewards";
-        button.classList.replace("btn-fail", "btn-success");
-    }, 1000 + ((searchesNu  - 1)* timeout * 1000));
+    button.innerHTML = "Stop searches";
+}
+
+function enableButton(button) {
+    button.innerHTML = "Get rewards";
+    button.classList.replace("btn-fail", "btn-success");
 }
 
 async function setSearchState() {

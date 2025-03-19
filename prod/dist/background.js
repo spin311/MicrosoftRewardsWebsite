@@ -7,6 +7,7 @@ const BING_SEARCH_PARAMS = "&qs=n&form=QBLH&sp=-1&pq=";
 const DEFAULT_SEARCHES = 10;
 const DEFAULT_TIMEOUT = 7;
 const DEFAULT_CLOSE_TIME = 2;
+let shouldStop = false;
 
 const words = [
     "food", "drink", "restaurant", "cafe", "bar", "pub", "club", "diner", "eatery", "tavern",
@@ -75,11 +76,14 @@ function handleMessage(request) {
         popupBg();
     } else if (request.action === "check") {
         checkLastOpened();
+    } else if (request.action === "stop") {
+        shouldStop = true;
     }
 }
 
 // Main Functions
 function popupBg() {
+    shouldStop = false;
     chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords"], (results) => {
         const searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
         const searches = parseInt(results.searches) ?? DEFAULT_SEARCHES;
@@ -100,6 +104,10 @@ function getRandomElement(array) {
 async function createTabs(searchTimeout, searches, closeTime, useWords = true) {
     if (searchTimeout <= 0) searchTimeout = 0.5;
     for (let i = 0; i < searches; i++) {
+        if (shouldStop) {
+            shouldStop = false;
+            break;
+        }
         let randomString;
         if (useWords) {
             const word1 = getRandomElement(words);
@@ -114,6 +122,7 @@ async function createTabs(searchTimeout, searches, closeTime, useWords = true) {
         openAndClose(url, closeTime);
         await delay((searchTimeout - 0.5) * 1000 + getRandomNumber(0, 1000));
     }
+    chrome.runtime.sendMessage({ action: "searchEnded" });
 }
 
 function openAndClose(url, closeTime) {
