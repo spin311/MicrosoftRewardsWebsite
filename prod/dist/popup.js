@@ -25,8 +25,12 @@ function setupDonateImage(donateImg, donateText) {
     }
 }
 
-function setupSearchButton(button) {
+async function setupSearchButton(button) {
     if (button) {
+        const {isSearching} = await chrome.storage.sync.get("isSearching");
+        if (isSearching) {
+            disableButton(button);
+        }
         button.addEventListener("click", async function () {
             if (button.classList.contains('btn-fail')) {
                 enableButton(button);
@@ -47,7 +51,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const donateImg = document.getElementById('donateImg');
 
     setupDonateImage(donateImg, donateText);
-    setupSearchButton(button);
+    await setupSearchButton(button);
 
     await setCheckboxState("autoCheckbox", "active");
     await setInputState("timeout", "timeout");

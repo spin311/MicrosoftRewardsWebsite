@@ -39,7 +39,7 @@ const words2 = ["near", "google", "where", "how", "what", "can", "best", "cheape
 ];
 // Event Listeners
 chrome.runtime.onInstalled.addListener(handleInstallOrUpdate);
-chrome.runtime.onStartup.addListener(checkActiveStatus);
+chrome.runtime.onStartup.addListener(handleStartup);
 chrome.runtime.onMessage.addListener(handleMessage);
 
 // Event Handlers
@@ -50,7 +50,8 @@ function handleInstallOrUpdate(details) {
             timeout: DEFAULT_TIMEOUT,
             searches: DEFAULT_SEARCHES,
             closeTime: DEFAULT_CLOSE_TIME,
-            useWords: true
+            useWords: true,
+            isSearching: false
         });
         if (details.reason === "update") {
             chrome.storage.sync.set({
@@ -63,12 +64,13 @@ function handleInstallOrUpdate(details) {
     }
 }
 
-function checkActiveStatus() {
+function handleStartup() {
     chrome.storage.sync.get("active", (result) => {
         if (result.active) {
             checkLastOpened();
         }
     });
+    chrome.storage.sync.set({ isSearching: false });
 }
 
 function handleMessage(request) {
@@ -102,6 +104,7 @@ function getRandomElement(array) {
 }
 
 async function createTabs(searchTimeout, searches, closeTime, useWords = true) {
+    chrome.storage.sync.set({ isSearching: true });
     if (searchTimeout <= 0) searchTimeout = 0.5;
     for (let i = 0; i < searches; i++) {
         if (shouldStop) {
@@ -122,6 +125,7 @@ async function createTabs(searchTimeout, searches, closeTime, useWords = true) {
         openAndClose(url, closeTime);
         await delay((searchTimeout - 0.5) * 1000 + getRandomNumber(0, 1000));
     }
+    chrome.storage.sync.set({ isSearching: false });
     chrome.runtime.sendMessage({ action: "searchEnded" });
 }
 
