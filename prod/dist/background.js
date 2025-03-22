@@ -4,7 +4,7 @@
 const WEBSITE_URL = "https://spin311.github.io/MicrosoftRewardsWebsite/";
 const BING_SEARCH_URL = "https://www.bing.com/search?q=";
 const BING_SEARCH_PARAMS = "&qs=n&form=QBLH&sp=-1&pq=";
-const DEFAULT_SEARCHES = 10;
+const DEFAULT_SEARCHES = 12;
 const DEFAULT_TIMEOUT = 7;
 const DEFAULT_CLOSE_TIME = 2;
 let shouldStop = false;
@@ -51,11 +51,13 @@ function handleInstallOrUpdate(details) {
             searches: DEFAULT_SEARCHES,
             closeTime: DEFAULT_CLOSE_TIME,
             useWords: true,
-            isSearching: false
+            isSearching: false,
+            autoDaily: false
         });
         if (details.reason === "update") {
             chrome.storage.sync.set({
-                useWords: true
+                useWords: true,
+                autoDaily: false
             });
         }
         setTimeout(() => {
@@ -80,17 +82,49 @@ function handleMessage(request) {
         checkLastOpened();
     } else if (request.action === "stop") {
         shouldStop = true;
+    } else if (request.action === "closeBingTabs") {
+        closeBingTabs();
+    }
+}
+
+async function openDailyRewards() {
+    const tab = await chrome.tabs.create({ url: "https://rewards.bing.com/", active: false });
+
+    // Wait for the tab to load completely before sending message
+    return new Promise((resolve) => {
+        function checkTab(tabId, changeInfo) {
+            if (tabId === tab.id && changeInfo.status === "complete") {
+                chrome.tabs.onUpdated.removeListener(checkTab);
+                setTimeout(() => {
+                    chrome.tabs.sendMessage(tab.id, {action: "openDaily"});
+                    resolve();
+                }, 300);
+            }
+        }
+        chrome.tabs.onUpdated.addListener(checkTab);
+    });
+}
+
+async function closeBingTabs() {
+    const tabs = await chrome.tabs.query({url: "*://www.bing.com/*&rnoreward*"});
+    for (const tab of tabs) {
+        if (tab.id) {
+            await chrome.tabs.remove(tab.id);
+            await contentDelay(100 + contentGetRandomNumber(0, 500));
+        }
     }
 }
 
 // Main Functions
 function popupBg() {
     shouldStop = false;
-    chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords"], (results) => {
+    chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords", "autoDaily"], (results) => {
         const searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
         const searches = parseInt(results.searches) ?? DEFAULT_SEARCHES;
         const closeTime = parseInt(results.closeTime) ?? DEFAULT_CLOSE_TIME;
         const useWords = results.useWords ?? true;
+        const autoDaily = results.autoDaily ?? true;
+        if (autoDaily) openDailyRewards();
         createTabs(searchTimeout, searches, closeTime, useWords);
     });
 }

@@ -9,17 +9,36 @@
 
     <div class="text-center">
     <button id="button" class="btn btn-success my-1">Get rewards</button>
-
-            <div class="form-check text-center d-flex justify-content-center ml-3 my-2">
-              <input class="form-check-input me-2" type="checkbox" id="autoCheckbox">
-              <label class="form-check-label" for="autoCheckbox">
-                Get rewards automatically
-              </label>
+        <div class="checkboxes">
+            <div class="input-with-info">
+                <input class="form-check-input" type="checkbox" id="autoCheckbox">
+                <label class="form-check-label" for="autoCheckbox">
+                    Do daily searches automatically
+                </label>
+                <span class="tooltip-icon info" data-tooltip="Opens bing tabs the first time browser opens every day">i</span>
             </div>
+            <div class="input-with-info">
+                <input class="form-check-input" type="checkbox" id="autoDaily">
+                <label class="form-check-label" for="autoDaily">
+                    Open daily set automatically
+                </label>
+                <span class="tooltip-icon info" data-tooltip="Opens bing rewards tab and completes daily tasks for extra points">i</span>
+            </div>
+        </div>
+        <div class="subtext mb-l">*need to allow popups at rewards.bing to work</div>
+
+
         <div class="inputs">
-            <div>
-                <input type="number" id="searches" value="10" min="1" max="999">
-                <label for="searches" class="form-label">Number of searches</label>
+            <div class="width-100">
+                <div class="input-with-info">
+                    <span>
+                    <input type="number" id="searches" value="10" min="1" max="999">
+                    <label for="searches">Number of searches</label>
+                    </span>
+                    <span class="tooltip-icon info" data-tooltip="Number of random tabs to open in bing">i</span>
+                </div>
+                <div class="subtext initial-text">*First 2 searches do not give points</div>
+
             </div>
             <div>
                     <input type="number" id="timeout" value="7" min="0" max="9999">
@@ -29,15 +48,14 @@
             </div>
             <div>
                 <input type="number" id="closeTime" value="2" min="0" max="300">
-                <label for="closeTime" class="form-label">Time before closing tabs (s)</label>
+                <label for="closeTime">Time before closing tabs (s)</label>
             </div>
         </div>
         </div>
 
-    <div class="d-flex justify-content-center  my-2">
+    <div class="justify-content-center  my-2">
         <div class="form-check-label mb-2">
-            For searches use:
-            <span class="tooltip-icon" data-tooltip="Website is the new way that checks Prolific website directly for study changes. Title is the old way that checks Prolific title changes">i</span>
+            For searches use: <span class="tooltip-icon tooltip-icon--right" data-tooltip="Use random words or random characters for searches">i</span>
         </div>
         <div class="search mb-4">
             <ul>
@@ -52,7 +70,7 @@
             <a href="https://github.com/spin311/MicrosoftRewardsWebsite" class="float-start links" target="_blank">Github</a>
             <img src="./imgs/github.png" alt="github-logo">
         </span>
-        <a class="my-1 links" href="https://www.microsoft.com/rewards" target="_blank">Rewards</a>
+        <a class="my-1 links" href="https://rewards.bing.com/" target="_blank">Rewards</a>
         <span class="float-end" style="display: flex; align-items: center;">
             <a href="https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY" class="links" target="_blank" id="donateText">Donate</a>
             <img src="imgs/justAGirlSmol.png" alt="Cat" id="donateImg">

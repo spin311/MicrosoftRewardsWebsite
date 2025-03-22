@@ -43,7 +43,6 @@ async function setupSearchButton(button) {
         });
     }
 }
-let timeout = 7;
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded', async function () {
     const button = document.getElementById("button");
@@ -54,6 +53,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     await setupSearchButton(button);
 
     await setCheckboxState("autoCheckbox", "active");
+    await setCheckboxState("autoDaily", "autoDaily");
     await setInputState("timeout", "timeout");
     await setInputState("searches", "searches");
     await setInputState("closeTime", "closeTime");

@@ -16,6 +16,12 @@
   "background": {
     "service_worker": "dist/background.js"
   },
+  "content_scripts": [
+    {
+      "matches": ["https://rewards.bing.com/"],
+      "js": ["dist/content.js"]
+    }
+  ],
   "action": {
     "default_icon":  {
       "16": "imgs/logo.png",

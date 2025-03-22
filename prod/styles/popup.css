@@ -21,11 +21,6 @@ body {
     margin-bottom: 0.5rem;
   }
   
-  .form-label {
-    flex: 0 0 30%;
-    margin-right: 1rem;
-  }
-  
   .form-select {
     flex: 1;
     padding: 0.375rem 0.75rem;
@@ -73,6 +68,10 @@ body {
     line-height: 1.5;
     border-radius: 0.25rem;
     transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  }
+
+  .btn:hover {
+    cursor: pointer;
   }
   
   .btn-success {
@@ -258,4 +257,44 @@ a:hover::before {
   visibility: visible;
 }
 
+.tooltip-icon--right::after {
+  left: auto; /* Reset left positioning */
+  right: 0; /* Start at the right edge of the icon */
+  transform: translateX(90%); /* Adjust to align with the right edge of the icon */
+}
+
+.checkboxes {
+  display: flex;
+  flex-direction: column;
+  margin-left: 3em;
+  text-align: initial;
+  margin-top: 0.5em;
+  gap: 0.3em;
+}
+.input-with-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.subtext {
+  font-size: 14px;
+  color: #5b5f5c;
+}
+
+.initial-text {
+  text-align: initial;
+}
+
+.mb-2 {
+  margin-bottom: 0.5em;
+}
+
+.mb-l {
+    margin-bottom: 2em;
+}
+
+.width-100 {
+  width: 100%;
+}
 
