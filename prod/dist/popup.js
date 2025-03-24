@@ -45,6 +45,7 @@ async function setupSearchButton(button) {
 }
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded', async function () {
+    await chrome.action.setBadgeText({text: ""});
     const button = document.getElementById("button");
     const donateText = document.getElementById('donateText');
     const donateImg = document.getElementById('donateImg');

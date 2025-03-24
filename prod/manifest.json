@@ -13,6 +13,9 @@
   "permissions": [
     "storage"
   ],
+  "host_permissions": [
+    "https://www.bing.com/*"
+  ],
   "background": {
     "service_worker": "dist/background.js"
   },

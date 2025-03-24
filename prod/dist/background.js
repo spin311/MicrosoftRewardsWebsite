@@ -67,6 +67,8 @@ function handleInstallOrUpdate(details) {
 }
 
 function handleStartup() {
+    chrome.action.setBadgeText({text: "New"});
+    chrome.action.setBadgeBackgroundColor({ color: "#eacf73" });
     chrome.storage.sync.get("active", (result) => {
         if (result.active) {
             checkLastOpened();
@@ -106,11 +108,12 @@ async function openDailyRewards() {
 }
 
 async function closeBingTabs() {
-    const tabs = await chrome.tabs.query({url: "*://www.bing.com/*&rnoreward*"});
-    for (const tab of tabs) {
+    const tabs = await chrome.tabs.query({url: "https://www.bing.com/search*"});
+    const filteredTabs = tabs.filter(tab => tab.url.includes("&rnoreward"));
+    for (const tab of filteredTabs) {
         if (tab.id) {
             await chrome.tabs.remove(tab.id);
-            await contentDelay(100 + contentGetRandomNumber(0, 500));
+            await delay(100 + getRandomNumber(0, 500));
         }
     }
 }
