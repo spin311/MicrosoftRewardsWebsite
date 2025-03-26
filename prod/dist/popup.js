@@ -43,14 +43,31 @@ async function setupSearchButton(button) {
         });
     }
 }
+
+async function setupRewardsLink(rewardsLink) {
+    if (rewardsLink) {
+        const { referralClicked } = await chrome.storage.local.get("referralClicked");
+        if (referralClicked) {
+            rewardsLink.href = "https://rewards.bing.com/"
+        }
+        else {
+            rewardsLink.addEventListener("click", async function () {
+                await chrome.storage.local.set({referralClicked: true});
+            });
+        }
+    }
+}
+
 //wait for popup to load before adding event listeners
 document.addEventListener('DOMContentLoaded', async function () {
     await chrome.action.setBadgeText({text: ""});
     const button = document.getElementById("button");
     const donateText = document.getElementById('donateText');
     const donateImg = document.getElementById('donateImg');
+    const rewardsLink = document.getElementById('rewardsLink');
 
     setupDonateImage(donateImg, donateText);
+    await setupRewardsLink(rewardsLink)
     await setupSearchButton(button);
 
     await setCheckboxState("autoCheckbox", "active");
