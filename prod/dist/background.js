@@ -3,11 +3,10 @@
 // Constants
 const WEBSITE_URL = "https://spin311.github.io/MicrosoftRewardsWebsite/";
 const BING_SEARCH_URL = "https://www.bing.com/search?q=";
-const BING_SEARCH_PARAMS = "&qs=n&form=QBLH&sp=-1&pq=";
+const BING_SEARCH_PARAMS = "&qs=n&sp=-1&pq=";
 const DEFAULT_SEARCHES = 12;
-const DEFAULT_TIMEOUT = 7;
+const DEFAULT_TIMEOUT = 20;
 const DEFAULT_CLOSE_TIME = 2;
-let shouldStop = false;
 
 const words = [
     "food", "drink", "restaurant", "cafe", "bar", "pub", "club", "diner", "eatery", "tavern",
@@ -42,6 +41,32 @@ chrome.runtime.onInstalled.addListener(handleInstallOrUpdate);
 chrome.runtime.onStartup.addListener(handleStartup);
 chrome.runtime.onMessage.addListener(handleMessage);
 
+chrome.alarms.onAlarm.addListener(handleAlarms);
+
+function handleAlarms(alarm) {
+    if (alarm.name === 'openTabAlarm') {
+        chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords", 'currentSearch'], (results) => {
+            let searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
+            const searches = parseInt(results.searches) ?? DEFAULT_SEARCHES;
+            const closeTime = (parseInt(results.closeTime) ?? DEFAULT_CLOSE_TIME) * 1000;
+            let currentSearch = parseInt(results.currentSearch) ?? searches;
+            const useWords = results.useWords ?? true;
+            openTab(useWords, closeTime);
+            currentSearch++;
+            if (currentSearch < searches) {
+                if (searchTimeout <= 1) searchTimeout = 1;
+                const delayInMinutes = ((searchTimeout - 1) * 1000 + getRandomNumber(0, 2000)) / 60000;
+                chrome.storage.sync.set({ currentSearch });
+                chrome.alarms.create('openTabAlarm', { delayInMinutes });
+
+            } else {
+                sendStopSearch();
+            }
+        });
+    }
+
+}
+
 // Event Handlers
 function handleInstallOrUpdate(details) {
     if (details.reason === "install") {
@@ -69,8 +94,8 @@ function handleInstallOrUpdate(details) {
 function handleStartup() {
     chrome.action.setBadgeText({text: "New"});
     chrome.action.setBadgeBackgroundColor({ color: "#eacf73" });
-    chrome.storage.sync.get("active", (result) => {
-        if (result.active) {
+    chrome.storage.sync.get(["active", "autoDaily"], (result) => {
+        if (result.active || result.autoDaily) {
             checkLastOpened();
         }
     });
@@ -83,7 +108,7 @@ function handleMessage(request) {
     } else if (request.action === "check") {
         checkLastOpened();
     } else if (request.action === "stop") {
-        shouldStop = true;
+        sendStopSearch();
     } else if (request.action === "closeBingTabs") {
         closeBingTabs();
     }
@@ -120,15 +145,15 @@ async function closeBingTabs() {
 
 // Main Functions
 function popupBg() {
-    shouldStop = false;
-    chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords", "autoDaily"], (results) => {
+    chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords", "autoDaily", "active"], (results) => {
         const searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
         const searches = parseInt(results.searches) ?? DEFAULT_SEARCHES;
         const closeTime = parseInt(results.closeTime) ?? DEFAULT_CLOSE_TIME;
         const useWords = results.useWords ?? true;
         const autoDaily = results.autoDaily ?? true;
+        const autoTabs = results.active ?? true;
         if (autoDaily) openDailyRewards();
-        createTabs(searchTimeout, searches, closeTime, useWords);
+        if (autoTabs) createTabs(searchTimeout, searches, closeTime, useWords);
     });
 }
 
@@ -140,30 +165,32 @@ function getRandomElement(array) {
     return array[getRandomNumber(0, array.length - 1)];
 }
 
-async function createTabs(searchTimeout, searches, closeTime, useWords = true) {
-    chrome.storage.sync.set({ isSearching: true });
-    if (searchTimeout <= 0) searchTimeout = 0.5;
-    for (let i = 0; i < searches; i++) {
-        if (shouldStop) {
-            shouldStop = false;
-            break;
-        }
-        let randomString;
-        if (useWords) {
-            const word1 = getRandomElement(words);
-            const word2 = getRandomElement(words2);
-            const randomChar = Math.random().toString(36).substring(2, 3);
-            randomString = `${word1} ${word2}${randomChar}`;
-        }
-        else {
-            randomString = Math.random().toString(36).substring(2, 7);
-        }
-        const url = `${BING_SEARCH_URL}${randomString}${BING_SEARCH_PARAMS}`;
-        openAndClose(url, closeTime);
-        await delay((searchTimeout - 0.5) * 1000 + getRandomNumber(0, 1000));
+function sendStopSearch() {
+    chrome.storage.sync.set({isSearching: false});
+    chrome.runtime.sendMessage({action: "searchEnded"});
+    chrome.alarms.clearAll();
+}
+
+async function openTab(useWords, closeTime) {
+    let randomString;
+    if (useWords) {
+        const word1 = getRandomElement(words);
+        const word2 = getRandomElement(words2);
+        const randomChar = Math.random().toString(36).substring(2, 3);
+        randomString = `${word1} ${word2}${randomChar}`;
+    } else {
+        randomString = Math.random().toString(36).substring(2, 7);
     }
-    chrome.storage.sync.set({ isSearching: false });
-    chrome.runtime.sendMessage({ action: "searchEnded" });
+    const url = `${BING_SEARCH_URL}${randomString}${BING_SEARCH_PARAMS}`;
+    openAndClose(url, closeTime + getRandomNumber(0, 1000));
+}
+
+async function createTabs(searchTimeout, searches, closeTime, useWords = true) {
+    await chrome.storage.sync.set({ isSearching: true, currentSearch: 0 });
+    if (searchTimeout <= 1) searchTimeout = 1;
+    await openTab(useWords, closeTime * 1000);
+    const timeToWait =  (searchTimeout - 1) * 1000 + getRandomNumber(0, 2000);
+    chrome.alarms.create('openTabAlarm', { delayInMinutes: timeToWait / 60000 });
 }
 
 function openAndClose(url, closeTime) {
@@ -188,15 +215,15 @@ function checkLastOpened() {
     });
 }
 
-function waitAndClose(id, timeout = DEFAULT_CLOSE_TIME) {
-    if (timeout <= 0) timeout = 0.5;
+function waitAndClose(id, timeout = DEFAULT_CLOSE_TIME * 1000) {
+    if (timeout <= 0) timeout = 500;
     setTimeout(() => {
         chrome.tabs.get(id, () => {
             if (!chrome.runtime.lastError) {
                 chrome.tabs.remove(id);
             }
         });
-    }, (timeout - 0.5) * 1000 + getRandomNumber(0, 1000));
+    }, (timeout - 500)  + getRandomNumber(0, 1000));
 }
 
 // Utility Functions

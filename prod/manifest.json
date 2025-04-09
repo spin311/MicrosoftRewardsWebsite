@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Microsoft automatic rewards",
-  "version": "1.5.0",
+  "version": "2.0.0",
   "icons": {
     "16": "imgs/logo.png",
     "32": "imgs/logo2.png",
@@ -11,7 +11,8 @@
   "description": "Script that gives you maximum amount of microsoft rewards points every day automatically or by a click of a button.",
 
   "permissions": [
-    "storage"
+    "storage",
+    "alarms"
   ],
   "host_permissions": [
     "https://www.bing.com/*"
