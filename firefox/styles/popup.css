@@ -139,14 +139,14 @@ body {
     text-decoration-line: none;
   }
 
-a:not(.normal-link) {
+a {
   text-decoration: none;
   color: #18272F;
   font-weight: 700;
   position: relative;
 }
 
-a:not(.normal-link)::before {
+a::before {
   content: '';
   background-color: hsl(212, 97%, 76%);
   position: absolute;
@@ -161,7 +161,7 @@ a:not(.normal-link)::before {
   visibility: hidden;
 }
 
-a:not(.normal-link):hover::before {
+a:hover::before {
   bottom: 0;
   height: 100%;
 }
@@ -289,55 +289,15 @@ a:not(.normal-link):hover::before {
 .mb-2 {
   margin-bottom: 0.5em;
 }
-.mb-md {
-    margin-bottom: 0.7em;
+.mb-lg {
+    margin-bottom: 2em;
 }
 
 .width-100 {
   width: 100%;
 }
 
-.try-mobile {
-  display: inline-block;
-}
-
 .d-ib {
     display: inline-block;
 }
 
-.try-mobile-link {
-  color: #18272F;
-  font-weight: 700;
-  position: relative;
-  display: inline-block;
-  overflow: hidden;
-}
-
-.try-mobile-link::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-          120deg,
-          rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 0.5) 50%,
-          rgba(255, 255, 255, 0) 100%
-  );
-  transform: skewX(-25deg);
-  animation: shine 6s infinite;
-}
-
-@keyframes shine {
-  0% {
-    left: -75%;
-  }
-  40% {
-    left: 125%;
-  }
-  100% {
-    left: 125%;
-  }
-}

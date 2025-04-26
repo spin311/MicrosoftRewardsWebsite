@@ -1,7 +1,7 @@
 "use strict";
 
 // Constants
-const WEBSITE_URL = "https://spin311.github.io/MicrosoftRewardsWebsite/";
+const WEBSITE_URL = "https://svitspindler.com/microsoft-automatic-rewards";
 const BING_SEARCH_URL = "https://www.bing.com/search?q=";
 const BING_SEARCH_PARAMS = "&qs=n&sp=-1&pq=";
 const DEFAULT_SEARCHES = 12;
@@ -27,15 +27,14 @@ const words = [
     "astronomy", "volunteering", "physics", "chemistry", "biology", "mathematics", "history",
     "geography", "literature", "language", "economics", "philosophy", "yoga", "meditation",
     "fitness", "nutrition", "mindfulness", "stretching", "massage", "aromatherapy", "pilates",
-    "therapy", "birthday", "wedding", "graduation", "anniversary", "holiday", "festival", "concert"
-];
-
-const words2 = ["near", "google", "where", "how", "what", "can", "best", "cheapest", "top", "top10",
+    "therapy", "birthday", "wedding", "graduation", "anniversary", "holiday", "festival", "concert",
+    "near", "google", "where", "how", "what", "can", "best", "cheapest", "top", "top10",
     "find", "search", "locate", "discover", "explore", "lookup", "seek", "identify", "track", "uncover",
     "nearby", "closest", "guide", "tutorial", "review", "comparison", "versus", "information",
     "directions", "recommendations", "alternatives", "solutions", "help", "advice", "instructions",
     "tips", "examples", "resources", "techniques", "methods"
 ];
+
 // Event Listeners
 chrome.runtime.onInstalled.addListener(handleInstallOrUpdate);
 chrome.runtime.onStartup.addListener(handleStartup);
@@ -80,6 +79,7 @@ function handleInstallOrUpdate(details) {
             autoDaily: false
         });
         if (details.reason === "update") {
+            chrome.action.setBadgeText({text: "New"});
             chrome.storage.sync.set({
                 useWords: true,
                 autoDaily: false
@@ -92,7 +92,6 @@ function handleInstallOrUpdate(details) {
 }
 
 function handleStartup() {
-    chrome.action.setBadgeText({text: "New"});
     chrome.action.setBadgeBackgroundColor({ color: "#eacf73" });
     chrome.storage.sync.get(["active", "autoDaily"], (result) => {
         if (result.active || result.autoDaily) {
@@ -118,7 +117,7 @@ async function openDailyRewards() {
     const tab = await chrome.tabs.create({ url: "https://rewards.bing.com/", active: false });
 
     // Wait for the tab to load completely before sending message
-    return new Promise((resolve) => {
+    new Promise((resolve) => {
         function checkTab(tabId, changeInfo) {
             if (tabId === tab.id && changeInfo.status === "complete") {
                 chrome.tabs.onUpdated.removeListener(checkTab);
@@ -130,6 +129,7 @@ async function openDailyRewards() {
         }
         chrome.tabs.onUpdated.addListener(checkTab);
     });
+    setTimeout(() => chrome.tabs.remove(tab.id), 10000);
 }
 
 async function closeBingTabs() {
@@ -172,15 +172,17 @@ function sendStopSearch() {
 }
 
 async function openTab(useWords, closeTime) {
-    let randomString;
+    let randomString = '';
     if (useWords) {
-        const word1 = getRandomElement(words);
-        const word2 = getRandomElement(words2);
-        const randomChar = Math.random().toString(36).substring(2, 3);
-        randomString = `${word1} ${word2}${randomChar}`;
+        const numberOfWords = getRandomNumber(2, 4);
+        for (let i = 0; i < numberOfWords; i++) {
+            randomString += `${getRandomElement(words)} `;
+        }
     } else {
-        randomString = Math.random().toString(36).substring(2, 7);
+        randomString = Math.random().toString(36).substring(2, getRandomNumber(5, 8));
     }
+    const randomChar = Math.random().toString(36).substring(2, 3);
+    randomString = `${randomChar}${randomString}`;
     const url = `${BING_SEARCH_URL}${randomString}${BING_SEARCH_PARAMS}`;
     openAndClose(url, closeTime + getRandomNumber(0, 1000));
 }
