@@ -3,7 +3,7 @@
 // Constants
 const WEBSITE_URL = "https://svitspindler.com/microsoft-automatic-rewards";
 const BING_SEARCH_URL = "https://www.bing.com/search?q=";
-const BING_SEARCH_PARAMS = "&qs=n&sp=-1&pq=";
+const BING_SEARCH_PARAMS = "&qs=n&form=QBLH&sp=-1&pq=";
 const DEFAULT_SEARCHES = 12;
 const DEFAULT_TIMEOUT = 20;
 const DEFAULT_CLOSE_TIME = 2;
@@ -32,7 +32,19 @@ const words = [
     "find", "search", "locate", "discover", "explore", "lookup", "seek", "identify", "track", "uncover",
     "nearby", "closest", "guide", "tutorial", "review", "comparison", "versus", "information",
     "directions", "recommendations", "alternatives", "solutions", "help", "advice", "instructions",
-    "tips", "examples", "resources", "techniques", "methods"
+    "tips", "examples", "resources", "techniques", "methods", "how to", "ways to", "places to", "things to do", "restaurants near me", "best time to",
+    "cheap", "popular", "famous", "hidden gems", "activities", "events", "today", "tonight",
+    "open now", "family friendly", "pet friendly", "with kids", "for couples", "solo travel",
+    "budget travel", "luxury", "free", "local", "near me", "what is", "who is", "can I",
+    "should I", "when to", "why is", "how much", "how long", "how far", "how many", "does",
+    "is it safe", "easy", "quick", "simple", "step by step", "nearby attractions", "must see",
+    "reviews", "testimonials", "rating", "map", "price", "schedule", "availability", "book now",
+    "tickets", "opening hours", "closed", "weather", "forecast", "cheap flights", "best hotels",
+    "cuisine", "menu", "food near me", "best place for", "best way to", "directions to", "get to",
+    "how do I", "plan trip", "vacation ideas", "top rated", "most popular", "things to avoid",
+    "tips for", "travel guide", "insider tips", "how it works", "learn about", "overview",
+    "explained", "definition", "meaning", "origin", "background", "history of", "basics of",
+    "beginner guide", "example of", "sample", "template", "walkthrough", "demo"
 ];
 
 // Event Listeners

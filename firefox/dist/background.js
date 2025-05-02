@@ -3,7 +3,7 @@
 // Constants
 const WEBSITE_URL = "https://svitspindler.com/microsoft-automatic-rewards";
 const BING_SEARCH_URL = "https://www.bing.com/search?q=";
-const BING_SEARCH_PARAMS = "&qs=n&sp=-1&pq=";
+const BING_SEARCH_PARAMS = "&qs=n&form=QBLH&sp=-1&pq=";
 const DEFAULT_SEARCHES = 12;
 const DEFAULT_TIMEOUT = 20;
 const DEFAULT_CLOSE_TIME = 2;
