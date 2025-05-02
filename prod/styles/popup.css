@@ -85,7 +85,8 @@ body {
   justify-content: center;
   color: #2282ad;
   font-size: 1.3em;
-  text-shadow: 2px 2px 4px #d3e6ef
+  text-shadow: 2px 2px 4px #d3e6ef;
+  margin-bottom: 0;
 }
 
   .btn-fail {

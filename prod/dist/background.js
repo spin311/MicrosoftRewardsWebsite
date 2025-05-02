@@ -6,7 +6,7 @@ const BING_SEARCH_URL = "https://www.bing.com/search?q=";
 const BING_SEARCH_PARAMS = "&qs=n&form=QBLH&sp=-1&pq=";
 const DEFAULT_SEARCHES = 12;
 const DEFAULT_TIMEOUT = 20;
-const DEFAULT_CLOSE_TIME = 2;
+const DEFAULT_CLOSE_TIME = 5;
 
 const words = [
     "food", "drink", "restaurant", "cafe", "bar", "pub", "club", "diner", "eatery", "tavern",
@@ -97,6 +97,7 @@ function handleInstallOrUpdate(details) {
                 autoDaily: false
             });
         }
+        chrome.runtime.setUninstallURL(`https://svitspindler.com/uninstall?extension=${encodeURI("Microsoft Automatic Rewards")}`);
         setTimeout(() => {
             chrome.tabs.create({ url: WEBSITE_URL, active: true });
         }, 1000);
@@ -104,7 +105,6 @@ function handleInstallOrUpdate(details) {
 }
 
 function handleStartup() {
-    chrome.action.setBadgeBackgroundColor({ color: "#eacf73" });
     chrome.storage.sync.get(["active", "autoDaily"], (result) => {
         if (result.active || result.autoDaily) {
             checkLastOpened();
@@ -120,8 +120,6 @@ function handleMessage(request) {
         checkLastOpened();
     } else if (request.action === "stop") {
         sendStopSearch();
-    } else if (request.action === "closeBingTabs") {
-        closeBingTabs();
     }
 }
 
@@ -142,17 +140,6 @@ async function openDailyRewards() {
         chrome.tabs.onUpdated.addListener(checkTab);
     });
     setTimeout(() => chrome.tabs.remove(tab.id), 10000);
-}
-
-async function closeBingTabs() {
-    const tabs = await chrome.tabs.query({url: "https://www.bing.com/search*"});
-    const filteredTabs = tabs.filter(tab => tab.url.includes("&rnoreward"));
-    for (const tab of filteredTabs) {
-        if (tab.id) {
-            await chrome.tabs.remove(tab.id);
-            await delay(100 + getRandomNumber(0, 500));
-        }
-    }
 }
 
 // Main Functions

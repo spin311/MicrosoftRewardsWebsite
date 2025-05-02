@@ -39,24 +39,7 @@ function openDailySets() {
             link.click();
             await contentDelay(1000 + contentGetRandomNumber(0, 1000));
         }
-        alertBackground("closeBingTabs");
     });
-}
-
-function alertBackground(message) {
-    chrome.runtime.sendMessage({ action: message });
-}
-
-function shouldOpenDaily(autoDaily, lastDaily) {
-    if (!autoDaily) return false;
-    const today = new Date().toLocaleDateString();
-    if (lastDaily !== today)  {
-        chrome.storage.sync.set({
-            lastDaily: today
-        });
-    }
-    return lastDaily !== today;
-
 }
 
 async function contentDelay(ms) {

@@ -67,7 +67,7 @@ document.addEventListener('DOMContentLoaded', async function () {
     const rewardsLink = document.getElementById('rewardsLink');
 
     setupDonateImage(donateImg, donateText);
-    await setupRewardsLink(rewardsLink)
+    // await setupRewardsLink(rewardsLink);
     await setupSearchButton(button);
 
     await setCheckboxState("autoCheckbox", "active");
