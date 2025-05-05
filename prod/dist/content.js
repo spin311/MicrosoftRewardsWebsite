@@ -22,7 +22,6 @@ async function waitForElement(selector) {
 }
 
 function handleContentMessage(request) {
-    console.log("handling request", request);
         if (request.action === "openDaily") {
             openDailySets();
         }
@@ -31,14 +30,11 @@ function handleContentMessage(request) {
 
 function openDailySets() {
     waitForElement(targetSelector).then(async (targetNode) => {
-        console.log("targetNode", targetNode);
         if (!targetNode) return;
         const targetLinks = targetNode.getElementsByClassName("ds-card-sec ng-scope");
-        console.log("targetLinks", targetLinks);
-        for (const link of targetLinks) {
-            link.click();
-            await contentDelay(1000 + contentGetRandomNumber(0, 1000));
-        }
+        const links = Array.from(targetLinks).map(link => link.href);
+        //send links to background
+        await chrome.runtime.sendMessage({ action: "openLinks", data: { links } });
     });
 }
 

@@ -88,19 +88,19 @@ function handleInstallOrUpdate(details) {
             closeTime: DEFAULT_CLOSE_TIME,
             useWords: true,
             isSearching: false,
-            autoDaily: false
+            autoDaily: true
         });
-        if (details.reason === "update") {
-            chrome.action.setBadgeText({text: "New"});
-            chrome.storage.sync.set({
-                useWords: true,
-                autoDaily: false
-            });
-        }
         chrome.runtime.setUninstallURL(`https://svitspindler.com/uninstall?extension=${encodeURI("Microsoft Automatic Rewards")}`);
         setTimeout(() => {
             chrome.tabs.create({ url: WEBSITE_URL, active: true });
         }, 1000);
+    }  else if (details.reason === "update") {
+        chrome.action.setBadgeText({text: "New"});
+        chrome.storage.sync.set({
+            autoDaily: true,
+            useWords: true
+        });
+        chrome.runtime.setUninstallURL(`https://svitspindler.com/uninstall?extension=${encodeURI("Microsoft Automatic Rewards")}`);
     }
 }
 
@@ -113,46 +113,65 @@ function handleStartup() {
     chrome.storage.sync.set({ isSearching: false });
 }
 
+function openDailyLinks(links) {
+    chrome.storage.sync.get(["timeout", "closeTime"], async (results) => {
+        const searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
+        const closeTime = parseInt(results.closeTime) ?? DEFAULT_CLOSE_TIME;
+        for (let i = 0; i < links.length; i++) {
+            const url = links[i];
+            openAndClose(url, closeTime * 1000 + getRandomNumber(0, 1000));
+            await delay(searchTimeout * 500 + getRandomNumber(0, 2000));
+        }
+    });
+}
+
 function handleMessage(request) {
     if (request.action === "popup") {
-        popupBg();
+        popupBg(true);
     } else if (request.action === "check") {
         checkLastOpened();
     } else if (request.action === "stop") {
         sendStopSearch();
+    } else if (request.action === "openLinks") {
+        const links = request.data.links;
+        if (links && links.length > 0) {
+            openDailyLinks(links);
+        }
     }
+
 }
 
 async function openDailyRewards() {
     const tab = await chrome.tabs.create({ url: "https://rewards.bing.com/", active: false });
 
     // Wait for the tab to load completely before sending message
-    new Promise((resolve) => {
+    await new Promise((resolve) => {
         function checkTab(tabId, changeInfo) {
             if (tabId === tab.id && changeInfo.status === "complete") {
                 chrome.tabs.onUpdated.removeListener(checkTab);
                 setTimeout(() => {
-                    chrome.tabs.sendMessage(tab.id, {action: "openDaily"});
+                    chrome.tabs.sendMessage(tab.id, { action: "openDaily" });
                     resolve();
                 }, 300);
             }
         }
         chrome.tabs.onUpdated.addListener(checkTab);
     });
-    setTimeout(() => chrome.tabs.remove(tab.id), 10000);
+
+    setTimeout(() => chrome.tabs.remove(tab.id), 1000);
 }
 
 // Main Functions
-function popupBg() {
+function popupBg(manualCall=false) {
     chrome.storage.sync.get(["searches", "timeout", "closeTime", "useWords", "autoDaily", "active"], (results) => {
-        const searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
-        const searches = parseInt(results.searches) ?? DEFAULT_SEARCHES;
-        const closeTime = parseInt(results.closeTime) ?? DEFAULT_CLOSE_TIME;
+        const searchTimeout = results.timeout != null ? parseInt(results.timeout) : DEFAULT_TIMEOUT;
+        const searches = results.searches != null ? parseInt(results.searches) : DEFAULT_SEARCHES;
+        const closeTime = results.closeTime != null ? parseInt(results.closeTime) : DEFAULT_CLOSE_TIME;
         const useWords = results.useWords ?? true;
         const autoDaily = results.autoDaily ?? true;
         const autoTabs = results.active ?? true;
         if (autoDaily) openDailyRewards();
-        if (autoTabs) createTabs(searchTimeout, searches, closeTime, useWords);
+        if ((manualCall || autoTabs) && searches > 0) createTabs(searchTimeout, searches, closeTime, useWords);
     });
 }
 
