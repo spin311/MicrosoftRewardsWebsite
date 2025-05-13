@@ -96,11 +96,6 @@ function handleInstallOrUpdate(details) {
         }, 1000);
     }  else if (details.reason === "update") {
         chrome.action.setBadgeText({text: "New"});
-        chrome.storage.sync.set({
-            autoDaily: true,
-            useWords: true
-        });
-        chrome.runtime.setUninstallURL(`https://svitspindler.com/uninstall?extension=${encodeURI("Microsoft Automatic Rewards")}`);
     }
 }
 
@@ -113,18 +108,6 @@ function handleStartup() {
     chrome.storage.sync.set({ isSearching: false });
 }
 
-function openDailyLinks(links) {
-    chrome.storage.sync.get(["timeout", "closeTime"], async (results) => {
-        const searchTimeout = parseInt(results.timeout) ?? DEFAULT_TIMEOUT;
-        const closeTime = parseInt(results.closeTime) ?? DEFAULT_CLOSE_TIME;
-        for (let i = 0; i < links.length; i++) {
-            const url = links[i];
-            openAndClose(url, closeTime * 1000 + getRandomNumber(0, 1000));
-            await delay(searchTimeout * 500 + getRandomNumber(0, 2000));
-        }
-    });
-}
-
 function handleMessage(request) {
     if (request.action === "popup") {
         popupBg(true);
@@ -132,13 +115,7 @@ function handleMessage(request) {
         checkLastOpened();
     } else if (request.action === "stop") {
         sendStopSearch();
-    } else if (request.action === "openLinks") {
-        const links = request.data.links;
-        if (links && links.length > 0) {
-            openDailyLinks(links);
-        }
     }
-
 }
 
 async function openDailyRewards() {
@@ -158,7 +135,7 @@ async function openDailyRewards() {
         chrome.tabs.onUpdated.addListener(checkTab);
     });
 
-    setTimeout(() => chrome.tabs.remove(tab.id), 1000);
+    setTimeout(() => chrome.tabs.remove(tab.id), 10000);
 }
 
 // Main Functions

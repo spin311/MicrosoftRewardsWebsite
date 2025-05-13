@@ -32,9 +32,10 @@ function openDailySets() {
     waitForElement(targetSelector).then(async (targetNode) => {
         if (!targetNode) return;
         const targetLinks = targetNode.getElementsByClassName("ds-card-sec ng-scope");
-        const links = Array.from(targetLinks).map(link => link.href);
-        //send links to background
-        await chrome.runtime.sendMessage({ action: "openLinks", data: { links } });
+        for (const link of targetLinks) {
+            link.click();
+            await contentDelay(1000 + contentGetRandomNumber(0, 1000));
+        }
     });
 }
 
