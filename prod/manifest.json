@@ -1,7 +1,7 @@
 {
   "manifest_version": 3,
   "name": "Microsoft automatic rewards",
-  "version": "2.2.0",
+  "version": "2.2.1",
   "icons": {
     "16": "imgs/logo.png",
     "32": "imgs/logo2.png",

@@ -88,7 +88,7 @@ function handleInstallOrUpdate(details) {
             closeTime: DEFAULT_CLOSE_TIME,
             useWords: true,
             isSearching: false,
-            autoDaily: true
+            autoDaily: false
         });
         chrome.runtime.setUninstallURL(`https://svitspindler.com/uninstall?extension=${encodeURI("Microsoft Automatic Rewards")}`);
         setTimeout(() => {
