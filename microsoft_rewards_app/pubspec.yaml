@@ -1,0 +1,37 @@
+name: microsoft_automatic_rewards
+version: 1.0.0+7
+
+environment:
+  sdk: '>=3.7.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_bloc: ^9.1.0
+  get_it: ^8.0.3
+  url_launcher: ^6.1.11
+  equatable: ^2.0.5
+  word_generator: ^0.4.6
+  shared_preferences: ^2.5.3
+  flutter_launcher_icons: ^0.14.3
+  flutter_inappwebview: ^6.1.5
+  bloc: any
+  animated_text_kit: ^4.2.3
+  flutter_local_notifications: ^19.2.1
+  permission_handler: ^12.0.0+1
+  flutter_timezone: ^4.1.0
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  bloc_test: ^10.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/images/
+
+flutter_launcher_icons:
+  android: true
+  ios: true
+  image_path: "assets/images/microsoft.png"
+  remove_alpha_ios: true
