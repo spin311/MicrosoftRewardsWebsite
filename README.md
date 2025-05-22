@@ -1,17 +1,17 @@
 # Microsoft Rewards Google Extension
 
-![banner](imgs/banner.png)
+![banner](chrome/imgs/banner.png)
 
 Get the most out of your Microsoft rewards account and earn points every day!
 
-If you like the extension, please give it a star on GitHub! <img src="imgs/github-star.png" alt="icon" height="32">
+If you like the extension, please give it a star on GitHub! <img src="chrome/imgs/github-star.png" alt="icon" height="32">
 
 ## Download
 
 [Google Chrome Store](https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo)  
-  If you enjoy the extension, 5 star rating would mean a lot:) <img src="imgs/stars5.jpeg" alt="5 Stars" height="16">
+  If you enjoy the extension, 5-star rating would mean a lot:) <img src="chrome/imgs/stars5.jpeg" alt="5 Stars" height="16">
 
-## Donate <img src="imgs/justAGirl.png" alt="Cat" height="64">
+## Donate <img src="chrome/imgs/justAGirl.png" alt="Cat" height="64">
 
 Donations help me make tools like this for free in my spare time. Any amount helps! ❤️
 
@@ -21,7 +21,7 @@ Donations help me make tools like this for free in my spare time. Any amount hel
 
 ## Features
 
-![Popup Screenshot](imgs/help3.png)
+![Popup Screenshot](chrome/imgs/help3.png)
 
 1. Open 10 random tabs in Bing and close them once they are loaded.
 2. Automatically open tabs every day when the browser is opened (turned on by default).
@@ -32,17 +32,19 @@ Donations help me make tools like this for free in my spare time. Any amount hel
 7. Visit the Microsoft Rewards site and log in.
 8. [Donate with PayPal or any credit card](https://www.paypal.com/donate/?hosted_button_id=4WXEWMN3QGLGY).
 
-<img src="imgs/pin.png" alt="Pin extension" height="64">
+<img src="chrome/imgs/pin.png" alt="Pin extension" height="64">
 
 Make sure to pin the extension.
 
 ## Project structure
 
 ```
-prod - Production files (All files needed for the extension)
-src - Source files (TypeScript)
-styles - CSS files
-imgs - Images
+/chrome - Chrome extension files
+  prod - Production files (Min files needed for the extension)
+  /src - Source files (TypeScript)
+  /styles - CSS files
+  /imgs - Images
+/microsoft_rewards_app - Android app files
 ```
 
 
