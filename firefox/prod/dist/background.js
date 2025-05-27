@@ -9,7 +9,44 @@ const DEFAULT_SEARCHES = 12;
 const DEFAULT_TIMEOUT = 60;
 const DEFAULT_CLOSE_TIME = 5;
 
-const words = [ /* same word list as chrome version */ ];
+const words = [
+    "food", "drink", "restaurant", "cafe", "bar", "pub", "club", "diner", "eatery", "tavern",
+    "museum", "bistro", "buffet", "canteen", "coffeehouse", "grill", "inn", "joint", "kitchen",
+    "lounge", "pizzeria", "saloon", "steakhouse", "tearoom", "trattoria", "brasserie", "brewery",
+    "cafeteria", "chophouse", "gastropub", "roadhouse", "rotisserie", "smorgasbord", "soda",
+    "soccer", "basketball", "baseball", "tennis", "cricket", "rugby", "golf", "hockey", "swimming",
+    "running", "cycling", "skiing", "snowboarding", "skating", "surfing", "fishing", "hiking",
+    "camping", "climbing", "dancing", "singing", "painting", "drawing", "sculpting", "photography",
+    "writing", "reading", "knitting", "sewing", "gardening", "cooking", "baking", "gaming", "chess",
+    "poker", "bridge", "scrabble", "monopoly", "puzzle", "crossword", "sudoku", "video games",
+    "console", "PCgaming", "arcade", "VRgaming", "mobilegaming", "boardgames", "cardgames",
+    "television", "computer", "smartphone", "laptop", "tablet", "camera", "headphones", "speaker",
+    "monitor", "keyboard", "mouse", "printer", "router", "drone", "microphone", "beach", "mountain",
+    "forest", "desert", "island", "ocean", "river", "lake", "park", "doctor", "teacher", "engineer",
+    "programmer", "designer", "artist", "chef", "nurse", "architect", "scientist", "collecting",
+    "woodworking", "origami", "pottery", "calligraphy", "jewelry", "metalwork", "glassblowing",
+    "astronomy", "volunteering", "physics", "chemistry", "biology", "mathematics", "history",
+    "geography", "literature", "language", "economics", "philosophy", "yoga", "meditation",
+    "fitness", "nutrition", "mindfulness", "stretching", "massage", "aromatherapy", "pilates",
+    "therapy", "birthday", "wedding", "graduation", "anniversary", "holiday", "festival", "concert",
+    "near", "google", "where", "how", "what", "can", "best", "cheapest", "top", "top10",
+    "find", "search", "locate", "discover", "explore", "lookup", "seek", "identify", "track", "uncover",
+    "nearby", "closest", "guide", "tutorial", "review", "comparison", "versus", "information",
+    "directions", "recommendations", "alternatives", "solutions", "help", "advice", "instructions",
+    "tips", "examples", "resources", "techniques", "methods", "how to", "ways to", "places to", "things to do", "restaurants near me", "best time to",
+    "cheap", "popular", "famous", "hidden gems", "activities", "events", "today", "tonight",
+    "open now", "family friendly", "pet friendly", "with kids", "for couples", "solo travel",
+    "budget travel", "luxury", "free", "local", "near me", "what is", "who is", "can I",
+    "should I", "when to", "why is", "how much", "how long", "how far", "how many", "does",
+    "is it safe", "easy", "quick", "simple", "step by step", "nearby attractions", "must see",
+    "reviews", "testimonials", "rating", "map", "price", "schedule", "availability", "book now",
+    "tickets", "opening hours", "closed", "weather", "forecast", "cheap flights", "best hotels",
+    "cuisine", "menu", "food near me", "best place for", "best way to", "directions to", "get to",
+    "how do I", "plan trip", "vacation ideas", "top rated", "most popular", "things to avoid",
+    "tips for", "travel guide", "insider tips", "how it works", "learn about", "overview",
+    "explained", "definition", "meaning", "origin", "background", "history of", "basics of",
+    "beginner guide", "example of", "sample", "template", "walkthrough", "demo"
+];
 
 // Event Listeners
 browser.runtime.onInstalled.addListener(handleInstallOrUpdate);
@@ -52,7 +89,7 @@ async function handleInstallOrUpdate(details) {
             autoDaily: false
         });
         await browser.runtime.setUninstallURL(
-            `https://svitspindler.com/uninstall?extension=${encodeURI('Microsoft Automatic Rewards')}`
+            `https://svitspindler.com/uninstall?extension=${encodeURI('Microsoft Automatic Rewards Firefox')}`
         );
         setTimeout(() => browser.tabs.create({ url: WEBSITE_URL, active: true }),1000);
     } else if (details.reason === 'update') {
