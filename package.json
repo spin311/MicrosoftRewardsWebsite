@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/firefox-webext-browser": "^120.0.4"
+  }
+}

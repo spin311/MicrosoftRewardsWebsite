@@ -12,6 +12,8 @@ import '../../../../core/constants/strings.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:animated_text_kit/animated_text_kit.dart';
 
+import 'login_screen.dart';
+
 class SearchScreen extends StatelessWidget {
   const SearchScreen({super.key});
 
@@ -157,6 +159,7 @@ class _SearchFormState extends State<_SearchForm> {
   final TextEditingController _delayController = TextEditingController();
   InAppWebViewController? _webViewController;
   bool _sendDailyReminder = false;
+  bool _loggedIn = false;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 19, minute: 0);
 
   @override
@@ -188,6 +191,7 @@ class _SearchFormState extends State<_SearchForm> {
       _countController.text = prefs.getString('search_count') ?? '12';
       _delayController.text = prefs.getString('search_delay') ?? '20';
       _sendDailyReminder = prefs.getBool('send_daily_reminder') ?? false;
+      _loggedIn = prefs.getBool('loggedIn') ?? false;
       _selectedTime = TimeOfDay(
         hour: prefs.getInt('reminder_hour') ?? 19,
         minute: prefs.getInt('reminder_minute') ?? 0,
@@ -225,8 +229,6 @@ class _SearchFormState extends State<_SearchForm> {
       setState(() => _selectedTime = pickedTime);
 
       if (_sendDailyReminder) {
-        print('Sending immediate notification and scheduling daily reminder');
-        print('Selected time: ${pickedTime.hour}:${pickedTime.minute}');
         await NotificationService.scheduleDailyReminder(hour: pickedTime.hour, minute: pickedTime.minute);
       }
     }
@@ -326,7 +328,36 @@ class _SearchFormState extends State<_SearchForm> {
               ),
             ],
           ),
-          const SizedBox(height: AppConstants.defaultPadding * 2),
+          if (!_loggedIn) ...[
+            Row(
+              children: [
+                Padding(
+                  padding: EdgeInsets.symmetric(horizontal: 12.0),
+                  child: const Icon(
+                  Icons.warning_amber,
+                  color: Colors.orange,
+                  size: 20,
+                  ),
+                ),
+                TextButton(
+                    onPressed: () => navigateToLoginScreen(context),
+                    style: TextButton.styleFrom(
+                      padding: const EdgeInsets.only(right: 6.0),
+                      minimumSize: const Size(0, 0),
+                      tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                    ),
+                    child: Text(
+                        'Log in',
+                        style: TextStyle(
+                          decoration: TextDecoration.underline,
+                          decorationColor: Theme.of(context).primaryColor)
+                    )
+                ),
+                Text('to earn points.')
+              ],
+            )
+          ],
+          SizedBox(height: AppConstants.defaultPadding * (_loggedIn ? 2 : 1)),
           BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               final isInProgress = state is SearchInProgress;
@@ -436,6 +467,17 @@ class _SearchFormState extends State<_SearchForm> {
         delay: double.parse(_delayController.text),
         controller: _webViewController!,
       ));
+    }
+  }
+
+  void navigateToLoginScreen(BuildContext context) {
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => const LoginScreen(),
+        ),
+      );
     }
   }
 

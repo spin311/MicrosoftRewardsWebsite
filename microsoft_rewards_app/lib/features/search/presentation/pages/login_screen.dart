@@ -77,6 +77,20 @@ class _LoginScreenState extends State<LoginScreen> {
                   ),
                 ),
               ),
+            const Spacer(),
+            Align(
+              alignment: Alignment.bottomRight,
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: TextButton(
+                  onPressed: () => showConfirmPopup(context),
+                  child: const Text(
+                      "Skip for now",
+                      style: TextStyle(fontSize: 16, color: Colors.blue)
+                  ),
+                ),
+              ),
+            ),
             ] else ...[
               Expanded(
                 child: InAppWebView(
@@ -97,17 +111,7 @@ class _LoginScreenState extends State<LoginScreen> {
                     if (url != null && url.host.contains("www.bing.com")) {
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setBool("loggedIn", true);
-                      if (mounted) {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(
-                            builder: (context) => BlocProvider(
-                              create: (context) => sl<SearchBloc>(),
-                              child: const SearchScreen(),
-                            ),
-                          ),
-                        );
-                      }
+                      navigateToSearchScreen(context);
                     }
                   },
                 ),
@@ -116,6 +120,49 @@ class _LoginScreenState extends State<LoginScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  void navigateToSearchScreen(BuildContext context) {
+    if (mounted) {
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(
+          builder: (context) => BlocProvider(
+            create: (context) => sl<SearchBloc>(),
+            child: const SearchScreen(),
+          ),
+        ),
+      );
+    }
+  }
+
+  showConfirmPopup(context) {
+    showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text("Skip Login for now?"),
+          content: const Text("You won't be able to earn points until you login. Are you sure you want to skip?"),
+          actions: [
+            TextButton(
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+              child: const Text("Cancel"),
+            ),
+            TextButton(
+              onPressed: () {
+                // Handle logout logic here
+                Navigator.of(context).pop();
+                navigateToSearchScreen(context);
+              },
+              child: const Text("Skip"),
+            ),
+          ],
+        );
+      },
+      barrierDismissible: true
     );
   }
 }
