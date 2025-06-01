@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:url_launcher/url_launcher.dart';
+import 'package:wakelock_plus/wakelock_plus.dart';
 import '../../../../core/utils/validators/input_validators.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
@@ -14,8 +14,15 @@ import 'package:animated_text_kit/animated_text_kit.dart';
 
 import 'login_screen.dart';
 
-class SearchScreen extends StatelessWidget {
+class SearchScreen extends StatefulWidget {
   const SearchScreen({super.key});
+
+  @override
+  State<SearchScreen> createState() => _SearchScreenState();
+}
+
+class _SearchScreenState extends State<SearchScreen> {
+  final GlobalKey<SearchFormState> _searchFormKey = GlobalKey();
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +57,7 @@ class SearchScreen extends StatelessWidget {
                 Expanded(
                   child: BlocListener<SearchBloc, SearchState>(
                     listener: _handleStateChanges,
-                    child: const _SearchForm(),
+                    child: SearchForm(key: _searchFormKey),
                   ),
                 ),
                 if (!isKeyboardVisible) const Divider(),
@@ -68,17 +75,13 @@ class SearchScreen extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   TextButton(
-                    onPressed: () => _launchURL('https://svitspindler.com/microsoft-automatic-rewards'),
+                    onPressed: () => openInWebView(context, 'https://svitspindler.com/microsoft-automatic-rewards'),
                     child: const Text('Help'),
                   ),
                   TextButton(
-                    onPressed: () => _launchURL('https://rewards.bing.com/'),
+                    onPressed: () => openInWebView(context, 'https://rewards.bing.com/'),
                     child: const Text('Rewards'),
-                  ),
-                  TextButton(
-                    onPressed: () => _launchURL('https://svitspindler.com/donate'),
-                    child: const Text('Donate ♥'),
-                  ),
+                  )
                 ],
               ),
             ),
@@ -134,31 +137,36 @@ class SearchScreen extends StatelessWidget {
         ),
       );
     }
+    if (state is SearchFailure || state is SearchSuccess) {
+      WakelockPlus.disable();
+    }
   }
 
-  void _launchURL(String url) async {
-    final Uri uri = Uri.parse(url);
-    if (await canLaunchUrl(uri)) {
-      await launchUrl(uri);
+  void openInWebView(BuildContext context, String url) {
+    if (_searchFormKey.currentState != null) {
+      _searchFormKey.currentState!.openInWebView(url);
     } else {
-      throw 'Could not launch $url';
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Browser is not ready yet')),
+      );
     }
   }
 }
 
-class _SearchForm extends StatefulWidget {
-  const _SearchForm();
+class SearchForm extends StatefulWidget {
+  const SearchForm({super.key});
 
   @override
-  State<_SearchForm> createState() => _SearchFormState();
+  State<SearchForm> createState() => SearchFormState();
 }
 
-class _SearchFormState extends State<_SearchForm> {
+class SearchFormState extends State<SearchForm> {
   final _formKey = GlobalKey<FormState>();
   final TextEditingController _countController = TextEditingController();
   final TextEditingController _delayController = TextEditingController();
   InAppWebViewController? _webViewController;
   bool _sendDailyReminder = false;
+  bool _keepScreenOn = false;
   bool _loggedIn = false;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 19, minute: 0);
 
@@ -175,6 +183,7 @@ class _SearchFormState extends State<_SearchForm> {
   void dispose() {
     _countController.dispose();
     _delayController.dispose();
+    _webViewController?.dispose();
     super.dispose();
   }
 
@@ -188,9 +197,10 @@ class _SearchFormState extends State<_SearchForm> {
   Future<void> _loadSavedValues() async {
     final prefs = await SharedPreferences.getInstance();
     setState(() {
-      _countController.text = prefs.getString('search_count') ?? '12';
+      _countController.text = prefs.getString('search_count') ?? '22';
       _delayController.text = prefs.getString('search_delay') ?? '20';
       _sendDailyReminder = prefs.getBool('send_daily_reminder') ?? false;
+      _keepScreenOn = prefs.getBool('keep_screen_on') ?? false;
       _loggedIn = prefs.getBool('loggedIn') ?? false;
       _selectedTime = TimeOfDay(
         hour: prefs.getInt('reminder_hour') ?? 19,
@@ -328,6 +338,25 @@ class _SearchFormState extends State<_SearchForm> {
               ),
             ],
           ),
+          Row (
+            children: [
+              Checkbox(
+                  value: _keepScreenOn,
+                  onChanged: (value) async {
+                    setState(() => _keepScreenOn = value!);
+                    final prefs = await SharedPreferences.getInstance();
+                    prefs.setBool('keep_screen_on', value!);
+                  },
+              ),
+              Text(
+                'Keep screen on during search',
+                style: TextStyle(
+                  color: _keepScreenOn ? Colors.blue : Colors.grey,
+                  decoration: TextDecoration.none,
+                ),
+              ),
+            ],
+          ),
           if (!_loggedIn) ...[
             Row(
               children: [
@@ -357,7 +386,6 @@ class _SearchFormState extends State<_SearchForm> {
               ],
             )
           ],
-          SizedBox(height: AppConstants.defaultPadding * (_loggedIn ? 2 : 1)),
           BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               final isInProgress = state is SearchInProgress;
@@ -462,6 +490,9 @@ class _SearchFormState extends State<_SearchForm> {
 
   void _startSearch() {
     if (_formKey.currentState!.validate()) {
+      if (_keepScreenOn) {
+        WakelockPlus.enable();
+      }
       context.read<SearchBloc>().add(StartSearchEvent(
         count: int.parse(_countController.text),
         delay: double.parse(_delayController.text),
@@ -477,6 +508,18 @@ class _SearchFormState extends State<_SearchForm> {
         MaterialPageRoute(
           builder: (context) => const LoginScreen(),
         ),
+      );
+    }
+  }
+
+  void openInWebView(String url) {
+    if (_webViewController != null) {
+      _webViewController!.loadUrl(
+        urlRequest: URLRequest(url: WebUri(url)),
+      );
+    } else {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Browser is not ready yet')),
       );
     }
   }
