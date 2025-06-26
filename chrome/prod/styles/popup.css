@@ -306,15 +306,18 @@ a:not(.normal-link):hover::before {
     display: inline-block;
 }
 
-.try-mobile-link {
+.earn-title {
+  margin-left: 1.5em;
   color: #18272F;
   font-weight: 700;
+    font-size: 1.4em;
   position: relative;
   display: inline-block;
   overflow: hidden;
+  text-align: center;
 }
 
-.try-mobile-link::after {
+.earn-title::after {
   content: '';
   position: absolute;
   top: 0;
@@ -341,4 +344,37 @@ a:not(.normal-link):hover::before {
   100% {
     left: 125%;
   }
+}
+
+.earn {
+  text-align: left;
+}
+
+.earn-list {
+  margin-top: 0.2em;
+}
+
+.earn-list > li a{
+    color: #18272F;
+}
+
+.earn-list > li {
+    padding: 0.65em;
+    font-weight: 600;
+    display: flex;
+    align-content: center;
+    gap: 0.2em;
+    font-size: 14px;
+}
+
+.earn-list > li:hover {
+    cursor: pointer;
+    color: white;
+    background-color: #2282ad;
+}
+
+.earn-logo {
+    width: 22px;
+    height: 22px;
+    margin-right: 0.5em;
 }

@@ -33,9 +33,14 @@
             </div>
         </div>
         <div class="subtext mb-md">*need to allow popups at rewards.bing to work</div>
-        <span class="try-mobile mb-md"><a href="https://svitspindler.com/microsoft-automatic-rewards/mobile/test-app" target="_blank" class="normal-link try-mobile-link">Try mobile app</a></span>
-
-
+        <div class="earn">
+            <div class="earn-title">Earn money</div>
+            <ul class="earn-list">
+                <li><img src="./imgs/svgs/survey-svgrepo-com.svg" alt="survey" class="earn-logo"> <a href="https://www.swagbucks.com/p/register?rb=213613392&rp=1" class="normal-link" target="_blank">Swagbucks: Paid surveys</a></li>
+                <li><img src="./imgs/svgs/bitcoin-btc-logo.svg" alt="bitcoin" class="earn-logo"><a href="https://www.binance.com/activity/referral-entry/CPA?ref=CPA_00C984KKZ8" class="normal-link" target="_blank">Binance: Deposit 50$ to get 100$</a></li>
+                <li><img src="./imgs/svgs/money-svgrepo-com.svg" alt="money" class="earn-logo"><a href="https://refnocode.trade.re/qxg5kxbx" class="normal-link" target="_blank">Trade Republic: Deposit 30$ to get 30$</a></li>
+            </ul>
+        </div>
 
         <div class="inputs">
             <div class="width-100">
@@ -46,13 +51,13 @@
                     </span>
                     <span class="tooltip-icon info" data-tooltip="Number of random tabs to open in bing">i</span>
                 </div>
-                <div class="subtext initial-text">*First 2 searches do not give points</div>
             </div>
             <div>
                     <input type="number" id="timeout" value="7" min="0" max="9999">
                 <label for="timeout">
                     Time between searches (s)
                 </label>
+                <div class="subtext initial-text">*Set to 500 if you only get 12 points</div>
             </div>
             <div>
                 <input type="number" id="closeTime" value="2" min="0" max="300">
