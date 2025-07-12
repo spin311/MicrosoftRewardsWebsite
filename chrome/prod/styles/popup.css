@@ -109,6 +109,7 @@ body {
   }
   
   .form-check-input {
+    accent-color: #2282ad;
     position: absolute;
     margin-top: 0.3rem;
     margin-left: -1.25rem;
@@ -377,4 +378,9 @@ a:not(.normal-link):hover::before {
     width: 22px;
     height: 22px;
     margin-right: 0.5em;
+}
+
+.no-underline {
+  display: inline-block;
+    text-decoration: none;
 }
