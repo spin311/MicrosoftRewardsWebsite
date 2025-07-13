@@ -9,6 +9,11 @@ If you like the extension, please give it a star on GitHub! <img src="chrome/img
 ## Download
 
 [Google Chrome Store](https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo)  
+
+[Firefox Store](https://addons.mozilla.org/en-US/firefox/addon/microsoft-automatic-rewards/)
+
+[Mobile app](https://github.com/spin311/MicrosoftRewardsWebsite/releases/tag/app)
+
   If you enjoy the extension, 5-star rating would mean a lot:) <img src="chrome/imgs/stars5.jpeg" alt="5 Stars" height="16">
 
 ## Donate <img src="chrome/imgs/justAGirl.png" alt="Cat" height="64">
