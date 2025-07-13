@@ -83,24 +83,20 @@ async function handleStartup() {
     await browser.storage.sync.set({ isSearching: false });
 }
 
-// Popup or options messages
+// Messages from popup/options
 function handleMessage(request) {
     if (request.action === 'popup') popupBg(true);
     else if (request.action === 'check') void checkLastOpened();
     else if (request.action === 'stop') void sendStopSearch();
 }
 
-// Unified alarm handler
+// Alarms
 function handleAnyAlarm(alarm) {
-    if (alarm.name === 'dailyCheck') {
-        void checkLastOpened();
-    }
-    if (alarm.name === 'nextTabAlarm' && pendingLoopState) {
-        continueTabLoop();
-    }
+    if (alarm.name === 'dailyCheck') void checkLastOpened();
+    if (alarm.name === 'nextTabAlarm' && pendingLoopState) continueTabLoop();
 }
 
-// Main hybrid search loop
+// Main loop
 async function createTabs(searchTimeout, searches, closeTime, useWords=true) {
     await browser.storage.sync.set({ isSearching: true, currentSearch: 0 });
     startTabLoop(searchTimeout, searches, closeTime, useWords, 0);
@@ -120,37 +116,44 @@ function startTabLoop(searchTimeout, searches, closeTime, useWords, currentSearc
         if (nextDelayMs < 1000) nextDelayMs = 1000;
 
         if (nextDelayMs < 60000) {
+            console.log(`Next tab in ${nextDelayMs} ms using setTimeout`);
             setTimeout(() => {
                 startTabLoop(searchTimeout, searches, closeTime, useWords, currentSearch);
             }, nextDelayMs);
         } else {
+            const delayInMinutes = Math.max(1, Math.round(nextDelayMs / 60000));
+            console.log(`Next tab delayed by ${delayInMinutes} min using browser alarm`);
             pendingLoopState = { searchTimeout, searches, closeTime, useWords, currentSearch };
-            browser.alarms.create('nextTabAlarm', { delayInMinutes: nextDelayMs / 60000 });
+            browser.alarms.clear('nextTabAlarm').then(() => {
+                browser.alarms.create('nextTabAlarm', { delayInMinutes });
+            });
         }
     });
 }
 
 function continueTabLoop() {
+    console.log('continueTabLoop triggered by alarm');
     if (!pendingLoopState) return;
     const { searchTimeout, searches, closeTime, useWords, currentSearch } = pendingLoopState;
+    pendingLoopState = null;
     startTabLoop(searchTimeout, searches, closeTime, useWords, currentSearch);
 }
 
 // Popup triggers it
 async function popupBg(manualCall=false) {
     const results = await browser.storage.sync.get(['searches','timeout','closeTime','useWords','autoDaily','active']);
-    const searchTimeout = parseInt(results.timeout)||DEFAULT_TIMEOUT;
-    const searches = parseInt(results.searches)||DEFAULT_SEARCHES;
-    const closeTime = parseInt(results.closeTime)||DEFAULT_CLOSE_TIME;
-    const useWords = results.useWords??true;
-    const autoDaily = results.autoDaily??true;
-    const autoTabs = results.active??true;
+    const searchTimeout = parseInt(results.timeout) || DEFAULT_TIMEOUT;
+    const searches = parseInt(results.searches) || DEFAULT_SEARCHES;
+    const closeTime = parseInt(results.closeTime) || DEFAULT_CLOSE_TIME;
+    const useWords = results.useWords ?? true;
+    const autoDaily = results.autoDaily ?? true;
+    const autoTabs = results.active ?? true;
 
     if (autoDaily) await openDailyRewards();
-    if ((manualCall||autoTabs)&&searches>0) void createTabs(searchTimeout,searches,closeTime,useWords);
+    if ((manualCall || autoTabs) && searches > 0) void createTabs(searchTimeout, searches, closeTime, useWords);
 }
 
-// Tab opening
+// Open tabs
 async function openDailyRewards() {
     const tab = await browser.tabs.create({ url: 'https://rewards.bing.com/', active: false });
     return new Promise(resolve => {
@@ -169,23 +172,23 @@ async function openDailyRewards() {
 }
 
 async function openTab(useWords, closeTime) {
-    let randomString='';
+    let randomString = '';
     if (useWords) {
         const count = getRandomNumber(2,4);
-        for (let i=0;i<count;i++) randomString+=`${getRandomElement(words)} `;
+        for (let i=0;i<count;i++) randomString += `${getRandomElement(words)} `;
     } else {
-        randomString=Math.random().toString(36).substring(2,getRandomNumber(5,8));
+        randomString = Math.random().toString(36).substring(2,getRandomNumber(5,8));
     }
-    randomString=`${Math.random().toString(36).charAt(2)}${randomString}`;
-    const url=`${BING_SEARCH_URL}${encodeURIComponent(randomString)}${BING_SEARCH_PARAMS}`;
+    randomString = `${Math.random().toString(36).charAt(2)}${randomString}`;
+    const url = `${BING_SEARCH_URL}${encodeURIComponent(randomString)}${BING_SEARCH_PARAMS}`;
     return openAndClose(url, closeTime + getRandomNumber(0,1000));
 }
 
 function openAndClose(url, closeTime) {
     return browser.tabs.create({ url, active: false }).then(tab => {
-        const tabId=tab.id;
-        function listener(updatedId,changeInfo) {
-            if (updatedId===tabId && changeInfo.status==='complete') {
+        const tabId = tab.id;
+        function listener(updatedId, changeInfo) {
+            if (updatedId === tabId && changeInfo.status === 'complete') {
                 browser.tabs.onUpdated.removeListener(listener);
                 waitAndClose(tabId, closeTime);
             }
@@ -194,11 +197,11 @@ function openAndClose(url, closeTime) {
     });
 }
 
-function waitAndClose(id, timeout=DEFAULT_CLOSE_TIME*1000) {
-    if (timeout<=0) timeout=500;
+function waitAndClose(id, timeout = DEFAULT_CLOSE_TIME * 1000) {
+    if (timeout <= 0) timeout = 500;
     setTimeout(() => {
-        browser.tabs.get(id).then(() => browser.tabs.remove(id)).catch(()=>{});
-    }, (timeout-500)+getRandomNumber(0,1000));
+        browser.tabs.get(id).then(() => browser.tabs.remove(id)).catch(() => {});
+    }, (timeout - 500) + getRandomNumber(0,1000));
 }
 
 async function sendStopSearch() {
@@ -208,13 +211,13 @@ async function sendStopSearch() {
 
 // Helpers
 function getRandomNumber(min,max) {
-    return Math.floor(Math.random()*(max-min+1)+min);
+    return Math.floor(Math.random() * (max - min + 1) + min);
 }
 function getRandomElement(array) {
     return array[getRandomNumber(0, array.length - 1)];
 }
 
-// Check last opened
+// Daily alarm check
 async function checkLastOpened() {
     const today = new Date().toLocaleDateString();
     const result = await browser.storage.sync.get('lastOpened');
