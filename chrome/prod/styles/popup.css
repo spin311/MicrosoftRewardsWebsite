@@ -311,7 +311,7 @@ a:not(.normal-link):hover::before {
   margin-left: 1.5em;
   color: #18272F;
   font-weight: 700;
-    font-size: 1.4em;
+  font-size: 1.1em;
   position: relative;
   display: inline-block;
   overflow: hidden;

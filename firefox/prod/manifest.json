@@ -1,7 +1,7 @@
 {
   "manifest_version": 2,
   "name": "Microsoft automatic rewards",
-  "version": "2.2.3",
+  "version": "2.2.4",
   "description": "Script that gives you maximum amount of Microsoft rewards points every day automatically or by a click of a button.",
   "icons": {
     "16": "imgs/logo.png",
