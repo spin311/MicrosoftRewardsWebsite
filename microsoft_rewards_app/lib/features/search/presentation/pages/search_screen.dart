@@ -38,7 +38,7 @@ class _SearchScreenState extends State<SearchScreen> {
                 : Row(
               children: [
                 Image.asset(
-                  'assets/images/microsoft.png',
+                  'assets/images/auto_search.png',
                   height: 32,
                 ),
                 const SizedBox(width: 10),

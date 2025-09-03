@@ -1,6 +1,6 @@
 // lib/core/constants/strings.dart
 class Strings {
-  static const String appTitle = 'Auto Rewards for Bing';
+  static const String appTitle = 'Reward Search Automator';
   static const String searchFailed = 'Search failed: ';
   static const String searchCompleted = 'Search completed successfully!';
   static const String searchCountLabel = 'Search Count';

@@ -20,7 +20,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Login to Microsoft")),
+      appBar: AppBar(title: const Text("Login to Microsoft Account")),
       body: Padding(
         padding: const EdgeInsets.all(16),
         child: Column(
@@ -36,12 +36,12 @@ class _LoginScreenState extends State<LoginScreen> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Image.asset(
-                        'assets/images/microsoft.png',
+                        'assets/images/auto_search.png',
                         height: 40,
                       ),
                       const SizedBox(height: 16),
                       const Text(
-                        "Earn Microsoft Rewards automatically",
+                        "Automate your daily web searches to collect reward points",
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,
@@ -50,9 +50,9 @@ class _LoginScreenState extends State<LoginScreen> {
                       ),
                       const SizedBox(height: 12),
                       const Text(
-                        "Sign in to Microsoft to earn points by automating Bing searches.\n Level 2 is required to earn points.\n Redeem points for gift cards and more.",
-                        style: TextStyle(fontSize: 15, height: 1.5),
-                        textAlign: TextAlign.center,
+                        "Sign in with your existing rewards account to run automated searches.\n"
+                            "Customizable number of searches and delays.\n"
+                            "Use your collected points as usual for gift cards, donations, or game credits.",
                       ),
                       const SizedBox(height: 24),
                       ElevatedButton.icon(
