@@ -166,7 +166,7 @@ class SearchFormState extends State<SearchForm> {
   final TextEditingController _delayController = TextEditingController();
   InAppWebViewController? _webViewController;
   bool _sendDailyReminder = false;
-  bool _keepScreenOn = false;
+  bool _keepScreenOn = true;
   bool _loggedIn = false;
   TimeOfDay _selectedTime = const TimeOfDay(hour: 19, minute: 0);
 
@@ -200,7 +200,7 @@ class SearchFormState extends State<SearchForm> {
       _countController.text = prefs.getString('search_count') ?? '22';
       _delayController.text = prefs.getString('search_delay') ?? '20';
       _sendDailyReminder = prefs.getBool('send_daily_reminder') ?? false;
-      _keepScreenOn = prefs.getBool('keep_screen_on') ?? false;
+      _keepScreenOn = prefs.getBool('keep_screen_on') ?? true;
       _loggedIn = prefs.getBool('loggedIn') ?? false;
       _selectedTime = TimeOfDay(
         hour: prefs.getInt('reminder_hour') ?? 19,
@@ -385,7 +385,35 @@ class SearchFormState extends State<SearchForm> {
                 Text('to earn points.')
               ],
             )
-          ],
+          ] else ...[
+            Row(
+            children: [
+    const Padding(
+    padding: EdgeInsets.symmetric(horizontal: 12.0),
+    child: Icon(
+    Icons.logout,
+    color: Colors.blue,
+    size: 20,
+    ),
+    ),
+    TextButton(
+    onPressed: _logout,
+    style: TextButton.styleFrom(
+    padding: const EdgeInsets.only(right: 6.0),
+    minimumSize: const Size(0, 0),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    ),
+    child: Text(
+    'Log out',
+    style: TextStyle(
+    decoration: TextDecoration.underline,
+    decorationColor: Theme.of(context).primaryColor,
+    ),
+    ),
+    ),
+    ],
+    ),
+    ],
           BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               final isInProgress = state is SearchInProgress;
@@ -526,5 +554,18 @@ class SearchFormState extends State<SearchForm> {
 
   void _cancelSearch() {
     context.read<SearchBloc>().add(CancelSearchEvent());
+  }
+
+  Future<void> _logout() async {
+
+    await CookieManager.instance().deleteAllCookies();
+    await WebStorageManager.instance().deleteAllData();
+
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('loggedIn', false);
+
+    if (mounted) {
+      navigateToLoginScreen(context);
+    }
   }
 }
