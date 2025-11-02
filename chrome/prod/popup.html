@@ -9,7 +9,7 @@
   <h3 class="container-fluid text-center mt-2 heading">Microsoft automatic rewards</h3>
   <div class="container-fluid text-center my-2">
       <a href="https://svitspindler.com/microsoft-automatic-rewards" class="float-start links" target="_blank">Help</a>
-      <a href="https://svitspindler.com/microsoft-automatic-rewards/mobile/website" class="float-start links" target="_blank">Mobile</a>
+      <a href="https://svitspindler.com/microsoft-automatic-rewards/mobile/test-app" class="float-start links" target="_blank">Mobile</a>
       <a class="links" href="https://svitspindler.com/contact" target="_blank" id="contact">Contact Me</a>
   </div>
 
@@ -33,9 +33,10 @@
                 <span class="tooltip-icon info" data-tooltip="Opens bing rewards tab and completes daily tasks for extra points">ℹ</span>
             </div>
         </div>
-        <div class="subtext mb-md">*need to allow popups at rewards.bing to work</div>
-        <div class="earn">
-            <div class="earn-title">My extension for free games:</div>
+        <div class="subtext mb-md">*allow popups at rewards.bing to work</div>
+
+        <div class="left-align  small-title">
+            <div class="ml-2">Extension for free games:</div>
             <ul class="earn-list">
                 <li>
                     <a href="https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk?authuser=2&hl=en-GB&pli=1" class="normal-link" target="_blank" style="display: flex; align-items: center; width: 100%; height: 100%;">
@@ -45,6 +46,20 @@
                 </li>
             </ul>
         </div>
+        <div class="left-align ml-2 small-title">Mobile app to earn more points:</div>
+        <div class="website-header">
+            <div class="qr-code-with-text">
+                <img src="./imgs/svgs/qr-code-app.svg" alt="QR code" class="qr-code">
+                <span class="website-phone-text">Scan on phone</span>
+            </div>
+            <a href="https://play.google.com/store/apps/details?id=com.spin311.microsoft_automatic_rewards" class="website-phone normal-link no-underline try-mobile" target="_blank" rel="noopener noreferrer">
+                <img class="website-phone-image" src="./imgs/mar-phone.png" alt="Microsoft Automatic Rewards Phone App">
+                <div class="normal-color">Download App</div>
+            </a>
+        </div>
+<!--        <span class="try-mobile mb-md"><a href="https://svitspindler.com/microsoft-automatic-rewards/mobile/test-app" target="_blank" class="normal-link try-mobile-link"><img-->
+<!--                src="./imgs/svgs/mobile-phone.svg" alt="mobile phone" class="earn-logo">Download mobile app</a></span>-->
+
 
         <div class="inputs">
             <div class="width-100">
@@ -61,7 +76,7 @@
                 <label for="timeout">
                     Time between searches (s)
                 </label>
-                <div class="subtext initial-text">*Set to 500 if you only get 12 points</div>
+                <div class="subtext initial-text">*Set to 500 if your points are stuck</div>
             </div>
             <div>
                 <input type="number" id="closeTime" value="2" min="0" max="300">

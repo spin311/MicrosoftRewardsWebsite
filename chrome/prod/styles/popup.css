@@ -141,6 +141,10 @@ body {
     text-decoration-line: none;
   }
 
+.normal-color {
+  color: #18272F;
+}
+
 a:not(.normal-link) {
   text-decoration: none;
   color: #18272F;
@@ -299,26 +303,27 @@ a:not(.normal-link):hover::before {
   width: 100%;
 }
 
-.try-mobile {
-  display: inline-block;
-}
-
 .d-ib {
     display: inline-block;
 }
 
-.earn-title {
+.try-mobile {
+  display: inline-block;
   margin-left: 1.5em;
-  color: #18272F;
   font-weight: 700;
   font-size: 1.1em;
   position: relative;
-  display: inline-block;
   overflow: hidden;
   text-align: center;
 }
+.try-mobile > a {
+  color: #18272F;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
 
-.earn-title::after {
+.try-mobile::after {
   content: '';
   position: absolute;
   top: 0;
@@ -347,7 +352,7 @@ a:not(.normal-link):hover::before {
   }
 }
 
-.earn {
+.left-align {
   text-align: left;
 }
 
@@ -383,4 +388,36 @@ a:not(.normal-link):hover::before {
 .no-underline {
   display: inline-block;
     text-decoration: none;
+}
+
+.ml-2 {
+    margin-left: 1.5em;
+}
+
+.website-header {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.qr-code-with-text {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.website-phone-text {
+  font-weight: 700;
+  font-size: 1.1em;
+  margin-top: 0.3em;
+  color: #18272F;
+}
+
+.website-phone-image, .qr-code {
+  height: 8rem;
+}
+
+.small-title {
+    font-size: 1.1em;
+    font-weight: 500;
+    margin-bottom: 0.3em;
 }
