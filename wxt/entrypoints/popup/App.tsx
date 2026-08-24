@@ -5,6 +5,7 @@ import { useSearchProgress } from '@/entrypoints/hooks/useSearchProgress';
 import { StorageValues } from '@/entrypoints/enums/storageValues';
 import { DEFAULTS, LEVEL_SEARCHES } from '@/entrypoints/utils/settings';
 import { clearBadge } from '@/entrypoints/utils/browserAction';
+import { RECOMMENDED_MIN_TIMEOUT_SECONDS } from '@/entrypoints/utils/search';
 import NumberInput from '@/entrypoints/components/NumberInput';
 import AccountLevelSelect from '@/entrypoints/components/AccountLevelSelect';
 import ManualClaimButton from '@/entrypoints/components/ManualClaimButton';
@@ -32,6 +33,10 @@ function App() {
     // Only shown for a run that is in flight or already finished this session:
     // a zero count means nothing has run, and showing 0/5 would read as stalled.
     const hasRunToShow = isLoaded && (isSearching || completed > 0);
+
+    // Gaps this short are honoured, but they are below what Microsoft reliably
+    // credits — so the field warns rather than silently overriding the choice.
+    const isTimeoutRisky = Number.isFinite(timeout) && timeout < RECOMMENDED_MIN_TIMEOUT_SECONDS;
 
     // Picking a level sets a sensible search count; the number field stays
     // editable so the user can still override it.
@@ -115,6 +120,13 @@ function App() {
                     </div>
                     <div>
                         <NumberInput id="timeout" label="Time between searches (s)" value={timeout} min={0} max={9999} onChange={setTimeoutValue} />
+                        {isTimeoutRisky && (
+                            <p className="field-warning" role="status">
+                                ⚠ Under {RECOMMENDED_MIN_TIMEOUT_SECONDS}s, Microsoft often stops crediting the
+                                searches, and the browser can stretch a short gap anyway.
+                                {' '}{DEFAULTS.timeout}s or more is recommended.
+                            </p>
+                        )}
                     </div>
                     <div>
                         <NumberInput id="closeTime" label="Time before closing tabs (s)" value={closeTime} min={0} max={300} onChange={setCloseTime} />
