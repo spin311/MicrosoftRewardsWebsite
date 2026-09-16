@@ -10,27 +10,35 @@ import { clearTrackedTabs } from './tabCleanup';
 
 const WEBSITE_URL = 'https://svitspindler.com/microsoft-automatic-rewards';
 
-// Runs whatever the user has enabled: the daily set if "Daily set" is on, and
-// the Bing searches if "Daily searches" is on. Both the automatic daily trigger
-// and the popup's "Get rewards" button call this, so the button respects the
-// same toggles rather than forcing either run.
+// Runs whatever the user has enabled: the dashboard visit if "Daily set" or
+// "Claim points" is on, and the Bing searches if "Daily searches" is on. Both
+// the automatic daily trigger and the popup's "Get rewards" button call this, so
+// the button respects the same toggles rather than forcing either run.
 export async function runRewards(): Promise<void> {
     const s = await getStorageItems(
-        ['searches', 'timeout', 'closeTime', 'active', 'autoDaily'],
+        ['searches', 'timeout', 'closeTime', 'active', 'autoDaily', 'claimPoints'],
         StorageValues.SYNC
     );
     const searchTimeout = toInt(s.timeout, DEFAULTS.timeout);
     const searches = toInt(s.searches, DEFAULTS.searches);
     const closeTime = toInt(s.closeTime, DEFAULTS.closeTime);
     const isDailySetEnabled = s.autoDaily ?? DEFAULTS.autoDaily;
+    const isClaimEnabled = s.claimPoints ?? DEFAULTS.claimPoints;
     const isSearchesEnabled = s.active ?? DEFAULTS.active;
 
-    // The daily set is deliberately NOT awaited: the two runs are independent.
-    // Awaiting it used to serialise the searches behind the dashboard tab
-    // reporting "complete", so a dashboard closed by the user, removed by our
-    // own safety timer, or lost to a torn-down service worker meant not a single
-    // search ran that day.
-    if (isDailySetEnabled) void openDailyRewards().catch(() => {});
+    // The dashboard visit is deliberately NOT awaited: the two runs are
+    // independent. Awaiting it used to serialise the searches behind the
+    // dashboard tab reporting "complete", so a dashboard closed by the user,
+    // removed by our own safety timer, or lost to a torn-down service worker
+    // meant not a single search ran that day. One tab covers both dashboard
+    // jobs — two would fight over the foreground, and the SPA only renders while
+    // it is visible.
+    if (isDailySetEnabled || isClaimEnabled) {
+        void openDailyRewards({
+            doDailySet: isDailySetEnabled,
+            doClaim: isClaimEnabled,
+        }).catch(() => {});
+    }
     if (isSearchesEnabled && searches > 0) {
         await startSearches(searchTimeout, searches, closeTime);
     }
@@ -55,6 +63,7 @@ export async function handleInstallOrUpdate(details: { reason: string }): Promis
             searches: DEFAULTS.searches,
             closeTime: DEFAULTS.closeTime,
             openFirstResult: DEFAULTS.openFirstResult,
+            claimPoints: DEFAULTS.claimPoints,
             isSearching: false,
             currentSearch: 0,
         }, StorageValues.SYNC);
@@ -77,6 +86,6 @@ export async function handleStartup(): Promise<void> {
     // Tab ids do not survive a browser restart, so anything still registered for
     // cleanup points at tabs that no longer exist.
     await clearTrackedTabs();
-    const s = await getStorageItems(['active', 'autoDaily'], StorageValues.SYNC);
-    if (s.active || s.autoDaily) await checkLastOpened();
+    const s = await getStorageItems(['active', 'autoDaily', 'claimPoints'], StorageValues.SYNC);
+    if (s.active || s.autoDaily || s.claimPoints) await checkLastOpened();
 }

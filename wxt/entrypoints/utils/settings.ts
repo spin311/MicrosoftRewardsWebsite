@@ -12,6 +12,12 @@ export const DEFAULTS = {
     // Off by default: navigating off the results page risks the search not being
     // credited, so this stays opt-in.
     openFirstResult: false,
+    // When on, the dashboard run also presses "Ready to claim" and confirms in
+    // the flyout it opens. Off by default: it clicks through a real transaction
+    // on the account, so existing users opt in rather than being enrolled by an
+    // update — and with "Daily set" off it is what makes the dashboard tab open
+    // at all, which briefly takes focus.
+    claimPoints: false,
 } as const;
 
 // Selecting an account level sets a sensible default number of daily searches
