@@ -1,3 +1,4 @@
+import { storage } from '#imports';
 import { browser } from 'wxt/browser';
 import { getStorageItems, setStorageItem, setStorageItems } from '@/entrypoints/hooks/useStorage';
 import { StorageValues } from '@/entrypoints/enums/storageValues';
@@ -9,6 +10,13 @@ import { startSearches, stopSearches } from './searchRunner';
 import { clearTrackedTabs } from './tabCleanup';
 
 const WEBSITE_URL = 'https://svitspindler.com/microsoft-automatic-rewards';
+
+const DAILY_CHECK_ALARM = 'dailyCheck';
+// onStartup only fires when the browser actually launches, so a long-lived
+// session that never restarts across a day boundary used to miss the
+// once-per-day gate below (checkLastOpened) entirely. This alarm re-runs that
+// gate periodically so the day rollover is caught without needing a restart.
+const DAILY_CHECK_PERIOD_MINUTES = 360;
 
 // Runs whatever the user has enabled: the dashboard visit if "Daily set" or
 // "Claim points" is on, and the Bing searches if "Daily searches" is on. Both
@@ -53,6 +61,40 @@ export async function checkLastOpened(): Promise<void> {
     }
 }
 
+export function isDailyCheckAlarm(name: string): boolean {
+    return name === DAILY_CHECK_ALARM;
+}
+
+// Armed only while at least one daily feature is on, so a fully disabled
+// extension is not woken every few hours for nothing — the same discipline
+// tabCleanup uses for its sweep alarm.
+export async function scheduleDailyCheckAlarm(): Promise<void> {
+    const s = await getStorageItems(['active', 'autoDaily', 'claimPoints'], StorageValues.SYNC);
+    const isEnabled =
+        (s.active ?? DEFAULTS.active) ||
+        (s.autoDaily ?? DEFAULTS.autoDaily) ||
+        (s.claimPoints ?? DEFAULTS.claimPoints);
+    if (isEnabled) {
+        browser.alarms.create(DAILY_CHECK_ALARM, { periodInMinutes: DAILY_CHECK_PERIOD_MINUTES });
+    } else {
+        await browser.alarms.clear(DAILY_CHECK_ALARM);
+    }
+}
+
+export async function handleDailyCheckAlarm(alarm: { name: string }): Promise<void> {
+    if (alarm.name !== DAILY_CHECK_ALARM) return;
+    await checkLastOpened();
+}
+
+// Re-arms (or disarms) the alarm the moment a relevant toggle changes, so
+// turning a daily feature on/off takes effect immediately rather than waiting
+// for the next restart — including a toggle synced in from another device.
+export function watchDailyFeatureToggles(): void {
+    storage.watch<boolean>('sync:active', () => void scheduleDailyCheckAlarm());
+    storage.watch<boolean>('sync:autoDaily', () => void scheduleDailyCheckAlarm());
+    storage.watch<boolean>('sync:claimPoints', () => void scheduleDailyCheckAlarm());
+}
+
 export async function handleInstallOrUpdate(details: { reason: string }): Promise<void> {
     if (details.reason === 'install') {
         await setStorageItems({
@@ -88,4 +130,5 @@ export async function handleStartup(): Promise<void> {
     await clearTrackedTabs();
     const s = await getStorageItems(['active', 'autoDaily', 'claimPoints'], StorageValues.SYNC);
     if (s.active || s.autoDaily || s.claimPoints) await checkLastOpened();
+    await scheduleDailyCheckAlarm();
 }
