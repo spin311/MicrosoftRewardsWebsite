@@ -40,23 +40,42 @@ export function buildSearchUrl(query: string): string {
     return `${BING_SEARCH_URL}${encodeURIComponent(query)}${BING_SEARCH_PARAMS}`;
 }
 
-// Fraction of the configured gap used as a symmetric random spread, so the time
-// between searches varies (base ±50%) instead of being near-fixed — looks less
-// robotic while still averaging the user's configured timeout. At the default
-// 60s timeout this keeps every gap at or above MIN_DELAY_SECONDS without the
-// clamp below having to bite.
-const DELAY_JITTER_FRACTION = 0.5;
+// Bounds on the symmetric random spread applied to the configured gap, so the
+// time between searches varies instead of being near-fixed — it looks less
+// robotic while still averaging exactly what the user asked for. Both bounds are
+// fractions of that gap, so the spread always scales with it.
+const MIN_JITTER_FRACTION = 0.2;
+const MAX_JITTER_FRACTION = 0.5;
 
-// Hard floor on the gap between searches. Chrome silently clamps any alarm under
-// 30s in a packed build, so anything shorter is fiction there — and searches that
-// do arrive in that fast a burst risk not being credited at all.
-const MIN_DELAY_SECONDS = 30;
+// The spread also stops short of pushing a gap below the recommended minimum, so
+// a user who picks a safe 60s never gets a 15s gap. Below the recommendation the
+// term goes negative and MIN_JITTER_FRACTION takes over, which is what keeps
+// short gaps tight: someone who deliberately sets 5s wants about 5s, not
+// anything between 2.5s and 7.5s.
+export const RECOMMENDED_MIN_TIMEOUT_SECONDS = 30;
 
-export function nextDelayMinutes(timeoutSeconds: number, jitterMs?: number): number {
-    const baseMs = Math.max(timeoutSeconds, 1) * 1000;
-    const spread = Math.round(baseMs * DELAY_JITTER_FRACTION);
+// Absolute floor: a zero-length gap would open every remaining tab at once.
+// Gaps below the recommendation are otherwise honoured, even though Microsoft is
+// less likely to credit them — the popup warns instead of overriding the choice.
+const MIN_DELAY_SECONDS = 1;
+
+// Grows smoothly with the configured gap: ±20% of it at the short end, ±50% once
+// the gap is wide enough to afford that, and in between only as wide as keeps the
+// low end at the recommendation. So 5s gives 4-6s, 30s gives 24-36s (the ±20%
+// floor wins, since a fixed 30s would be the robotic case), 45s gives 30-60s and
+// 60s gives 30-90s. The low end never falls as the setting rises.
+export function jitterSpreadMs(baseMs: number): number {
+    const headroom = baseMs - RECOMMENDED_MIN_TIMEOUT_SECONDS * 1000;
+    return Math.round(
+        Math.min(baseMs * MAX_JITTER_FRACTION, Math.max(baseMs * MIN_JITTER_FRACTION, headroom))
+    );
+}
+
+export function nextDelayMs(timeoutSeconds: number, jitterMs?: number): number {
+    const baseMs = Math.max(timeoutSeconds, MIN_DELAY_SECONDS) * 1000;
+    const spread = jitterSpreadMs(baseMs);
     const jitter = jitterMs ?? getRndInteger(-spread, spread);
-    return Math.max(baseMs + jitter, MIN_DELAY_SECONDS * 1000) / 60000;
+    return Math.max(baseMs + jitter, MIN_DELAY_SECONDS * 1000);
 }
 
 // True while another search tab should open. Opening exactly `searches` tabs

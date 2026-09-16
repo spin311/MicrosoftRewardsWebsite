@@ -115,6 +115,58 @@ describe('searchRunner', () => {
     });
   });
 
+  describe('scheduling the next step', () => {
+    // Regression: every gap was scheduled as an alarm, and Chrome rounds any
+    // alarm under 30s up to 30s — so a user asking for 5s waited 30s.
+    it('runs a sub-30s gap from an in-worker timer', async () => {
+      vi.useFakeTimers();
+      try {
+        const create = vi.spyOn(fakeBrowser.tabs, 'create');
+        await seed({ currentSearch: 1, isSearching: true, timeout: 5 });
+
+        await handleAlarmStep(ALARM);
+        expect(create).toHaveBeenCalledTimes(1);
+
+        // base 5s ±20% → the next search is due within 6s.
+        await vi.advanceTimersByTimeAsync(6_000);
+
+        expect(create).toHaveBeenCalledTimes(2);
+        expect(await getStorageItem<number>('currentSearch', StorageValues.SYNC)).toBe(3);
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+
+    // The timer above dies with the service worker, so an alarm is armed at the
+    // 30s platform minimum to resume the run rather than let it stall.
+    it('still arms a backstop alarm for a sub-30s gap', async () => {
+      await seed({ currentSearch: 1, isSearching: true, timeout: 5 });
+
+      const before = Date.now();
+      await handleAlarmStep(ALARM);
+
+      const alarm = await fakeBrowser.alarms.get('openTabAlarm');
+      // Armed at the 30s platform minimum, not at the 5s the timer handles.
+      expect(alarm?.scheduledTime ?? 0).toBeGreaterThanOrEqual(before + 30_000);
+    });
+
+    it('leaves a 30s-or-longer gap to the alarm alone', async () => {
+      vi.useFakeTimers();
+      try {
+        const create = vi.spyOn(fakeBrowser.tabs, 'create');
+        await seed({ currentSearch: 1, isSearching: true, timeout: 60 });
+
+        await handleAlarmStep(ALARM);
+        await vi.advanceTimersByTimeAsync(120_000);
+
+        expect(create).toHaveBeenCalledTimes(1);
+        expect(await fakeBrowser.alarms.get('openTabAlarm')).toBeDefined();
+      } finally {
+        vi.useRealTimers();
+      }
+    });
+  });
+
   describe('search tab cleanup', () => {
     // A search tab's own close timer does not survive the service worker being
     // torn down, so every one is registered for the durable sweep as well.

@@ -1,7 +1,7 @@
 import { browser } from 'wxt/browser';
 import { storage } from '#imports';
 import { getRndInteger } from '@/entrypoints/utils/helpers';
-import { buildSearchQuery, buildSearchUrl, nextDelayMinutes, shouldOpenMore, toInt } from '@/entrypoints/utils/search';
+import { buildSearchQuery, buildSearchUrl, nextDelayMs, shouldOpenMore, toInt } from '@/entrypoints/utils/search';
 import { getStorageItem, getStorageItems, setStorageItem, setStorageItems } from '@/entrypoints/hooks/useStorage';
 import { StorageValues } from '@/entrypoints/enums/storageValues';
 import { DEFAULTS } from '@/entrypoints/utils/settings';
@@ -14,12 +14,16 @@ const ALARM_NAME = 'openTabAlarm';
 // not be swept away before its search has had a chance to register.
 const SEARCH_TAB_LOAD_ALLOWANCE_MS = 60000;
 
-// Opens tab #1 immediately (currentSearch = 1), then schedules the rest via alarm.
+// Chrome silently clamps any alarm shorter than this to 30s, so a gap the user
+// configured below it cannot be expressed as an alarm at all.
+const ALARM_MIN_DELAY_MS = 30000;
+
+// Opens tab #1 immediately (currentSearch = 1), then schedules the rest.
 export async function startSearches(searchTimeout: number, searches: number, closeTimeSeconds: number): Promise<void> {
     await openSearchTab(closeTimeSeconds * 1000);
     await recordProgress(1);
     if (shouldOpenMore(1, searches)) {
-        browser.alarms.create(ALARM_NAME, { delayInMinutes: nextDelayMinutes(searchTimeout) });
+        scheduleNextStep(searchTimeout);
     } else {
         await stopSearches();
     }
@@ -45,9 +49,28 @@ export async function handleAlarmStep(alarm: { name: string }): Promise<void> {
     const nowOpened = opened + 1;
     await recordProgress(nowOpened);
     if (shouldOpenMore(nowOpened, searches)) {
-        browser.alarms.create(ALARM_NAME, { delayInMinutes: nextDelayMinutes(searchTimeout) });
+        scheduleNextStep(searchTimeout);
     } else {
         await stopSearches();
+    }
+}
+
+// Waits out the gap before the next search, then runs the step.
+//
+// A gap of 30s or more is left to the alarm: durable, and the only thing that
+// survives the service worker being torn down. A shorter gap also needs an
+// in-worker timer, because Chrome rounds a sub-30s alarm up to 30s — which used
+// to make every setting under 20s behave as 30s. The timer does not outlive a
+// teardown, so the alarm is still armed at that 30s minimum as a backstop: worst
+// case the run resumes ~30s late instead of stalling for good.
+//
+// Whichever path fires first re-schedules under the same alarm name, and
+// creating an alarm replaces the pending one, so a step never runs twice.
+function scheduleNextStep(searchTimeout: number): void {
+    const delayMs = nextDelayMs(searchTimeout);
+    browser.alarms.create(ALARM_NAME, { delayInMinutes: Math.max(delayMs, ALARM_MIN_DELAY_MS) / 60000 });
+    if (delayMs < ALARM_MIN_DELAY_MS) {
+        setTimeout(() => void handleAlarmStep({ name: ALARM_NAME }), delayMs);
     }
 }
 

@@ -612,3 +612,12 @@ input[type="number"]:focus {
     margin-top: 0.7em;
     margin-bottom: 0.35em;
 }
+
+/* Inline caution under a setting whose value is allowed but risky. */
+.field-warning {
+    max-width: 18em;
+    margin: 0.25em 0 0;
+    font-size: 0.75em;
+    line-height: 1.35;
+    color: #8a5300;
+}
