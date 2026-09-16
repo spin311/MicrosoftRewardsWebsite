@@ -17,14 +17,20 @@ const DAILY_LINK_HARD_CLOSE_MS = 20000;
 // load event never arrives.
 const DASHBOARD_LOAD_TIMEOUT_MS = 30000;
 
-// Opens the rewards dashboard and tells the content script to click the
-// daily-set cards (that click is what credits the points). The dashboard is
-// opened ACTIVE: browsers pause rendering/timers in hidden tabs, so the SPA
-// won't render its daily-set grid — nor keep the click loop running — unless
-// the tab is visible. We restore the user's previous tab when done. Each click
+export interface DashboardJobs {
+    doDailySet: boolean;
+    doClaim: boolean;
+}
+
+// Opens the rewards dashboard and tells the content script which of its jobs to
+// run: clicking the daily-set cards (that click is what credits the points) and
+// pressing "Ready to claim". The dashboard is opened ACTIVE: browsers pause
+// rendering/timers in hidden tabs, so the SPA won't render its daily-set grid or
+// its claim flyout — nor keep the click loop running — unless the tab is
+// visible. We restore the user's previous tab when done. Each daily-set click
 // opens a search in its own tab (auto-closed shortly after it loads); if such a
 // tab grabs focus we snap it back to the dashboard so it stays rendered.
-export async function openDailyRewards(): Promise<void> {
+export async function openDailyRewards(jobs: DashboardJobs): Promise<void> {
     const previousActiveTabId = await getActiveTabId();
 
     const tab = await browser.tabs.create({ url: 'https://rewards.bing.com/dashboard', active: true });
@@ -56,7 +62,7 @@ export async function openDailyRewards(): Promise<void> {
     }
 
     function doneListener(message: { action?: string }, sender: { tab?: { id?: number } }): void {
-        if (message.action === 'dailyDone' && sender.tab?.id === dashboardId) finish();
+        if (message.action === 'dashboardDone' && sender.tab?.id === dashboardId) finish();
     }
     browser.runtime.onMessage.addListener(doneListener);
     setTimeout(finish, DAILY_TAB_MAX_LIFETIME_MS);
@@ -74,7 +80,9 @@ export async function openDailyRewards(): Promise<void> {
             if (updatedId !== dashboardId || changeInfo.status !== 'complete') return;
             browser.tabs.onUpdated.removeListener(loadListener);
             setTimeout(() => {
-                browser.tabs.sendMessage(dashboardId, { action: 'openDaily' }).catch(() => {});
+                browser.tabs
+                    .sendMessage(dashboardId, { action: 'runDashboard', ...jobs })
+                    .catch(() => {});
                 settle();
             }, 300);
         }

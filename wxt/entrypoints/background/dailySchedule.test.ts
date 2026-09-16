@@ -80,9 +80,34 @@ describe('runRewards', () => {
     expect(await getStorageItem<boolean>('isSearching', StorageValues.SYNC)).not.toBe(true);
   });
 
-  it('opens nothing when both toggles are off', async () => {
+  // "Claim points" is the second job on the same dashboard tab, so it has to be
+  // able to open that tab on its own — a user who only wants their points
+  // claimed should not have to enable the daily set to get it.
+  it('opens the dashboard for "Claim points" alone', async () => {
     const urls = trackCreatedTabs();
-    await seed({ active: false, autoDaily: false });
+    await seed({ active: false, autoDaily: false, claimPoints: true });
+
+    await runRewards();
+    await flushPendingWork();
+
+    expect(urls).toEqual([DASHBOARD_URL]);
+  });
+
+  // One tab covers both jobs: two would fight over the foreground, and the SPA
+  // only renders while visible.
+  it('opens a single dashboard when both dashboard jobs are on', async () => {
+    const urls = trackCreatedTabs();
+    await seed({ active: false, autoDaily: true, claimPoints: true });
+
+    await runRewards();
+    await flushPendingWork();
+
+    expect(urls).toEqual([DASHBOARD_URL]);
+  });
+
+  it('opens nothing when every toggle is off', async () => {
+    const urls = trackCreatedTabs();
+    await seed({ active: false, autoDaily: false, claimPoints: false });
 
     await runRewards();
     await flushPendingWork();
@@ -151,5 +176,16 @@ describe('handleInstallOrUpdate', () => {
     await handleInstallOrUpdate({ reason: 'install' });
 
     expect(await getStorageItem<boolean>('openFirstResult', StorageValues.SYNC)).toBe(false);
+  });
+
+  // Claiming clicks through a real transaction on the account, so it is opt-in:
+  // a fresh install must not start out pressing it.
+  it('seeds a new install with "claim points" disabled', async () => {
+    trackCreatedTabs();
+    vi.spyOn(fakeBrowser.runtime, 'setUninstallURL').mockResolvedValue(undefined);
+
+    await handleInstallOrUpdate({ reason: 'install' });
+
+    expect(await getStorageItem<boolean>('claimPoints', StorageValues.SYNC)).toBe(false);
   });
 });
