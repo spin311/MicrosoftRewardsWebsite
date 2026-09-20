@@ -1,8 +1,18 @@
+:root {
+    --color-primary: #2282ad;
+    --color-primary-rgb: 34, 130, 173;
+    --color-primary-hover: #1a6f8c;
+    --color-text: #18272F;
+    --color-text-muted: #5b5f5c;
+    --color-white: #fff;
+    --color-bg: #e6f5f1;
+}
+
 body {
     width: 20em;
     min-height: 13em;
     font-size: 18px;
-    background-color: #e6f5f1;
+    background-color: var(--color-bg);
     padding-bottom: 0;
 }
 
@@ -27,7 +37,7 @@ body {
     font-size: 1rem;
     line-height: 1.5;
     color: #212529;
-    background-color: #fff;
+    background-color: var(--color-white);
     background-clip: padding-box;
     border: 1px solid #ced4da;
     border-radius: 0.25rem;
@@ -54,15 +64,15 @@ body {
   .btn {
     display: inline-block;
     font-weight: 400;
-    color: #fff;
+    color: var(--color-white);
     text-align: center;
     vertical-align: middle;
     -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    background-color: #2282ad;
-    border-color: #2282ad;
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
     padding: 0.375rem 0.75rem;
     font-size: 1rem;
     line-height: 1.5;
@@ -75,22 +85,22 @@ body {
   }
   
   .btn-success {
-    color: #fff;
-    background-color: #2282ad;
-    border-color: #2282ad;
+    color: var(--color-white);
+    background-color: var(--color-primary);
+    border-color: var(--color-primary);
   }
 
 .heading {
   display: flex;
   justify-content: center;
-  color: #2282ad;
+  color: var(--color-primary);
   font-size: 1.3em;
   text-shadow: 2px 2px 4px #d3e6ef;
   margin-bottom: 0;
 }
 
   .btn-fail {
-    background-color: #5b5f5c;border-color: #5b5f5c;
+    background-color: var(--color-text-muted);border-color: var(--color-text-muted);
   }
   
   .my-2 {
@@ -109,7 +119,7 @@ body {
   }
   
   .form-check-input {
-    accent-color: #2282ad;
+    accent-color: var(--color-primary);
     position: absolute;
     margin-top: 0.3rem;
     margin-left: -1.25rem;
@@ -141,13 +151,9 @@ body {
     text-decoration-line: none;
   }
 
-.normal-color {
-  color: #18272F;
-}
-
 a:not(.normal-link) {
   text-decoration: none;
-  color: #18272F;
+  color: var(--color-text);
   font-weight: 700;
   position: relative;
 }
@@ -192,16 +198,16 @@ select {
   font-family: inherit;
   font-size: 0.8em;
   padding: 0.2em 0.3em;
-  color: #18272F;
-  background-color: #fff;
-  border: 1px solid #2282ad;
+  color: var(--color-text);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-primary);
   border-radius: 0.25rem;
 }
 
 select:focus {
   outline: 0;
-  border-color: #1a6f8c;
-  box-shadow: 0 0 0 0.15rem rgba(34, 130, 173, 0.25);
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 0 0 0.15rem rgba(var(--color-primary-rgb), 0.25);
 }
 
 /* Number inputs match the select's look for a consistent form. */
@@ -209,16 +215,16 @@ input[type="number"] {
   font-family: inherit;
   font-size: 0.8em;
   padding: 0.2em 0.4em;
-  color: #18272F;
-  background-color: #fff;
-  border: 1px solid #2282ad;
+  color: var(--color-text);
+  background-color: var(--color-white);
+  border: 1px solid var(--color-primary);
   border-radius: 0.25rem;
 }
 
 input[type="number"]:focus {
   outline: 0;
-  border-color: #1a6f8c;
-  box-shadow: 0 0 0 0.15rem rgba(34, 130, 173, 0.25);
+  border-color: var(--color-primary-hover);
+  box-shadow: 0 0 0 0.15rem rgba(var(--color-primary-rgb), 0.25);
 }
 
 /* A form row: the control and its label, with breathing room between them. */
@@ -244,7 +250,7 @@ input[type="number"]:focus {
 /* Quieter, self-contained link for the "account level" label — deliberately
    different from the sliding-highlight top/bottom links. */
 .level-link {
-  color: #2282ad;
+  color: var(--color-primary);
   font-weight: 600;
   text-decoration: underline;
   text-decoration-style: dotted;
@@ -253,7 +259,7 @@ input[type="number"]:focus {
 }
 
 .level-link:hover {
-  color: #1a6f8c;
+  color: var(--color-primary-hover);
   text-decoration-style: solid;
 }
 
@@ -268,7 +274,7 @@ input[type="number"]:focus {
 .search li {
   padding: 0.5em;
   font-weight: 600;
-  border: 1px solid #2282ad;
+  border: 1px solid var(--color-primary);
   display: flex;
   align-content: center;
   gap: 0.2em;
@@ -278,11 +284,11 @@ input[type="number"]:focus {
 .search li:hover {
   cursor: pointer;
   color: white;
-  background-color: #2282ad;
+  background-color: var(--color-primary);
 }
 
 .active {
-  background-color: #1a6f8c;
+  background-color: var(--color-primary-hover);
   color: white;
   font-weight: bold;
 }
@@ -304,7 +310,7 @@ input[type="number"]:focus {
   justify-content: center;
   font-family: 'Arial', sans-serif;
   font-weight: bold;
-  background-color: #2282ad;
+  background-color: var(--color-primary);
   color: white;
 }
 
@@ -317,7 +323,7 @@ input[type="number"]:focus {
   font: unset;
   font-weight: unset;
   background-color: #333;
-  color: #fff;
+  color: var(--color-white);
   padding: 5px;
   border-radius: 5px;
   white-space: normal; /* Allow text to wrap */
@@ -359,7 +365,7 @@ input[type="number"]:focus {
 
 .subtext {
   font-size: 14px;
-  color: #5b5f5c;
+  color: var(--color-text-muted);
 }
 
 .initial-text {
@@ -381,51 +387,6 @@ input[type="number"]:focus {
     display: inline-block;
 }
 
-.try-mobile {
-  display: inline-block;
-  margin-left: 1.5em;
-  font-weight: 700;
-  font-size: 1.1em;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
-.try-mobile > a {
-  color: #18272F;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.try-mobile::after {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -75%;
-  width: 50%;
-  height: 100%;
-  background: linear-gradient(
-          120deg,
-          rgba(255, 255, 255, 0) 0%,
-          rgba(255, 255, 255, 0.5) 50%,
-          rgba(255, 255, 255, 0) 100%
-  );
-  transform: skewX(-25deg);
-  animation: shine 6s infinite;
-}
-
-@keyframes shine {
-  0% {
-    left: -75%;
-  }
-  40% {
-    left: 125%;
-  }
-  100% {
-    left: 125%;
-  }
-}
-
 .left-align {
   text-align: left;
 }
@@ -439,7 +400,7 @@ input[type="number"]:focus {
 }
 
 .earn-list > li a {
-    color: #18272F;
+    color: var(--color-text);
     transition: color 0.15s ease-in-out;
 }
 
@@ -450,19 +411,19 @@ input[type="number"]:focus {
     align-items: center;
     gap: 0.2em;
     font-size: 14px;
-    border: 1px solid #2282ad;
+    border: 1px solid var(--color-primary);
     border-radius: 0.35rem;
-    background-color: #fff;
+    background-color: var(--color-white);
     transition: background-color 0.15s ease-in-out;
 }
 
 .earn-list > li:hover {
     cursor: pointer;
-    background-color: #2282ad;
+    background-color: var(--color-primary);
 }
 
 .earn-list > li:hover a {
-    color: #fff;
+    color: var(--color-white);
 }
 
 .earn-logo {
@@ -471,37 +432,8 @@ input[type="number"]:focus {
     margin-right: 0.5em;
 }
 
-.no-underline {
-  display: inline-block;
-    text-decoration: none;
-}
-
 .ml-2 {
     margin-left: 1.5em;
-}
-
-.website-header {
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  margin: 0.5em 0;
-}
-
-.qr-code-with-text {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.website-phone-text {
-  font-weight: 700;
-  font-size: 1.1em;
-  margin-top: 0.3em;
-  color: #18272F;
-}
-
-.website-phone-image, .qr-code {
-  height: 6rem;
 }
 
 /* Footer row sits flush at the bottom; its images are capped so they don't
@@ -523,11 +455,11 @@ input[type="number"]:focus {
 .progress-card {
     margin: 0.5em 1.5em 0.2em;
     padding: 0.5em 0.7em 0.55em;
-    background-color: #fff;
-    border: 1px solid #2282ad;
+    background-color: var(--color-white);
+    border: 1px solid var(--color-primary);
     border-radius: 0.35rem;
     text-align: left;
-    box-shadow: 0 1px 3px rgba(34, 130, 173, 0.15);
+    box-shadow: 0 1px 3px rgba(var(--color-primary-rgb), 0.15);
 }
 
 .progress-row {
@@ -544,19 +476,19 @@ input[type="number"]:focus {
     gap: 0.45em;
     font-size: 0.8em;
     font-weight: 600;
-    color: #18272F;
+    color: var(--color-text);
 }
 
 /* Tabular figures keep the count from shifting as it ticks 9 -> 10. */
 .progress-count {
     font-size: 0.8em;
-    color: #5b5f5c;
+    color: var(--color-text-muted);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
 
 .progress-count strong {
-    color: #2282ad;
+    color: var(--color-primary);
     font-size: 1.15em;
 }
 
@@ -565,7 +497,7 @@ input[type="number"]:focus {
     width: 0.5em;
     height: 0.5em;
     border-radius: 50%;
-    background-color: #2282ad;
+    background-color: var(--color-primary);
 }
 
 .progress-dot--running {
@@ -577,7 +509,7 @@ input[type="number"]:focus {
 }
 
 .progress-dot--idle {
-    background-color: #5b5f5c;
+    background-color: var(--color-text-muted);
 }
 
 .progress-track {
@@ -590,7 +522,7 @@ input[type="number"]:focus {
 .progress-fill {
     height: 100%;
     border-radius: 999px;
-    background: linear-gradient(90deg, #2282ad, #4fb3cc);
+    background: linear-gradient(90deg, var(--color-primary), #4fb3cc);
     transition: width 0.4s ease-in-out;
 }
 
@@ -608,7 +540,7 @@ input[type="number"]:focus {
 .small-title {
     font-size: 1.05em;
     font-weight: 600;
-    color: #18272F;
+    color: var(--color-text);
     margin-top: 0.7em;
     margin-bottom: 0.35em;
 }
