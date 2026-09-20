@@ -11,6 +11,8 @@ import AccountLevelSelect from '@/entrypoints/components/AccountLevelSelect';
 import ManualClaimButton from '@/entrypoints/components/ManualClaimButton';
 import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
 
+const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=LZAPgBPPnsU&ref=rafsrchae';
+
 function App() {
     const [active, setActive] = useStorage<boolean>('active', DEFAULTS.active, StorageValues.SYNC);
     const [autoDaily, setAutoDaily] = useStorage<boolean>('autoDaily', DEFAULTS.autoDaily, StorageValues.SYNC);
@@ -50,7 +52,6 @@ function App() {
             <h3 className="container-fluid text-center mt-2 heading">Search automatic rewards</h3>
             <div className="container-fluid text-center my-2">
                 <a href="https://svitspindler.com/microsoft-automatic-rewards" className="float-start links" target="_blank">Help</a>
-                <a href="https://svitspindler.com/microsoft-automatic-rewards/mobile/test-app" className="float-start links" target="_blank">Mobile</a>
                 <a className="links" href="https://svitspindler.com/contact" target="_blank" id="contact">Contact Me</a>
             </div>
 
@@ -93,17 +94,14 @@ function App() {
                         </li>
                     </ul>
                 </div>
-                <div className="left-align ml-2 small-title">Mobile app to earn more points:</div>
-                <div className="website-header">
-                    <div className="qr-code-with-text">
-                        <img src="/imgs/svgs/qr-code-app.svg" alt="QR code" className="qr-code" />
-                        <span className="website-phone-text">Scan on phone</span>
-                    </div>
-                    <a href="https://play.google.com/store/apps/details?id=com.spin311.microsoft_automatic_rewards" className="website-phone normal-link no-underline try-mobile" target="_blank" rel="noopener noreferrer">
-                        <img className="website-phone-image" src="/imgs/mar-phone.png" alt="Microsoft Automatic Rewards Phone App" />
-                        <div className="normal-color">Download App</div>
-                    </a>
-                </div>
+                <div className="left-align ml-2 small-title">Join Microsoft Rewards:</div>
+                <ul className="earn-list">
+                    <li>
+                        <a href={REFERRAL_URL} className="normal-link" target="_blank" rel="noopener noreferrer">
+                            🎁 Sign up with my referral link
+                        </a>
+                    </li>
+                </ul>
 
                 <div className="inputs">
                     <div className="width-100">
@@ -139,7 +137,7 @@ function App() {
                     <a href="https://github.com/spin311/MicrosoftRewardsWebsite" className="float-start links" target="_blank">Github</a>
                     <img src="/imgs/github.png" alt="github-logo" />
                 </span>
-                <a className="links" href="https://rewards.bing.com/" target="_blank" id="rewardsLink">Rewards</a>
+                <a className="links" href={REFERRAL_URL} target="_blank" rel="noopener noreferrer" id="rewardsLink">Rewards</a>
                 <span className="float-end" style={{ display: 'flex', alignItems: 'center' }}>
                     <a href="https://svitspindler.com/donate" className="links" target="_blank" id="donateText" onMouseOver={() => setDonateHover(true)}>Donate</a>
                     <img src="/imgs/justAGirlSmol.png" alt="Cat" id="donateImg" style={{ visibility: donateHover ? 'visible' : 'hidden' }} />
