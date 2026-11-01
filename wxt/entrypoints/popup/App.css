@@ -504,6 +504,51 @@ input[type="number"]:focus {
   height: 6rem;
 }
 
+/* GitHub Sponsors promo above the footer. Insets match .earn-list so it stays in
+   the popup's content column; the button mirrors GitHub's own Sponsor button. */
+.sponsor-promo {
+  display: flex;
+  align-items: center;
+  gap: 0.6em;
+  margin: 0.6em 1.5em 0;
+  padding: 0.45em 0.6em;
+  background-color: #fff;
+  border-radius: 8px;
+}
+
+.sponsor-promo-text {
+  margin: 0;
+  font-size: 0.7em;
+  line-height: 1.35;
+  color: #18272F;
+}
+
+.sponsor-button {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3em;
+  padding: 0.3em 0.7em;
+  font-size: 0.75em;
+  font-weight: 600;
+  color: #24292f;
+  text-decoration: none;
+  background-color: #f6f8fa;
+  border: 1px solid #d0d7de;
+  border-radius: 6px;
+  transition: background-color .2s ease, border-color .2s ease;
+}
+
+.sponsor-button:hover {
+  color: #24292f;
+  background-color: #fff;
+  border-color: #bf3989;
+}
+
+.sponsor-heart {
+  color: #bf3989;
+}
+
 /* Footer row sits flush at the bottom; its images are capped so they don't
    inflate the row height (that oversized box was the "big padding" below). */
 .footer-links {

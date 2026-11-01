@@ -11,6 +11,10 @@ import AccountLevelSelect from '@/entrypoints/components/AccountLevelSelect';
 import ManualClaimButton from '@/entrypoints/components/ManualClaimButton';
 import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
 
+// metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
+// in this popup can be told apart from the README and website ones.
+const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=MicrosoftRewardsWebsite-popup';
+
 function App() {
     const [active, setActive] = useStorage<boolean>('active', DEFAULTS.active, StorageValues.SYNC);
     const [autoDaily, setAutoDaily] = useStorage<boolean>('autoDaily', DEFAULTS.autoDaily, StorageValues.SYNC);
@@ -132,6 +136,15 @@ function App() {
                         <NumberInput id="closeTime" label="Time before closing tabs (s)" value={closeTime} min={0} max={300} onChange={setCloseTime} />
                     </div>
                 </div>
+            </div>
+
+            <div className="sponsor-promo">
+                <p className="sponsor-promo-text">
+                    Enjoying the extension? Sponsor from <b>$5/month</b> and get your name featured in the README.
+                </p>
+                <a href={SPONSOR_URL} className="normal-link sponsor-button" target="_blank" rel="noopener noreferrer">
+                    <span className="sponsor-heart" aria-hidden="true">♥</span> Sponsor
+                </a>
             </div>
 
             <div className="container-fluid text-center footer-links">
