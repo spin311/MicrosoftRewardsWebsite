@@ -1,546 +1,382 @@
+/* Popup styles. Chrome caps a popup at 600px tall, so everything here is sized
+   to keep the whole popup — header Sponsor button included — on one screen. */
+
 :root {
+    color-scheme: light;
     --color-primary: #2282ad;
     --color-primary-rgb: 34, 130, 173;
     --color-primary-hover: #1a6f8c;
-    --color-text: #18272F;
-    --color-text-muted: #5b5f5c;
-    --color-white: #fff;
+    --color-on-primary: #fff;
+    --color-text: #18272f;
+    --color-text-muted: #5b6b70;
     --color-bg: #e6f5f1;
+    --color-surface: #fff;
+    --color-border: #cfe3dd;
+    --color-track: #dbeae5;
+    --color-switch-off: #b9c9c5;
+    --color-stop: #5b5f5c;
+    --color-warning: #8a5300;
+    --color-done: #2e9e6b;
+    --color-tooltip-bg: #24333a;
+    --color-tooltip-text: #fff;
+    /* GitHub's own Sponsor button, so the pill reads as what it is. */
+    --sponsor-bg: #f6f8fa;
+    --sponsor-border: #d0d7de;
+    --sponsor-text: #24292f;
+    --sponsor-heart: #bf3989;
+    --radius: 8px;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        color-scheme: dark;
+        --color-primary: #4fb3cc;
+        --color-primary-rgb: 79, 179, 204;
+        --color-primary-hover: #74c6da;
+        --color-on-primary: #0d1a1f;
+        --color-text: #e3eef0;
+        --color-text-muted: #9fb2b7;
+        --color-bg: #121b1e;
+        --color-surface: #1b272b;
+        --color-border: #2c3c41;
+        --color-track: #2c3c41;
+        --color-switch-off: #4a5b60;
+        --color-stop: #8a908d;
+        --color-warning: #f0b45c;
+        --color-done: #4cc28c;
+        --color-tooltip-bg: #e3eef0;
+        --color-tooltip-text: #121b1e;
+        --sponsor-bg: #21262d;
+        --sponsor-border: #3d444d;
+        --sponsor-text: #e6edf3;
+        --sponsor-heart: #db61a2;
+    }
+}
+
+* {
+    box-sizing: border-box;
 }
 
 body {
-    width: 20em;
-    min-height: 13em;
-    font-size: 18px;
-    background-color: var(--color-bg);
-    padding-bottom: 0;
-}
-
-.container-fluid {
-    margin-right: auto;
-    margin-left: auto;
-    padding-right: 15px;
-    padding-left: 15px;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
-  .form-group {
-    display: flex;
-    align-items: center;
-    margin-bottom: 0.5rem;
-  }
-  
-  .form-select {
-    flex: 1;
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    color: #212529;
-    background-color: var(--color-white);
-    background-clip: padding-box;
-    border: 1px solid #ced4da;
-    border-radius: 0.25rem;
-    transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-  .form-select:focus {
-    border-color: #80bdff;
-    outline: 0;
-    box-shadow: 0 0 0 0.25rem rgba(0, 123, 255, 0.25);
-  }
-
-  .text-center {
-    text-align: center;
-  }
-  
-  .mt-2 {
-    margin-top: 0.5rem !important;
-  }
-  
-  .m-3 {
-    margin: 1rem !important;
-  }
-  
-  .btn {
-    display: inline-block;
-    font-weight: 400;
-    color: var(--color-white);
-    text-align: center;
-    vertical-align: middle;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-    padding: 0.375rem 0.75rem;
-    font-size: 1rem;
-    line-height: 1.5;
-    border-radius: 0.25rem;
-    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out, border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
-  }
-
-  .btn:hover {
-    cursor: pointer;
-  }
-  
-  .btn-success {
-    color: var(--color-white);
-    background-color: var(--color-primary);
-    border-color: var(--color-primary);
-  }
-
-.heading {
-  display: flex;
-  justify-content: center;
-  color: var(--color-primary);
-  font-size: 1.3em;
-  text-shadow: 2px 2px 4px #d3e6ef;
-  margin-bottom: 0;
-}
-
-  .btn-fail {
-    background-color: var(--color-text-muted);border-color: var(--color-text-muted);
-  }
-  
-  .my-2 {
-    margin-top: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
-  }
-  .my-1 {
-    margin-top: 0.25rem !important;
-    margin-bottom: 0.25rem !important;
-  }
-  
-  .form-check {
-    position: relative;
-    display: block;
-    padding-left: 1.25rem;
-  }
-  
-  .form-check-input {
-    accent-color: var(--color-primary);
-    position: absolute;
-    margin-top: 0.3rem;
-    margin-left: -1.25rem;
-  }
-  
-  .me-2 {
-    margin-right: 0.5rem !important;
-  }
-  
-  .my-2 {
-    margin-top: 0.5rem !important;
-    margin-bottom: 0.5rem !important;
-  }
-  .float-start {
-    float: left;
-    margin-right: 10px;
-  }
-  
-  .float-end {
-    float: right;
-    margin-left: 10px;
-  }
-  .imgSmall {
-    width: 16px;
-    height: 16px;
-  }
-
-  .links {
-    text-decoration-line: none;
-  }
-
-a:not(.normal-link) {
-  text-decoration: none;
-  color: var(--color-text);
-  font-weight: 700;
-  position: relative;
-}
-
-a:not(.normal-link)::before {
-  content: '';
-  background-color: hsl(212, 97%, 76%);
-  position: absolute;
-  left: 0;
-  bottom: 3px;
-  width: 100%;
-  height: 8px;
-  z-index: -1;
-  transition: all .3s ease-in-out;
-}
-#donateImg {
-  visibility: hidden;
-  /* Overrides the 20px footer-image cap so the cat is a bit larger when the
-     Donate link reveals it on hover. */
-  height: 28px;
-  width: auto;
-}
-
-a:not(.normal-link):hover::before {
-  bottom: 0;
-  height: 100%;
-}
-
-.inputs {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5em;
-  align-items: flex-start;
-  margin-left: 2em;
-  margin-top: 0.5em;
-  input, select {
-    width: 5em;
-  }
-}
-
-select {
-  font-family: inherit;
-  font-size: 0.8em;
-  padding: 0.2em 0.3em;
-  color: var(--color-text);
-  background-color: var(--color-white);
-  border: 1px solid var(--color-primary);
-  border-radius: 0.25rem;
-}
-
-select:focus {
-  outline: 0;
-  border-color: var(--color-primary-hover);
-  box-shadow: 0 0 0 0.15rem rgba(var(--color-primary-rgb), 0.25);
-}
-
-/* Number inputs match the select's look for a consistent form. */
-input[type="number"] {
-  font-family: inherit;
-  font-size: 0.8em;
-  padding: 0.2em 0.4em;
-  color: var(--color-text);
-  background-color: var(--color-white);
-  border: 1px solid var(--color-primary);
-  border-radius: 0.25rem;
-}
-
-input[type="number"]:focus {
-  outline: 0;
-  border-color: var(--color-primary-hover);
-  box-shadow: 0 0 0 0.15rem rgba(var(--color-primary-rgb), 0.25);
-}
-
-/* A form row: the control and its label, with breathing room between them. */
-.field {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6em;
-}
-
-/* Equal box width so every label starts at the same x — the select and the
-   number inputs line up as a column despite differing padding. */
-.field input,
-.field select {
-  box-sizing: border-box;
-  width: 5em;
-}
-
-.field label {
-  font-size: 0.85em;
-  line-height: 1.2;
-}
-
-/* Quieter, self-contained link for the "account level" label — deliberately
-   different from the sliding-highlight top/bottom links. */
-.level-link {
-  color: var(--color-primary);
-  font-weight: 600;
-  text-decoration: underline;
-  text-decoration-style: dotted;
-  text-underline-offset: 2px;
-  transition: color 0.15s ease-in-out;
-}
-
-.level-link:hover {
-  color: var(--color-primary-hover);
-  text-decoration-style: solid;
-}
-
-.search ul {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  padding: 0;
-  margin: 0;
-  list-style-type: none;
-}
-
-.search li {
-  padding: 0.5em;
-  font-weight: 600;
-  border: 1px solid var(--color-primary);
-  display: flex;
-  align-content: center;
-  gap: 0.2em;
-  font-size: 12px;
-}
-
-.search li:hover {
-  cursor: pointer;
-  color: white;
-  background-color: var(--color-primary);
-}
-
-.active {
-  background-color: var(--color-primary-hover);
-  color: white;
-  font-weight: bold;
-}
-
-.mb-4 {
-  margin-bottom: 1rem !important;
-}
-
-.tooltip-icon {
-  cursor: pointer;
-  border: 1px solid;
-  border-radius: 50%;
-  margin-left: 5px;
-  position: relative;
-  width: 20px;
-  height: 20px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Arial', sans-serif;
-  font-weight: bold;
-  background-color: var(--color-primary);
-  color: white;
-}
-
-.tooltip-icon::after {
-  content: attr(data-tooltip);
-  position: absolute;
-  bottom: 100%; /* Position directly above the icon */
-  left: 0; /* Start at the left edge of the popup */
-  transform: translateX(-90%); /* Adjust to align with the left edge of the popup */
-  font: unset;
-  font-weight: unset;
-  background-color: #333;
-  color: var(--color-white);
-  padding: 5px;
-  border-radius: 5px;
-  white-space: normal; /* Allow text to wrap */
-  width: max-content; /* Adjust width to fit content */
-  max-width: 200px; /* Set a maximum width to prevent overflow */
-  opacity: 0;
-  visibility: hidden;
-  transition: opacity 0.2s;
-  z-index: 1;
-  text-align: left; /* Align text to the left */
-  word-wrap: break-word; /* Allow long words to break and wrap */
-  box-sizing: border-box; /* Ensure padding is included in width calculation */
-}
-
-.tooltip-icon:hover::after {
-  opacity: 1;
-  visibility: visible;
-}
-
-.tooltip-icon--right::after {
-  left: auto; /* Reset left positioning */
-  right: 0; /* Start at the right edge of the icon */
-  transform: translateX(90%); /* Adjust to align with the right edge of the icon */
-}
-
-.checkboxes {
-  display: flex;
-  flex-direction: column;
-  margin-left: 2em;
-  text-align: initial;
-  margin-top: 0.6em;
-  gap: 0.4em;
-}
-.input-with-info {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-
-.subtext {
-  font-size: 14px;
-  color: var(--color-text-muted);
-}
-
-.initial-text {
-  text-align: initial;
-}
-
-.mb-2 {
-  margin-bottom: 0.5em;
-}
-.mb-md {
-    margin-bottom: 0.7em;
-}
-
-.width-100 {
-  width: 100%;
-}
-
-.d-ib {
-    display: inline-block;
-}
-
-.left-align {
-  text-align: left;
-}
-
-.earn-list {
-  /* Left inset matches the section title's .ml-2 indent so the card lines up
-     under the text; right inset keeps it off the popup edge. */
-  margin: 0.4em 1.5em 0;
-  padding: 0;
-  list-style: none;
-}
-
-.earn-list > li a {
-    color: var(--color-text);
-    transition: color 0.15s ease-in-out;
-}
-
-.earn-list > li {
-    padding: 0.6em 0.7em;
-    font-weight: 600;
-    display: flex;
-    align-items: center;
-    gap: 0.2em;
+    width: 340px;
+    margin: 0;
+    font-family: system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     font-size: 14px;
-    border: 1px solid var(--color-primary);
-    border-radius: 0.35rem;
-    background-color: var(--color-white);
-    transition: background-color 0.15s ease-in-out;
+    line-height: 1.4;
+    color: var(--color-text);
+    background-color: var(--color-bg);
 }
 
-.earn-list > li:hover {
-    cursor: pointer;
-    background-color: var(--color-primary);
+a {
+    color: inherit;
 }
 
-.earn-list > li:hover a {
-    color: var(--color-white);
+:focus-visible {
+    outline: 2px solid var(--color-primary);
+    outline-offset: 2px;
 }
 
-.earn-logo {
+/* ---- Header: name on the left, Sponsor always in view on the right ---- */
+
+.top-bar {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    padding: 10px 12px;
+}
+
+.top-bar-logo {
     width: 22px;
     height: 22px;
-    margin-right: 0.5em;
+    flex: 0 0 auto;
 }
 
-.ml-2 {
-    margin-left: 1.5em;
-}
-
-/* GitHub Sponsors promo above the footer. Insets match .earn-list so it stays in
-   the popup's content column; the button mirrors GitHub's own Sponsor button. */
-.sponsor-promo {
-  display: flex;
-  align-items: center;
-  gap: 0.6em;
-  margin: 0.6em 1.5em 0;
-  padding: 0.45em 0.6em;
-  background-color: #fff;
-  border-radius: 8px;
-}
-
-.sponsor-promo-text {
-  margin: 0;
-  font-size: 0.7em;
-  line-height: 1.35;
-  color: #18272F;
+.top-bar-title {
+    flex: 1 1 auto;
+    margin: 0;
+    min-width: 0;
+    font-size: 14px;
+    font-weight: 700;
+    line-height: 1.2;
+    white-space: nowrap;
+    color: var(--color-primary);
 }
 
 .sponsor-button {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3em;
-  padding: 0.3em 0.7em;
-  font-size: 0.75em;
-  font-weight: 600;
-  color: #24292f;
-  text-decoration: none;
-  background-color: #f6f8fa;
-  border: 1px solid #d0d7de;
-  border-radius: 6px;
-  transition: background-color .2s ease, border-color .2s ease;
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 4px 9px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--sponsor-text);
+    text-decoration: none;
+    background-color: var(--sponsor-bg);
+    border: 1px solid var(--sponsor-border);
+    border-radius: 6px;
+    transition: border-color 0.15s ease, background-color 0.15s ease;
 }
 
 .sponsor-button:hover {
-  color: #24292f;
-  background-color: #fff;
-  border-color: #bf3989;
+    border-color: var(--sponsor-heart);
+    background-color: var(--color-surface);
 }
 
 .sponsor-heart {
-  color: #bf3989;
+    fill: var(--sponsor-heart);
+    transform-origin: center;
+    /* One beat as the popup opens draws the eye once, then stays still. */
+    animation: heart-beat 0.9s ease-in-out 0.4s 1;
 }
 
-/* Footer row sits flush at the bottom; its images are capped so they don't
-   inflate the row height (that oversized box was the "big padding" below). */
-.footer-links {
-  margin-top: 0.6em;
-  padding-top: 0.4em;
-  padding-bottom: 0.4em;
+.sponsor-button:hover .sponsor-heart {
+    animation: heart-beat 0.9s ease-in-out 1;
 }
 
-.footer-links img {
-  height: 20px;
-  width: auto;
+@keyframes heart-beat {
+    0%, 100% { transform: scale(1); }
+    25% { transform: scale(1.25); }
+    50% { transform: scale(0.95); }
+    70% { transform: scale(1.15); }
 }
 
-/* Live progress of a search run. Insets match the .earn-list card so the popup
-   keeps one content column; only rendered while a run is in flight or finished
-   this session (see App.tsx), so the numbers are never stale. */
-.progress-card {
-    margin: 0.5em 1.5em 0.2em;
-    padding: 0.5em 0.7em 0.55em;
-    background-color: var(--color-white);
-    border: 1px solid var(--color-primary);
-    border-radius: 0.35rem;
+/* ---- Main column ---- */
+
+.content {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 0 12px;
+}
+
+.primary-action {
+    width: 100%;
+    padding: 9px 12px;
+    font: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    color: var(--color-on-primary);
+    background-color: var(--color-primary);
+    border: 0;
+    border-radius: var(--radius);
+    cursor: pointer;
+    box-shadow: 0 1px 2px rgba(var(--color-primary-rgb), 0.35);
+    transition: background-color 0.15s ease;
+}
+
+.primary-action:hover {
+    background-color: var(--color-primary-hover);
+}
+
+.primary-action--stop,
+.primary-action--stop:hover {
+    background-color: var(--color-stop);
+    box-shadow: none;
+}
+
+.card {
+    padding: 4px 12px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+}
+
+.card-title {
+    margin: 6px 0 2px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--color-text-muted);
+}
+
+/* A setting: label (+ info) on the left, its control right-aligned, so every
+   control lines up in one column. */
+.row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    min-height: 32px;
+}
+
+.row + .row {
+    border-top: 1px solid var(--color-border);
+}
+
+.row-label {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-width: 0;
+}
+
+.row-label label {
+    cursor: pointer;
+}
+
+.control {
+    width: 88px;
+    flex: 0 0 auto;
+    padding: 4px 6px;
+    font: inherit;
+    color: var(--color-text);
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: 6px;
+}
+
+.control:focus {
+    outline: 0;
+    border-color: var(--color-primary);
+    box-shadow: 0 0 0 3px rgba(var(--color-primary-rgb), 0.2);
+}
+
+.level-link {
+    color: var(--color-primary);
+    text-decoration: underline dotted;
+    text-underline-offset: 3px;
+}
+
+.level-link:hover {
+    text-decoration-style: solid;
+}
+
+/* Native checkbox drawn as a switch; still a real input for label clicks,
+   keyboard and screen readers. */
+.switch {
+    appearance: none;
+    position: relative;
+    flex: 0 0 auto;
+    width: 34px;
+    height: 20px;
+    margin: 0;
+    border-radius: 999px;
+    background-color: var(--color-switch-off);
+    cursor: pointer;
+    transition: background-color 0.15s ease;
+}
+
+.switch::after {
+    content: '';
+    position: absolute;
+    top: 2px;
+    left: 2px;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background-color: #fff;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
+    transition: transform 0.15s ease;
+}
+
+.switch:checked {
+    background-color: var(--color-primary);
+}
+
+.switch:checked::after {
+    transform: translateX(14px);
+}
+
+/* Info tip: a quiet outlined "i" whose text shows on hover or focus. */
+.info-tip {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 15px;
+    height: 15px;
+    padding: 0;
+    font: 700 10px/1 Georgia, serif;
+    color: var(--color-text-muted);
+    background: none;
+    border: 1px solid currentColor;
+    border-radius: 50%;
+    cursor: help;
+}
+
+.info-tip:hover,
+.info-tip:focus-visible {
+    color: var(--color-primary);
+}
+
+.info-tip::after {
+    content: attr(data-tooltip);
+    position: absolute;
+    bottom: calc(100% + 6px);
+    left: 50%;
+    z-index: 2;
+    width: max-content;
+    max-width: 200px;
+    padding: 6px 8px;
+    font: 400 12px/1.35 system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
     text-align: left;
-    box-shadow: 0 1px 3px rgba(var(--color-primary-rgb), 0.15);
+    color: var(--color-tooltip-text);
+    background-color: var(--color-tooltip-bg);
+    border-radius: 6px;
+    transform: translateX(-50%);
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition: opacity 0.15s ease;
+}
+
+.info-tip:hover::after,
+.info-tip:focus-visible::after {
+    opacity: 1;
+    visibility: visible;
+}
+
+.field-warning {
+    margin: -2px 0 6px;
+    font-size: 12px;
+    line-height: 1.35;
+    color: var(--color-warning);
+}
+
+/* ---- Progress of a search run (SearchProgressBar) ---- */
+
+.progress-card {
+    padding: 8px 12px 10px;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
 }
 
 .progress-row {
     display: flex;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.5em;
-    margin-bottom: 0.4em;
+    gap: 8px;
+    margin-bottom: 6px;
 }
 
 .progress-title {
     display: flex;
     align-items: center;
-    gap: 0.45em;
-    font-size: 0.8em;
+    gap: 6px;
+    font-size: 13px;
     font-weight: 600;
-    color: var(--color-text);
 }
 
 /* Tabular figures keep the count from shifting as it ticks 9 -> 10. */
 .progress-count {
-    font-size: 0.8em;
+    font-size: 13px;
     color: var(--color-text-muted);
     font-variant-numeric: tabular-nums;
     white-space: nowrap;
 }
 
 .progress-count strong {
+    font-size: 15px;
     color: var(--color-primary);
-    font-size: 1.15em;
 }
 
 .progress-dot {
     flex: 0 0 auto;
-    width: 0.5em;
-    height: 0.5em;
+    width: 7px;
+    height: 7px;
     border-radius: 50%;
     background-color: var(--color-primary);
 }
@@ -550,7 +386,7 @@ input[type="number"]:focus {
 }
 
 .progress-dot--done {
-    background-color: #2e9e6b;
+    background-color: var(--color-done);
 }
 
 .progress-dot--idle {
@@ -558,10 +394,10 @@ input[type="number"]:focus {
 }
 
 .progress-track {
-    height: 0.45em;
-    border-radius: 999px;
-    background-color: #dbeae5;
+    height: 6px;
     overflow: hidden;
+    border-radius: 999px;
+    background-color: var(--color-track);
 }
 
 .progress-fill {
@@ -572,29 +408,80 @@ input[type="number"]:focus {
 }
 
 @keyframes progress-pulse {
-    0%, 100% {
-        opacity: 1;
-        transform: scale(1);
-    }
-    50% {
-        opacity: 0.35;
-        transform: scale(0.75);
-    }
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.35; transform: scale(0.75); }
 }
 
-.small-title {
-    font-size: 1.05em;
-    font-weight: 600;
+/* ---- Promos and footer ---- */
+
+.promo-tiles {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+
+.promo-tile {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 7px 9px;
+    text-decoration: none;
+    background-color: var(--color-surface);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius);
+    transition: border-color 0.15s ease;
+}
+
+.promo-tile:hover {
+    border-color: var(--color-primary);
+}
+
+.promo-icon {
+    flex: 0 0 auto;
+    width: 22px;
+    height: 22px;
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+}
+
+.promo-text {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    font-size: 11.5px;
+    line-height: 1.25;
+    color: var(--color-text-muted);
+}
+
+.promo-text strong {
+    font-size: 12.5px;
     color: var(--color-text);
-    margin-top: 0.7em;
-    margin-bottom: 0.35em;
 }
 
-/* Inline caution under a setting whose value is allowed but risky. */
-.field-warning {
-    max-width: 18em;
-    margin: 0.25em 0 0;
-    font-size: 0.75em;
-    line-height: 1.35;
-    color: #8a5300;
+.footer {
+    display: flex;
+    justify-content: center;
+    gap: 16px;
+    padding: 10px 12px 12px;
+    font-size: 12px;
+}
+
+.footer a {
+    color: var(--color-text-muted);
+    text-decoration: none;
+}
+
+.footer a:hover {
+    color: var(--color-primary);
+    text-decoration: underline;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation: none !important;
+        transition: none !important;
+    }
 }
