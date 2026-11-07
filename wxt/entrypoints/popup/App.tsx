@@ -14,7 +14,7 @@ import ToggleRow from '@/entrypoints/components/ToggleRow';
 import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
 import SponsorMilestoneCard from '@/entrypoints/components/SponsorMilestoneCard';
 import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
-import { getCrossPromoLinks } from '@/entrypoints/utils/crossPromo';
+import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
@@ -22,7 +22,7 @@ const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=Microso
 const FREE_GAMES_URL = 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk';
 const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=yHey9rv4Kyk&ref=rafsrchae';
 
-const CROSS_PROMO_LINKS = getCrossPromoLinks(import.meta.env.FIREFOX);
+const CROSS_PROMO_LINK = getCrossPromoLink(import.meta.env.FIREFOX);
 
 function App() {
     const [active, setActive] = useStorage<boolean>('active', DEFAULTS.active, StorageValues.SYNC);
@@ -143,10 +143,8 @@ function App() {
             </footer>
 
             <p className="cross-promo">
-                More free tools by the same developer:
-                {CROSS_PROMO_LINKS.map((link) => (
-                    <a key={link.href} href={link.href} className="normal-link cross-promo-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
-                ))}
+                Another free tool by the same developer:
+                <a href={CROSS_PROMO_LINK.href} className="normal-link cross-promo-link" target="_blank" rel="noopener noreferrer">{CROSS_PROMO_LINK.label}</a>
             </p>
         </>
     );

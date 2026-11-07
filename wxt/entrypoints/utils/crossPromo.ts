@@ -1,4 +1,4 @@
-// Footer cross-promotion for the developer's other extensions.
+// Footer cross-promotion for the developer's other extension.
 
 export interface CrossPromoLink {
     label: string;
@@ -7,21 +7,12 @@ export interface CrossPromoLink {
 
 const UTM = '?utm_source=MicrosoftRewardsWebsite-popup&utm_medium=cross-promo';
 
-const STORE_URLS = {
-    firefox: {
-        games: 'https://addons.mozilla.org/firefox/addon/free-game-claime-steam-epic/',
-        prolific: 'https://addons.mozilla.org/firefox/addon/prolific-studies-notifier/',
-    },
-    chromium: {
-        games: 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk',
-        prolific: 'https://chromewebstore.google.com/detail/prolific-studies-notifier/mlicfddkgjkeajfgkihplfbgpmbonbao',
-    },
+const FREE_GAME_CLAIMER_URLS = {
+    firefox: 'https://addons.mozilla.org/firefox/addon/free-game-claime-steam-epic/',
+    chromium: 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk',
 } as const;
 
-export function getCrossPromoLinks(isFirefox: boolean): CrossPromoLink[] {
-    const urls = isFirefox ? STORE_URLS.firefox : STORE_URLS.chromium;
-    return [
-        { label: 'Free Game Claimer — free games from Epic, Steam, GOG & Prime', href: `${urls.games}${UTM}` },
-        { label: 'Prolific Studies Notifier — alerts for paid studies', href: `${urls.prolific}${UTM}` },
-    ];
+export function getCrossPromoLink(isFirefox: boolean): CrossPromoLink {
+    const url = isFirefox ? FREE_GAME_CLAIMER_URLS.firefox : FREE_GAME_CLAIMER_URLS.chromium;
+    return { label: 'Free Game Claimer — free games from Epic, Steam, GOG & Prime', href: `${url}${UTM}` };
 }
