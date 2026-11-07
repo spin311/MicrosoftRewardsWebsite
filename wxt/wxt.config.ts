@@ -1,8 +1,22 @@
+import { copyFileSync, rmSync } from 'node:fs';
+import { resolve } from 'node:path';
 import { defineConfig } from 'wxt';
+
+// PolyForm requires the license terms and Required Notice to ship with every copy,
+// so the single repo-root LICENSE is copied into each build and the sources zip.
+const LICENSE_PATH = resolve(__dirname, '../LICENSE');
+// Sources are zipped from this folder, so the license is staged here for the zip only.
+const STAGED_LICENSE_PATH = resolve(__dirname, 'LICENSE');
 
 export default defineConfig({
   outDir: 'dist',
   modules: ['@wxt-dev/module-react'],
+  hooks: {
+    'build:done': (wxt) => copyFileSync(LICENSE_PATH, resolve(wxt.config.outDir, 'LICENSE')),
+    'zip:sources:start': () => copyFileSync(LICENSE_PATH, STAGED_LICENSE_PATH),
+    'zip:sources:done': () => rmSync(STAGED_LICENSE_PATH, { force: true }),
+  },
+  zip: { includeSources: ['LICENSE'] },
   alias: { '@': '.' },
   manifest: {
     name: 'Search automatic rewards',
