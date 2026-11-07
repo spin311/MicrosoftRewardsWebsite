@@ -110,6 +110,10 @@ source trees with committed compiled output. That code has been removed from
 the default branch and preserved on the [`legacy`](https://github.com/spin311/MicrosoftRewardsWebsite/tree/legacy)
 branch. Nothing on the default branch depends on it.
 
+## License
+
+Versions up to 3.2.0 were released under the MIT License. From 3.3.0 on, the code is under the PolyForm Noncommercial License 1.0.0 (see [LICENSE](LICENSE)): you're free to use, modify and share it for non-commercial purposes, but not to sell it or use it commercially.
+
 ## Contact
 
 If you have any suggestions or questions, you can contact me at [spin311pro@gmail.com](mailto:spin311pro@gmail.com).
