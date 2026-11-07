@@ -12,7 +12,8 @@ import ManualClaimButton from '@/entrypoints/components/ManualClaimButton';
 import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
 import ToggleRow from '@/entrypoints/components/ToggleRow';
 import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
-import { useReviewPrompt } from '@/entrypoints/hooks/useReviewPrompt';
+import SponsorMilestoneCard from '@/entrypoints/components/SponsorMilestoneCard';
+import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
 import { getCrossPromoLinks } from '@/entrypoints/utils/crossPromo';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
@@ -33,7 +34,7 @@ function App() {
     const [openFirstResult, setOpenFirstResult] = useStorage<boolean>('openFirstResult', DEFAULTS.openFirstResult, StorageValues.SYNC);
     const [claimPoints, setClaimPoints] = useStorage<boolean>('claimPoints', DEFAULTS.claimPoints, StorageValues.SYNC);
     const { isLoaded, isSearching, completed, total } = useSearchProgress();
-    const reviewPrompt = useReviewPrompt();
+    const prompt = usePromptCard();
 
     // The "New" badge from an update is dismissed once the popup is opened — but
     // the badge doubles as the live search counter, so wait for the run state and
@@ -109,10 +110,12 @@ function App() {
                                info="In each search tab, opens the first result after a short random delay." />
                 </section>
 
-                {/* One-time review ask, shown once it is due; the header Sponsor button stays as it is. */}
-                {reviewPrompt.isVisible && (
-                    <ReviewPromptCard onRate={() => void reviewPrompt.rate()} onDismiss={reviewPrompt.dismiss} />
-                )}
+                {/* One prompt card at a time, shown once it is due (card stays null until the prompt state loads); the header Sponsor button stays as it is. */}
+                {prompt.card === 'review' ? (
+                    <ReviewPromptCard onRate={() => void prompt.rate()} onDismiss={prompt.dismiss} />
+                ) : prompt.card === 'sponsor' ? (
+                    <SponsorMilestoneCard completedRuns={prompt.completedRuns} onSponsor={() => void prompt.sponsor()} onDismiss={prompt.dismiss} />
+                ) : null}
 
                 <nav className="promo-tiles" aria-label="More from the developer">
                     <a href={REFERRAL_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
