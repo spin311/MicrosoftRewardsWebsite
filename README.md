@@ -8,13 +8,17 @@ If you like the extension, please give it a star on GitHub! <img src="docs/image
 
 ## Download
 
-[Google Chrome Store](https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo)  
+[Google Chrome Store](https://chromewebstore.google.com/detail/microsoft-automatic-rewar/ocmmbfdhomnkljmjkmafegefcgcfkefo?utm_source=MicrosoftRewardsWebsite-readme)  
 
-[Firefox Store](https://addons.mozilla.org/en-US/firefox/addon/microsoft-automatic-rewards/)
+[Firefox Store](https://addons.mozilla.org/en-US/firefox/addon/microsoft-automatic-rewards/?utm_source=MicrosoftRewardsWebsite-readme)
 
 [Mobile app](https://github.com/spin311/MicrosoftRewardsWebsite/releases/tag/app)
 
   If you enjoy the extension, 5-star rating would mean a lot:) <img src="docs/images/stars5.jpeg" alt="5 Stars" height="16">
+
+### Use at your own risk
+
+Microsoft's Rewards terms prohibit bots and automated searches. Microsoft can limit or suspend accounts and void points. This extension only opens Bing searches in your own browser, but that does not make it allowed. Use it knowing the risk.
 
 ## Donate <img src="docs/images/justAGirl.png" alt="Cat" height="64">
 
