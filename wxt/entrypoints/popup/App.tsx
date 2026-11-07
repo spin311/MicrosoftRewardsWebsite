@@ -16,7 +16,7 @@ import ToggleRow from '@/entrypoints/components/ToggleRow';
 // in this popup can be told apart from the README and website ones.
 const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=MicrosoftRewardsWebsite-popup';
 const FREE_GAMES_URL = 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk';
-const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=LZAPgBPPnsU&ref=rafsrchae';
+const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=yHey9rv4Kyk&ref=rafsrchae';
 
 function App() {
     const [active, setActive] = useStorage<boolean>('active', DEFAULTS.active, StorageValues.SYNC);
@@ -108,7 +108,7 @@ function App() {
                         <span className="promo-icon" aria-hidden="true">🎁</span>
                         <span className="promo-text">
                             <strong>Join Rewards</strong>
-                            <span>Referral link</span>
+                            <span>Earn with Bing</span>
                         </span>
                     </a>
                     <a href={FREE_GAMES_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
