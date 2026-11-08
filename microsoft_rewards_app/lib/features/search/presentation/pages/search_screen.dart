@@ -230,8 +230,12 @@ class SearchFormState extends State<SearchForm> {
       );
     });
     // Before 1.2.1 an enabled reminder could fail to schedule (exact alarms are
-    // denied on Android 14+) while the box stayed ticked: schedule it again.
-    if (_sendDailyReminder) await _setDailyReminder(true);
+    // denied on Android 14+) while the box stayed ticked: schedule it again,
+    // quietly, without prompting or changing the user's setting.
+    if (_sendDailyReminder) {
+      await NotificationService.rescheduleIfAllowed(
+          hour: _selectedTime.hour, minute: _selectedTime.minute);
+    }
   }
 
   /// Turns the reminder on or off. The box only stays ticked when the reminder

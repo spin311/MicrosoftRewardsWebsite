@@ -26,14 +26,17 @@ RewardsSnapshot? parseUserInfo(Object? json, DateTime today) {
   final counters = asObject(userStatus['counters']);
   final levelInfo = asObject(userStatus['levelInfo']);
   final levelName = levelInfo?['activeLevelName'] ?? levelInfo?['activeLevel'];
+  final mobileEntries = asList(counters?['mobileSearch']);
+  final mobileSearch = _sumCounters(mobileEntries, (_) => true);
 
   return RewardsSnapshot(
     points: asInt(userStatus['availablePoints']),
     level: levelName is String && levelName.isNotEmpty ? levelName : null,
     pcSearch: _sumCounters(counters?['pcSearch'], (entry) => !_isEdgeBonus(entry)),
     edgeBonus: _sumCounters(counters?['pcSearch'], _isEdgeBonus),
-    mobileSearch: _sumCounters(counters?['mobileSearch'], (_) => true),
+    mobileSearch: mobileSearch,
     dailySet: _parseDailySet(dashboard['dailySetPromotions'], today),
+    isMobileSearchUnreadable: mobileSearch == null && (mobileEntries?.isNotEmpty ?? false),
   );
 }
 

@@ -23,6 +23,7 @@ class RewardsSnapshot extends Equatable {
     this.edgeBonus,
     this.mobileSearch,
     this.dailySet,
+    this.isMobileSearchUnreadable = false,
   });
 
   final int? points;
@@ -36,13 +37,20 @@ class RewardsSnapshot extends Equatable {
   final PointCounter? mobileSearch;
   final DailySetProgress? dailySet;
 
+  /// True when the API listed mobile counters but one couldn't be read. The
+  /// phone counter is then unknown, rather than the PC counter.
+  final bool isMobileSearchUnreadable;
+
   /// The counter the app's phone searches fill. Member-level accounts have no
   /// mobile counter: their phone searches fill the shared pcSearch counter
-  /// (verified live, Nov 2026).
-  PointCounter? get phoneSearchCounter => mobileSearch ?? pcSearch;
+  /// (verified live, Nov 2026). Falling back to it when the mobile counter was
+  /// merely unreadable could stop a run on a full PC counter.
+  PointCounter? get phoneSearchCounter =>
+      mobileSearch ?? (isMobileSearchUnreadable ? null : pcSearch);
 
   bool get isPhoneSearchMaxed => isMaxed(phoneSearchCounter);
 
   @override
-  List<Object?> get props => [points, level, pcSearch, edgeBonus, mobileSearch, dailySet];
+  List<Object?> get props =>
+      [points, level, pcSearch, edgeBonus, mobileSearch, dailySet, isMobileSearchUnreadable];
 }

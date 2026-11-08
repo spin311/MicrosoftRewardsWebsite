@@ -36,7 +36,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
     try {
       // The status only ever stops a run when it confirms the counter is full;
       // an unknown or signed-out status never blocks searching.
-      final before = await statusSource.fetchStatus();
+      final before = await _safeFetch();
       if (cancelToken.isCancelled) return;
       if (_isMaxed(before)) {
         emit(SearchSkipped(describeAlreadyComplete(before)));
@@ -54,7 +54,7 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
           emit(SearchInProgress(currentCount: currentCount, totalCount: event.count));
         },
         shouldStop: () async {
-          latest = await statusSource.fetchStatus();
+          latest = await _safeFetch();
           return _isMaxed(latest!);
         },
       );
@@ -77,7 +77,17 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
 
   Future<RewardsStatus> _finalStatus() async {
     await Future.delayed(finalCheckDelay);
-    return statusSource.fetchStatus();
+    return _safeFetch();
+  }
+
+  /// A status read that throws counts as unknown: it must never end a run.
+  Future<RewardsStatus> _safeFetch() async {
+    try {
+      return await statusSource.fetchStatus();
+    } catch (e) {
+      ErrorHandler.logError('rewards status', e);
+      return RewardsStatusFailed(error: RewardsStatusError.network, fetchedAt: DateTime.now());
+    }
   }
 
   static bool _isMaxed(RewardsStatus status) =>

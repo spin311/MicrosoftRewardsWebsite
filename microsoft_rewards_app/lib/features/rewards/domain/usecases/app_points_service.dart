@@ -71,6 +71,11 @@ class AppPointsService implements AppPointsEarner {
         return const AppPointsReport(auth: AppPointsAuth.signedOut);
       case AppTokenFailed(:final reason):
         return AppPointsReport(auth: AppPointsAuth.failed, authFailureReason: reason);
+      case AppTokenGranted() when cancellationToken?.isCancelled ?? false:
+        return const AppPointsReport(
+          auth: AppPointsAuth.granted,
+          readToEarn: ReadToEarnResult(status: ReadToEarnStatus.cancelled),
+        );
       case AppTokenGranted(:final token):
         return _earnWith(_apiFactory(token), cancellationToken, onReadToEarnProgress,
             includeDailyCheckIn);

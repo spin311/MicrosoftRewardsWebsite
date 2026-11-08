@@ -19,6 +19,11 @@ class _FixedStatusSource implements RewardsStatusSource {
   }
 }
 
+class _ThrowingStatusSource implements RewardsStatusSource {
+  @override
+  Future<RewardsStatus> fetchStatus() async => throw StateError('dispose failed');
+}
+
 class _FakeAppPoints implements AppPointsEarner {
   _FakeAppPoints(this._report, {this.error});
   final AppPointsReport _report;
@@ -53,6 +58,17 @@ void main() {
         const RewardsState(isRefreshing: true),
         RewardsState(status: _status),
       ],
+    );
+
+    blocTest<RewardsCubit, RewardsState>(
+      'a throwing status read ends the refresh instead of spinning forever',
+      build: () => RewardsCubit(statusSource: _ThrowingStatusSource(), appPoints: _FakeAppPoints(_completed)),
+      act: (cubit) => cubit.refresh(),
+      skip: 1,
+      verify: (cubit) {
+        expect(cubit.state.isRefreshing, isFalse);
+        expect(cubit.state.status, isA<RewardsStatusFailed>());
+      },
     );
 
     blocTest<RewardsCubit, RewardsState>(

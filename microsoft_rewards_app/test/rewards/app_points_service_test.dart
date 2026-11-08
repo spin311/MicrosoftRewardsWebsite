@@ -56,6 +56,21 @@ void main() {
     expect(subject.tokens, isEmpty);
   });
 
+  test('stops before any API call when cancelled while the token was fetched', () async {
+    // Arrange
+    final api = FakeRewardsPlatformApi(readOffer: readToEarnOffer(), checkIn: checkInOffer());
+    final subject = serviceWith(granted, api);
+    final token = SearchCancellationToken()..cancel();
+
+    // Act
+    final report = await subject.service.earn(cancellationToken: token);
+
+    // Assert
+    expect(report.readToEarn?.status, ReadToEarnStatus.cancelled);
+    expect(report.dailyCheckIn, isNull);
+    expect(subject.tokens, isEmpty);
+  });
+
   test('passes an authorization failure through with its reason', () async {
     final subject = serviceWith(const AppTokenFailed('timed out'), FakeRewardsPlatformApi());
 

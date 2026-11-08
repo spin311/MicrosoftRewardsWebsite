@@ -58,6 +58,11 @@ class _FakeRepository implements SearchRepository {
 
 class _FakeController extends Fake implements InAppWebViewController {}
 
+class _ThrowingStatusSource implements RewardsStatusSource {
+  @override
+  Future<RewardsStatus> fetchStatus() async => throw StateError('dispose failed');
+}
+
 SearchBloc _bloc(_FakeRepository repo, RewardsStatusSource status) => SearchBloc(
       performSearch: PerformSearch(repo),
       statusSource: status,
@@ -122,6 +127,16 @@ void main() {
         const SearchSuccess(
             "2 searches done, but you're not signed in to Microsoft Rewards, so they may not count."),
       ],
+      verify: (_) => expect(repo.searches, 2),
+    );
+
+    blocTest<SearchBloc, SearchState>(
+      'still searches when reading the status throws',
+      build: () => _bloc(repo, _ThrowingStatusSource()),
+      act: (bloc) => bloc.add(_start(2)),
+      wait: const Duration(milliseconds: 50),
+      skip: 3,
+      expect: () => [const SearchSuccess('2 searches done.')],
       verify: (_) => expect(repo.searches, 2),
     );
 

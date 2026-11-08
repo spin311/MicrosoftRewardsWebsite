@@ -22,10 +22,15 @@ class _Controller extends Fake implements InAppWebViewController {
       loaded.add(urlRequest.url.toString());
 }
 
-SearchRepositoryImpl _repo({Duration creditLag = Duration.zero}) => SearchRepositoryImpl(
+SearchRepositoryImpl _repo({
+  Duration creditLag = Duration.zero,
+  Duration checkGrace = const Duration(seconds: 5),
+}) =>
+    SearchRepositoryImpl(
       dataSource: _Queries(),
       searchHelper: SearchHelper(),
       creditLag: creditLag,
+      checkGrace: checkGrace,
       maxJitterMs: 0,
     );
 
@@ -90,6 +95,61 @@ void main() {
 
       // Assert: two gaps.
       expect(stopwatch.elapsedMilliseconds, lessThan(900));
+    });
+
+    test('a slow check never stretches the gap past the grace period', () async {
+      // Arrange: 100ms delay, 100ms grace, but the check takes 2s.
+      final stopwatch = Stopwatch()..start();
+      var checks = 0;
+
+      // Act
+      final done = await _repo(checkGrace: const Duration(milliseconds: 100)).performSearches(
+        count: 3,
+        delay: 0.1,
+        cancellationToken: SearchCancellationToken(),
+        controller: _Controller(),
+        onProgress: (_, __) {},
+        shouldStop: () async {
+          checks++;
+          await Future<void>.delayed(const Duration(seconds: 2));
+          return false;
+        },
+      );
+
+      // Assert: two ~200ms gaps, and only one check in flight at a time.
+      expect(done, 3);
+      expect(stopwatch.elapsedMilliseconds, lessThan(1000));
+      expect(checks, 1);
+    });
+
+    test('a late "full" stops the following search', () async {
+      // The first check outlives its gap, then reports full during the next one.
+      final done = await _repo(checkGrace: Duration.zero).performSearches(
+        count: 10,
+        delay: 0.1,
+        cancellationToken: SearchCancellationToken(),
+        controller: _Controller(),
+        onProgress: (_, __) {},
+        shouldStop: () async {
+          await Future<void>.delayed(const Duration(milliseconds: 150));
+          return true;
+        },
+      );
+
+      expect(done, 2);
+    });
+
+    test('a check that throws never ends the run', () async {
+      final done = await _repo().performSearches(
+        count: 3,
+        delay: 0,
+        cancellationToken: SearchCancellationToken(),
+        controller: _Controller(),
+        onProgress: (_, __) {},
+        shouldStop: () async => throw StateError('webview gone'),
+      );
+
+      expect(done, 3);
     });
 
     test('stops when cancelled during the gap', () async {

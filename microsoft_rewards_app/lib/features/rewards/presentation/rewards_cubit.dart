@@ -48,7 +48,14 @@ class RewardsCubit extends Cubit<RewardsState> {
   Future<void> refresh() async {
     if (state.isRefreshing) return;
     _emit(isRefreshing: true);
-    final status = await _statusSource.fetchStatus();
+    RewardsStatus status;
+    try {
+      status = await _statusSource.fetchStatus();
+    } catch (e) {
+      // Without this the spinner would stay and block every later refresh.
+      ErrorHandler.logError('rewards status', e);
+      status = RewardsStatusFailed(error: RewardsStatusError.network, fetchedAt: DateTime.now());
+    }
     _emit(status: status, isRefreshing: false);
   }
 

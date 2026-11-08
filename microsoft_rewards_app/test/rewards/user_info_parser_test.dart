@@ -119,6 +119,28 @@ void main() {
       expect(parseUserInfo(json, today)?.mobileSearch, isNull);
     });
 
+    test('flags a mobile counter that is listed but unreadable', () {
+      final json = userInfo();
+      countersOf(json)['mobileSearch'] = [
+        {'pointProgress': 'x', 'pointProgressMax': 60},
+      ];
+
+      final snapshot = parseUserInfo(json, today);
+
+      expect(snapshot?.isMobileSearchUnreadable, isTrue);
+      expect(snapshot?.phoneSearchCounter, isNull);
+    });
+
+    test('does not flag an account that has no mobile counter at all', () {
+      final json = userInfo();
+      countersOf(json).remove('mobileSearch');
+
+      final snapshot = parseUserInfo(json, today);
+
+      expect(snapshot?.isMobileSearchUnreadable, isFalse);
+      expect(snapshot?.phoneSearchCounter, snapshot?.pcSearch);
+    });
+
     // Summing only the readable entries could look maxed while the unreadable
     // one still had points left, and a maxed counter ends the searches.
     test('treats a group with one unreadable entry as unknown, not as a partial sum', () {

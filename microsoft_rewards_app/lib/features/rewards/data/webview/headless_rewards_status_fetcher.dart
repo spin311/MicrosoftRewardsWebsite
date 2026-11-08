@@ -45,24 +45,31 @@ class HeadlessRewardsStatusFetcher implements RewardsStatusSource {
     );
 
     try {
-      return await _loadAndFetch(webView, watcher, now).timeout(timeout);
+      // Outside the timeout: the plugin's dispose() only releases a WebView
+      // whose run() has returned.
+      await webView.run();
+      return await _awaitAndFetch(webView, watcher, now).timeout(timeout);
     } on TimeoutException {
       return RewardsStatusFailed(error: RewardsStatusError.network, fetchedAt: now);
-    } on Exception catch (error) {
+    } catch (error) {
+      // Never throws: callers rely on a status, and a throw must not end a run.
       debugPrint('Rewards status fetch failed: ${error.runtimeType}');
       return RewardsStatusFailed(error: RewardsStatusError.network, fetchedAt: now);
     } finally {
       watcher.dispose();
-      await webView.dispose();
+      try {
+        await webView.dispose();
+      } catch (error) {
+        debugPrint('Rewards status WebView dispose failed: ${error.runtimeType}');
+      }
     }
   }
 
-  Future<RewardsStatus> _loadAndFetch(
+  Future<RewardsStatus> _awaitAndFetch(
     HeadlessInAppWebView webView,
     PageLandingWatcher watcher,
     DateTime now,
   ) async {
-    await webView.run();
     final landing = await watcher.landing;
     final controller = webView.webViewController;
 

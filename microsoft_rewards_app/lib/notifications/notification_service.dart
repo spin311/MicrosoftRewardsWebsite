@@ -77,6 +77,20 @@ class NotificationService {
     return true;
   }
 
+  /// Re-schedules the reminder at launch only when notifications are already
+  /// allowed: never prompts, never throws. Returns whether it was scheduled.
+  static Future<bool> rescheduleIfAllowed({required int hour, required int minute}) async {
+    try {
+      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      if (await androidPlugin?.areNotificationsEnabled() != true) return false;
+      return await scheduleDailyReminder(hour: hour, minute: minute);
+    } catch (e) {
+      debugPrint('Daily reminder reschedule failed: ${e.runtimeType}');
+      return false;
+    }
+  }
+
   static Future<void> sendImmediateNotification({
     String title = 'Microsoft Automatic Rewards',
     String body = 'Thank you for using our app!',

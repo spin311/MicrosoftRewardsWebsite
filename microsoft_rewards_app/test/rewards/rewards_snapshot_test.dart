@@ -21,6 +21,18 @@ void main() {
   });
 
   group('RewardsSnapshot.phoneSearchCounter', () {
+    // A full PC counter must not stop phone searches whose own counter is
+    // merely unreadable.
+    test('is unknown when the mobile counter exists but was unreadable', () {
+      const snapshot = RewardsSnapshot(
+        pcSearch: PointCounter(progress: 90, max: 90),
+        isMobileSearchUnreadable: true,
+      );
+
+      expect(snapshot.phoneSearchCounter, isNull);
+      expect(snapshot.isPhoneSearchMaxed, isFalse);
+    });
+
     test('prefers the mobile counter when the account has one', () {
       // Arrange
       const snapshot = RewardsSnapshot(
