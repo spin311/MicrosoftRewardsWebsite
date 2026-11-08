@@ -52,7 +52,7 @@ String describeSearchRun({
   if (after is RewardsStatusFailed && after.isSignedOut) {
     return "$done, but you're not signed in to Microsoft Rewards, so they may not count.";
   }
-  final earned = _pointsEarned(before, after);
+  final earned = pointsEarnedBetween(before, after);
   if (earned == null) return '$done.';
 
   final counter = _counterOf(after);
@@ -64,13 +64,19 @@ String describeSearchRun({
   return '$done: +$earned points ($counter).';
 }
 
-int? _pointsEarned(RewardsStatus before, RewardsStatus after) {
+/// Points the phone-search counter gained between two readings, or null when
+/// either reading is unknown.
+int? pointsEarnedBetween(RewardsStatus before, RewardsStatus after) {
   if (before is! RewardsStatusLoaded || after is! RewardsStatusLoaded) return null;
   final start = before.snapshot.phoneSearchCounter;
   final end = after.snapshot.phoneSearchCounter;
   if (start == null || end == null) return null;
   return end.progress - start.progress;
 }
+
+/// Points an app-points run earned: Read to Earn plus the check-in.
+int appPointsEarned(AppPointsReport report) =>
+    (report.readToEarn?.pointsEarned ?? 0) + (report.dailyCheckIn?.pointsEarned ?? 0);
 
 /// The message after collecting app-only points.
 String describeAppPoints(AppPointsReport report) {

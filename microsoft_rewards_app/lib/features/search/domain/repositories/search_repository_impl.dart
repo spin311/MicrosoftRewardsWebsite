@@ -6,6 +6,7 @@ import '../../../../core/di/SearchCancellationToken.dart';
 import '../../../../core/utils/error_handler.dart';
 import '../../../../core/utils/helpers/search_helper.dart';
 import '../../data/dataSources/search_words.dart';
+import '../search_pacing.dart';
 
 /// Rewards shows a credited search within ~5s, so the counter is checked that
 /// long after a search, while the delay before the next one keeps running.
@@ -16,9 +17,6 @@ const _defaultCreditLag = Duration(seconds: 5);
 /// following search.
 const _defaultCheckGrace = Duration(seconds: 5);
 
-/// Up to this much random time is added to every delay.
-const _defaultMaxJitterMs = 1000;
-
 /// The delay is waited in slices this long so Cancel takes effect quickly.
 const _cancelPollInterval = Duration(milliseconds: 250);
 
@@ -27,17 +25,22 @@ class SearchRepositoryImpl implements SearchRepository {
   final SearchHelper searchHelper;
   final Duration creditLag;
   final Duration checkGrace;
-  final int maxJitterMs;
-  final Random _random;
+
+  /// The wait before the next search for a configured gap in seconds: the
+  /// extension's jittered pacing, so gaps never repeat exactly.
+  final Duration Function(double seconds) _delayFor;
 
   SearchRepositoryImpl({
     required this.dataSource,
     required this.searchHelper,
     this.creditLag = _defaultCreditLag,
     this.checkGrace = _defaultCheckGrace,
-    this.maxJitterMs = _defaultMaxJitterMs,
+    Duration Function(double seconds)? delayFor,
     Random? random,
-  }) : _random = random ?? Random();
+  }) : _delayFor = delayFor ?? _jitteredDelay(random ?? Random());
+
+  static Duration Function(double) _jitteredDelay(Random random) =>
+      (seconds) => nextDelay(seconds, random);
 
   @override
   Future<int> performSearches({
@@ -70,8 +73,7 @@ class SearchRepositoryImpl implements SearchRepository {
   }
 
   Future<void> _pause(double delay, SearchCancellationToken token) async {
-    final jitterMs = maxJitterMs > 0 ? _random.nextInt(maxJitterMs + 1) : 0;
-    final end = DateTime.now().add(Duration(milliseconds: (delay * 1000).toInt() + jitterMs));
+    final end = DateTime.now().add(_delayFor(delay));
     while (!token.isCancelled) {
       final left = end.difference(DateTime.now());
       if (left <= Duration.zero) return;

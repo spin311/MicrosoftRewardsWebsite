@@ -98,7 +98,8 @@ void main() {
         const SearchInProgress(currentCount: 1, totalCount: 10),
         const SearchInProgress(currentCount: 2, totalCount: 10),
         const SearchSuccess(
-            "Stopped after 2 searches: today's searches are complete (+9 points, Searches 15/15)."),
+            "Stopped after 2 searches: today's searches are complete (+9 points, Searches 15/15).",
+            pointsEarned: 9),
       ],
       verify: (_) => expect(repo.searches, 2),
     );

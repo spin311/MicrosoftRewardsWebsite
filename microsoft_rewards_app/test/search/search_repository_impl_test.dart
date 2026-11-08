@@ -31,7 +31,7 @@ SearchRepositoryImpl _repo({
       searchHelper: SearchHelper(),
       creditLag: creditLag,
       checkGrace: checkGrace,
-      maxJitterMs: 0,
+      delayFor: (seconds) => Duration(milliseconds: (seconds * 1000).round()),
     );
 
 void main() {

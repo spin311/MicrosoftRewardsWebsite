@@ -10,6 +10,9 @@ import '../../../../notifications/notification_service.dart';
 import '../../../../core/di/injection_container.dart';
 import '../../../rewards/presentation/rewards_cubit.dart';
 import '../../../rewards/presentation/rewards_status_card.dart';
+import '../../../support/support_links.dart';
+import '../../../support/support_prompt_presenter.dart';
+import '../../domain/search_pacing.dart';
 import '../bloc/search_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/strings.dart';
@@ -27,6 +30,7 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final GlobalKey<SearchFormState> _searchFormKey = GlobalKey();
+  final SupportPromptPresenter _supportPrompts = SupportPromptPresenter();
 
   @override
   Widget build(BuildContext context) {
@@ -48,11 +52,20 @@ class _SearchScreenState extends State<SearchScreen> {
                   height: 32,
                 ),
                 const SizedBox(width: 10),
-                const Text(Strings.appTitle),
+                const Flexible(
+                  child: Text(Strings.appTitle, overflow: TextOverflow.ellipsis),
+                ),
               ],
             );
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite, color: Colors.pinkAccent),
+            tooltip: 'Sponsor this app',
+            onPressed: _openSponsor,
+          ),
+        ],
       ),
       // Android 15+ always draws the app edge to edge, so keep the bottom row
       // clear of the navigation bar (3-button nav is ~48dp tall).
@@ -65,8 +78,19 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               children: [
                 Expanded(
-                  child: BlocListener<SearchBloc, SearchState>(
-                    listener: _handleStateChanges,
+                  child: MultiBlocListener(
+                    listeners: [
+                      BlocListener<SearchBloc, SearchState>(listener: _handleStateChanges),
+                      // A finished app-points run that earned something counts
+                      // as the app helping, like a search run that did.
+                      BlocListener<RewardsCubit, RewardsState>(
+                        listenWhen: (previous, current) =>
+                            previous.isCollecting && !current.isCollecting,
+                        listener: (context, state) {
+                          if ((state.appPointsEarned ?? 0) > 0) _supportPrompts.onHelpfulRun(context);
+                        },
+                      ),
+                    ],
                     child: SearchForm(key: _searchFormKey),
                   ),
                 ),
@@ -91,7 +115,12 @@ class _SearchScreenState extends State<SearchScreen> {
                   TextButton(
                     onPressed: () => openInWebView(context, 'https://rewards.bing.com/'),
                     child: const Text('Rewards'),
-                  )
+                  ),
+                  TextButton.icon(
+                    onPressed: _openSponsor,
+                    icon: const Icon(Icons.favorite, color: Colors.pinkAccent, size: 18),
+                    label: const Text('Sponsor'),
+                  ),
                 ],
               ),
             ),
@@ -99,6 +128,13 @@ class _SearchScreenState extends State<SearchScreen> {
         ),
       ),
       ),
+    );
+  }
+
+  Future<void> _openSponsor() async {
+    if (await openSponsorPage() || !mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Couldn't open the browser. Visit github.com/sponsors/spin311")),
     );
   }
 
@@ -159,6 +195,9 @@ class _SearchScreenState extends State<SearchScreen> {
     if (state is SearchSuccess || state is SearchSkipped) {
       context.read<RewardsCubit>().refresh();
     }
+    if (state is SearchSuccess && (state.pointsEarned ?? 0) > 0) {
+      _supportPrompts.onHelpfulRun(context);
+    }
     if (state is! SearchInProgress) {
       WakelockPlus.disable();
     }
@@ -181,6 +220,9 @@ class SearchForm extends StatefulWidget {
   @override
   State<SearchForm> createState() => SearchFormState();
 }
+
+/// Set once the pre-1.3.0 20s default has been moved to the new default.
+const _delayMigratedKey = 'delay_default_migrated';
 
 class SearchFormState extends State<SearchForm> {
   final _formKey = GlobalKey<FormState>();
@@ -218,9 +260,14 @@ class SearchFormState extends State<SearchForm> {
 
   Future<void> _loadSavedValues() async {
     final prefs = await SharedPreferences.getInstance();
+    final delay = migrateOldDefaultDelay(
+      stored: prefs.getString('search_delay'),
+      isMigrated: prefs.getBool(_delayMigratedKey) ?? false,
+    );
+    await prefs.setBool(_delayMigratedKey, true);
     setState(() {
       _countController.text = prefs.getString('search_count') ?? '22';
-      _delayController.text = prefs.getString('search_delay') ?? '20';
+      _delayController.text = delay;
       _sendDailyReminder = prefs.getBool('send_daily_reminder') ?? false;
       _keepScreenOn = prefs.getBool('keep_screen_on') ?? true;
       _loggedIn = prefs.getBool('loggedIn') ?? false;
@@ -331,6 +378,7 @@ class SearchFormState extends State<SearchForm> {
             keyboardType: TextInputType.number,
             validator: InputValidators.validateDelay,
           ),
+          _DelayWarning(controller: _delayController),
           Row(
             children: [
               Checkbox(
@@ -615,5 +663,31 @@ class SearchFormState extends State<SearchForm> {
     if (mounted) {
       navigateToLoginScreen(context);
     }
+  }
+}
+
+/// Same warning as the extension: short gaps are honoured, not overridden,
+/// but Microsoft credits them less often.
+class _DelayWarning extends StatelessWidget {
+  const _DelayWarning({required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, _) {
+        if (!isDelayRisky(double.tryParse(value.text))) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
+          child: Text(
+            '⚠ Under ${recommendedMinDelaySeconds}s, Microsoft often stops crediting the '
+            'searches. ${defaultDelaySeconds}s or more is recommended.',
+            style: TextStyle(color: Colors.orange.shade900, fontSize: 13),
+          ),
+        );
+      },
+    );
   }
 }

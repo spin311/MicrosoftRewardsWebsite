@@ -14,6 +14,7 @@ class RewardsState extends Equatable {
     this.readProgress,
     this.readMax,
     this.appPointsMessage,
+    this.appPointsEarned,
   });
 
   /// The last Rewards status read; null until the first one arrives.
@@ -28,9 +29,12 @@ class RewardsState extends Equatable {
   /// The outcome of the last app-points run, shown under the status.
   final String? appPointsMessage;
 
+  /// Points the last app-points run earned.
+  final int? appPointsEarned;
+
   @override
   List<Object?> get props =>
-      [status, isRefreshing, isCollecting, readProgress, readMax, appPointsMessage];
+      [status, isRefreshing, isCollecting, readProgress, readMax, appPointsMessage, appPointsEarned];
 }
 
 /// Today's Rewards status and the app-points run behind the search screen's
@@ -64,23 +68,23 @@ class RewardsCubit extends Cubit<RewardsState> {
     final token = SearchCancellationToken();
     _appPointsToken = token;
     emit(RewardsState(status: state.status, isRefreshing: state.isRefreshing, isCollecting: true));
-    final message = await _earn(token);
-    _emit(isCollecting: false, appPointsMessage: message);
+    final (message, earned) = await _earn(token);
+    _emit(isCollecting: false, appPointsMessage: message, appPointsEarned: earned);
     if (!isClosed) await refresh();
   }
 
   void cancelAppPoints() => _appPointsToken?.cancel();
 
-  Future<String> _earn(SearchCancellationToken token) async {
+  Future<(String, int)> _earn(SearchCancellationToken token) async {
     try {
       final report = await _appPoints.earn(
         cancellationToken: token,
         onReadToEarnProgress: (progress, max) => _emit(readProgress: progress, readMax: max),
       );
-      return describeAppPoints(report);
+      return (describeAppPoints(report), appPointsEarned(report));
     } catch (e) {
       ErrorHandler.logError('app points', e);
-      return "Couldn't collect app points. Try again later.";
+      return ("Couldn't collect app points. Try again later.", 0);
     }
   }
 
@@ -92,6 +96,7 @@ class RewardsCubit extends Cubit<RewardsState> {
     int? readProgress,
     int? readMax,
     String? appPointsMessage,
+    int? appPointsEarned,
   }) {
     if (isClosed) return;
     emit(RewardsState(
@@ -101,6 +106,7 @@ class RewardsCubit extends Cubit<RewardsState> {
       readProgress: readProgress ?? state.readProgress,
       readMax: readMax ?? state.readMax,
       appPointsMessage: appPointsMessage ?? state.appPointsMessage,
+      appPointsEarned: appPointsEarned ?? state.appPointsEarned,
     ));
   }
 

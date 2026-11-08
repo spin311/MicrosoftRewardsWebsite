@@ -63,12 +63,15 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       final stoppedMaxed = latest != null && _isMaxed(latest!);
       final after = stoppedMaxed ? latest! : await _finalStatus();
       if (cancelToken.isCancelled) return;
-      emit(SearchSuccess(describeSearchRun(
-        before: before,
-        after: after,
-        searchesDone: searchesDone,
-        stoppedMaxed: stoppedMaxed,
-      )));
+      emit(SearchSuccess(
+        describeSearchRun(
+          before: before,
+          after: after,
+          searchesDone: searchesDone,
+          stoppedMaxed: stoppedMaxed,
+        ),
+        pointsEarned: pointsEarnedBetween(before, after),
+      ));
     } catch (e) {
       if (cancelToken.isCancelled) return;
       emit(SearchFailure(ErrorHandler.getErrorMessage(e)));
@@ -146,10 +149,13 @@ class SearchCancelled extends SearchState {}
 class SearchSuccess extends SearchState {
   final String message;
 
-  const SearchSuccess(this.message);
+  /// Points the run earned, when both Rewards readings were known.
+  final int? pointsEarned;
+
+  const SearchSuccess(this.message, {this.pointsEarned});
 
   @override
-  List<Object> get props => [message];
+  List<Object> get props => [message, pointsEarned ?? -1];
 }
 
 /// The run didn't start because today's search counter is already full.

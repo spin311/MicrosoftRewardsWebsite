@@ -79,11 +79,11 @@ void main() {
         const RewardsState(isCollecting: true),
         const RewardsState(isCollecting: true, readProgress: 3, readMax: 30),
         const RewardsState(isCollecting: true, readProgress: 30, readMax: 30),
-        const RewardsState(readProgress: 30, readMax: 30, appPointsMessage: 'Read to Earn: +27 points (30/30).'),
+        const RewardsState(readProgress: 30, readMax: 30, appPointsMessage: 'Read to Earn: +27 points (30/30).', appPointsEarned: 27),
         const RewardsState(
-            isRefreshing: true, readProgress: 30, readMax: 30, appPointsMessage: 'Read to Earn: +27 points (30/30).'),
+            isRefreshing: true, readProgress: 30, readMax: 30, appPointsMessage: 'Read to Earn: +27 points (30/30).', appPointsEarned: 27),
         RewardsState(
-            status: _status, readProgress: 30, readMax: 30, appPointsMessage: 'Read to Earn: +27 points (30/30).'),
+            status: _status, readProgress: 30, readMax: 30, appPointsMessage: 'Read to Earn: +27 points (30/30).', appPointsEarned: 27),
       ],
     );
 
@@ -96,9 +96,9 @@ void main() {
       act: (cubit) => cubit.collectAppPoints(),
       skip: 1,
       expect: () => [
-        const RewardsState(appPointsMessage: "Couldn't collect app points. Try again later."),
-        const RewardsState(isRefreshing: true, appPointsMessage: "Couldn't collect app points. Try again later."),
-        RewardsState(status: _status, appPointsMessage: "Couldn't collect app points. Try again later."),
+        const RewardsState(appPointsMessage: "Couldn't collect app points. Try again later.", appPointsEarned: 0),
+        const RewardsState(isRefreshing: true, appPointsMessage: "Couldn't collect app points. Try again later.", appPointsEarned: 0),
+        RewardsState(status: _status, appPointsMessage: "Couldn't collect app points. Try again later.", appPointsEarned: 0),
       ],
     );
   });
