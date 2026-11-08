@@ -353,7 +353,7 @@ packages:
     source: hosted
     version: "2.1.3"
   http:
-    dependency: transitive
+    dependency: "direct main"
     description:
       name: http
       sha256: "2c11f3f94c687ee9bad77c171151672986360b2b001d109814ee7140b2cf261b"
@@ -917,14 +917,6 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "5.13.0"
-  word_generator:
-    dependency: "direct main"
-    description:
-      name: word_generator
-      sha256: "937dd6d124024fe474835b415bd56ecfda0f32fe8eba60a1be6251f3a154dbf9"
-      url: "https://pub.dev"
-    source: hosted
-    version: "0.4.6"
   xdg_directories:
     dependency: transitive
     description:
