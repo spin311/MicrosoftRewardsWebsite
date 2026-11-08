@@ -13,18 +13,36 @@ class SupportPromptPresenter {
     SupportPromptStore? store,
     InAppReview? review,
     DateTime Function()? clock,
+    bool Function()? isInForeground,
   })  : _store = store ?? SupportPromptStore(),
         _review = review ?? InAppReview.instance,
-        _clock = clock ?? DateTime.now;
+        _clock = clock ?? DateTime.now,
+        _isInForeground = isInForeground ?? _isAppResumed;
 
   final SupportPromptStore _store;
   final InAppReview _review;
   final DateTime Function() _clock;
+  final bool Function() _isInForeground;
+
+  static bool _isAppResumed() =>
+      WidgetsBinding.instance.lifecycleState == AppLifecycleState.resumed;
 
   Future<void> onHelpfulRun(BuildContext context) async {
-    final state = await _store.recordHelpfulRun();
+    try {
+      final state = await _store.recordHelpfulRun();
+      // A long run often ends while the user is in another app, where Google's
+      // review card can't show. The run still counts; a prompt that's due
+      // stays due and appears after the next helpful run in the foreground.
+      if (!_isInForeground() || !context.mounted) return;
+      await _show(pickSupportPrompt(state, _clock()), context);
+    } catch (e) {
+      ErrorHandler.logError('support prompt', e);
+    }
+  }
+
+  Future<void> _show(SupportPrompt? prompt, BuildContext context) async {
     final now = _clock();
-    switch (pickSupportPrompt(state, now)) {
+    switch (prompt) {
       case SupportPrompt.review:
         await _store.markReviewPrompted(now);
         await _requestReview();

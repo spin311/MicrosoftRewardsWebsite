@@ -264,7 +264,10 @@ class SearchFormState extends State<SearchForm> {
       stored: prefs.getString('search_delay'),
       isMigrated: prefs.getBool(_delayMigratedKey) ?? false,
     );
-    await prefs.setBool(_delayMigratedKey, true);
+    if (prefs.getBool(_delayMigratedKey) != true) {
+      await prefs.setBool(_delayMigratedKey, true);
+      await prefs.setString('search_delay', delay);
+    }
     setState(() {
       _countController.text = prefs.getString('search_count') ?? '22';
       _delayController.text = delay;

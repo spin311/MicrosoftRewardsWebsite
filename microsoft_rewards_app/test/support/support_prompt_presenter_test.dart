@@ -15,6 +15,9 @@ class _FakeReview extends Fake implements InAppReview {
 
 final _now = DateTime(2026, 11, 8, 13);
 
+SupportPromptPresenter _presenter(_FakeReview review, {bool Function()? foreground}) =>
+    SupportPromptPresenter(review: review, clock: () => _now, isInForeground: foreground ?? () => true);
+
 Future<void> _pumpButton(WidgetTester tester, SupportPromptPresenter presenter) {
   return tester.pumpWidget(MaterialApp(
     home: Builder(
@@ -31,7 +34,7 @@ void main() {
     // Arrange
     SharedPreferences.setMockInitialValues({'support_helpful_runs': 1});
     final review = _FakeReview();
-    await _pumpButton(tester, SupportPromptPresenter(review: review, clock: () => _now));
+    await _pumpButton(tester, _presenter(review));
 
     // Act: runs 2, 3 and 4
     for (var i = 0; i < 3; i++) {
@@ -50,7 +53,7 @@ void main() {
       'support_helpful_runs': 9,
       'support_review_prompted_at': _now.subtract(const Duration(days: 8)).millisecondsSinceEpoch,
     });
-    await _pumpButton(tester, SupportPromptPresenter(review: _FakeReview(), clock: () => _now));
+    await _pumpButton(tester, _presenter(_FakeReview()));
 
     // Act
     await tester.tap(find.text('helpful run'));
@@ -69,5 +72,24 @@ void main() {
     await tester.tap(find.text('helpful run'));
     await tester.pumpAndSettle();
     expect(find.text(sponsorDialogTitle), findsNothing);
+  });
+
+  testWidgets('holds a due review while the app is in the background', (tester) async {
+    // Arrange: the 3rd helpful run ends in the background, the 4th in front.
+    SharedPreferences.setMockInitialValues({'support_helpful_runs': 2});
+    final review = _FakeReview();
+    var isInForeground = false;
+    await _pumpButton(tester, _presenter(review, foreground: () => isInForeground));
+
+    // Act + Assert: nothing while in the background...
+    await tester.tap(find.text('helpful run'));
+    await tester.pumpAndSettle();
+    expect(review.requests, 0);
+
+    // ...and the review once the next helpful run ends in the foreground.
+    isInForeground = true;
+    await tester.tap(find.text('helpful run'));
+    await tester.pumpAndSettle();
+    expect(review.requests, 1);
   });
 }
