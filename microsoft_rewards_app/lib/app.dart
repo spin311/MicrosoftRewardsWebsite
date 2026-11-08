@@ -18,7 +18,6 @@ class MyApp extends StatelessWidget {
           seedColor: AppConstants.primary,
           primary: AppConstants.primary,
           onPrimary: AppConstants.onPrimary,
-          background: AppConstants.background,
           error: AppConstants.error,
         ),
         useMaterial3: true,

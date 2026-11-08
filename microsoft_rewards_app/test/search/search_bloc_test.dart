@@ -1,7 +1,7 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:microsoft_automatic_rewards/core/di/SearchCancellationToken.dart';
+import 'package:microsoft_automatic_rewards/core/di/search_cancellation_token.dart';
 import 'package:microsoft_automatic_rewards/features/rewards/rewards.dart';
 import 'package:microsoft_automatic_rewards/features/search/domain/repositories/search_repository.dart';
 import 'package:microsoft_automatic_rewards/features/search/domain/useCases/perform_search.dart';

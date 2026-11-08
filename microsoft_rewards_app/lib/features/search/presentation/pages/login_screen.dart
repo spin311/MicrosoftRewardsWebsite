@@ -16,7 +16,6 @@ class LoginScreen extends StatefulWidget {
 
 class _LoginScreenState extends State<LoginScreen> {
   bool _showWebView = false;
-  late InAppWebViewController _webViewController;
 
   @override
   Widget build(BuildContext context) {
@@ -105,13 +104,11 @@ class _LoginScreenState extends State<LoginScreen> {
                     clearSessionCache: false,
                     clearCache: false,
                   ),
-                  onWebViewCreated: (controller) {
-                    _webViewController = controller;
-                  },
                   onLoadStop: (controller, url) async {
                     if (isSignedInBingUrl(url)) {
                       final prefs = await SharedPreferences.getInstance();
                       await prefs.setBool("loggedIn", true);
+                      if (!context.mounted) return;
                       navigateToSearchScreen(context);
                     }
                   },
@@ -138,7 +135,7 @@ class _LoginScreenState extends State<LoginScreen> {
     }
   }
 
-  showConfirmPopup(context) {
+  void showConfirmPopup(BuildContext context) {
     showDialog(
       context: context,
       builder: (context) {

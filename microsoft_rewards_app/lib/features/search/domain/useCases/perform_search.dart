@@ -1,6 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 
-import '../../../../core/di/SearchCancellationToken.dart';
+import '../../../../core/di/search_cancellation_token.dart';
 import '../repositories/search_repository.dart';
 
 class PerformSearch {

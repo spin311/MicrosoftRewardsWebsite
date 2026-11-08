@@ -22,10 +22,12 @@ dependencies:
   http: ^1.4.0
   url_launcher: ^6.3.3
   in_app_review: ^2.0.12
+  timezone: ^0.10.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
   bloc_test: ^10.0.0
+  flutter_lints: ^6.0.0
 
 flutter:
   uses-material-design: true

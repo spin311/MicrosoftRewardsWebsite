@@ -1,6 +1,6 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:microsoft_automatic_rewards/core/di/SearchCancellationToken.dart';
+import 'package:microsoft_automatic_rewards/core/di/search_cancellation_token.dart';
 import 'package:microsoft_automatic_rewards/core/utils/helpers/search_helper.dart';
 import 'package:microsoft_automatic_rewards/features/search/data/dataSources/search_words.dart';
 import 'package:microsoft_automatic_rewards/features/search/domain/repositories/search_repository_impl.dart';
@@ -47,7 +47,7 @@ void main() {
         delay: 0,
         cancellationToken: SearchCancellationToken(),
         controller: controller,
-        onProgress: (_, __) {},
+        onProgress: (_, _) {},
         shouldStop: () async => ++checks == 2,
       );
 
@@ -64,7 +64,7 @@ void main() {
         delay: 0,
         cancellationToken: SearchCancellationToken(),
         controller: _Controller(),
-        onProgress: (_, __) {},
+        onProgress: (_, _) {},
         shouldStop: () async {
           checks++;
           return false;
@@ -86,7 +86,7 @@ void main() {
         delay: 0.3,
         cancellationToken: SearchCancellationToken(),
         controller: _Controller(),
-        onProgress: (_, __) {},
+        onProgress: (_, _) {},
         shouldStop: () async {
           await Future<void>.delayed(const Duration(milliseconds: 250));
           return false;
@@ -108,7 +108,7 @@ void main() {
         delay: 0.1,
         cancellationToken: SearchCancellationToken(),
         controller: _Controller(),
-        onProgress: (_, __) {},
+        onProgress: (_, _) {},
         shouldStop: () async {
           checks++;
           await Future<void>.delayed(const Duration(seconds: 2));
@@ -129,7 +129,7 @@ void main() {
         delay: 0.1,
         cancellationToken: SearchCancellationToken(),
         controller: _Controller(),
-        onProgress: (_, __) {},
+        onProgress: (_, _) {},
         shouldStop: () async {
           await Future<void>.delayed(const Duration(milliseconds: 150));
           return true;
@@ -145,7 +145,7 @@ void main() {
         delay: 0,
         cancellationToken: SearchCancellationToken(),
         controller: _Controller(),
-        onProgress: (_, __) {},
+        onProgress: (_, _) {},
         shouldStop: () async => throw StateError('webview gone'),
       );
 
@@ -160,7 +160,7 @@ void main() {
         delay: 0,
         cancellationToken: token,
         controller: _Controller(),
-        onProgress: (_, __) {},
+        onProgress: (_, _) {},
         shouldStop: () async {
           token.cancel();
           return false;
