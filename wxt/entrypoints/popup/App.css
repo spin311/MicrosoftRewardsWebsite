@@ -381,23 +381,8 @@ input[type="number"]:focus {
     display: inline-block;
 }
 
-.try-mobile {
-  display: inline-block;
-  margin-left: 1.5em;
-  font-weight: 700;
-  font-size: 1.1em;
-  position: relative;
-  overflow: hidden;
-  text-align: center;
-}
-.try-mobile > a {
-  color: #18272F;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.try-mobile::after {
+/* A periodic shine that draws the eye to the mobile app button. */
+.app-promo-button::after {
   content: '';
   position: absolute;
   top: 0;
@@ -480,28 +465,63 @@ input[type="number"]:focus {
     margin-left: 1.5em;
 }
 
-.website-header {
+/* Mobile app promo: says why the app is worth installing (points a browser
+   can't earn) next to a scannable code. Same card look and insets as the
+   sponsor promo, and no taller than the block it replaced. */
+.app-promo {
   display: flex;
-  justify-content: space-evenly;
   align-items: center;
-  margin: 0.5em 0;
+  gap: 0.7em;
+  margin: 0.6em 1.5em 0;
+  padding: 0.5em 0.6em;
+  background-color: #fff;
+  border-radius: 8px;
 }
 
-.qr-code-with-text {
+.app-promo-qr {
+  flex-shrink: 0;
+  width: 5.5rem;
+  height: 5.5rem;
+}
+
+.app-promo-body {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  gap: 0.3em;
+  text-align: left;
 }
 
-.website-phone-text {
+.app-promo-title {
+  margin: 0;
+  font-size: 0.85em;
   font-weight: 700;
-  font-size: 1.1em;
-  margin-top: 0.3em;
   color: #18272F;
 }
 
-.website-phone-image, .qr-code {
-  height: 6rem;
+.app-promo-text {
+  margin: 0;
+  font-size: 0.7em;
+  line-height: 1.35;
+  color: #18272F;
+}
+
+.app-promo-button {
+  position: relative;
+  overflow: hidden;
+  padding: 0.3em 0.7em;
+  font-size: 0.75em;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  background-color: #2282ad;
+  border-radius: 6px;
+  transition: background-color .2s ease;
+}
+
+.app-promo-button:hover {
+  color: #fff;
+  background-color: #1a6f8c;
 }
 
 /* GitHub Sponsors promo above the footer. Insets match .earn-list so it stays in
