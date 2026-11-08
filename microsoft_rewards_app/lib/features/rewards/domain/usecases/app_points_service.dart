@@ -1,6 +1,6 @@
 import 'package:equatable/equatable.dart';
 
-import '../../../../core/di/SearchCancellationToken.dart';
+import '../../../../core/di/search_cancellation_token.dart';
 import '../entities/app_token_result.dart';
 import '../repositories/app_token_source.dart';
 import '../repositories/rewards_platform_api.dart';

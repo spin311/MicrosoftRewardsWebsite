@@ -1,6 +1,6 @@
 import 'package:bloc_test/bloc_test.dart';
 import 'package:flutter_test/flutter_test.dart';
-import 'package:microsoft_automatic_rewards/core/di/SearchCancellationToken.dart';
+import 'package:microsoft_automatic_rewards/core/di/search_cancellation_token.dart';
 import 'package:microsoft_automatic_rewards/features/rewards/presentation/rewards_cubit.dart';
 import 'package:microsoft_automatic_rewards/features/rewards/rewards.dart';
 

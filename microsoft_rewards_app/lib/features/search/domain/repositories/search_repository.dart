@@ -1,5 +1,5 @@
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import 'package:microsoft_automatic_rewards/core/di/SearchCancellationToken.dart';
+import 'package:microsoft_automatic_rewards/core/di/search_cancellation_token.dart';
 
 abstract class SearchRepository {
   /// Runs up to [count] searches and returns how many ran. [shouldStop] is

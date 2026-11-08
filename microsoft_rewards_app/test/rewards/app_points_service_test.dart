@@ -1,7 +1,7 @@
 import 'dart:math';
 
 import 'package:flutter_test/flutter_test.dart';
-import 'package:microsoft_automatic_rewards/core/di/SearchCancellationToken.dart';
+import 'package:microsoft_automatic_rewards/core/di/search_cancellation_token.dart';
 import 'package:microsoft_automatic_rewards/features/rewards/domain/entities/app_access_token.dart';
 import 'package:microsoft_automatic_rewards/features/rewards/domain/entities/app_token_result.dart';
 import 'package:microsoft_automatic_rewards/features/rewards/domain/repositories/app_token_source.dart';

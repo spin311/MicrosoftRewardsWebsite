@@ -2,7 +2,7 @@ import 'dart:math';
 
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:microsoft_automatic_rewards/features/search/domain/repositories/search_repository.dart';
-import '../../../../core/di/SearchCancellationToken.dart';
+import '../../../../core/di/search_cancellation_token.dart';
 import '../../../../core/utils/error_handler.dart';
 import '../../../../core/utils/helpers/search_helper.dart';
 import '../../data/dataSources/search_words.dart';

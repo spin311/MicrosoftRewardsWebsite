@@ -38,10 +38,5 @@ jobs:
         with:
           channel: stable
       - run: flutter pub get
-      # TODO: remove continue-on-error once the app is analyzer-clean and the
-      # default template test (test/widget_test.dart) is replaced with real tests.
-      # Kept non-blocking so the baseline CI is green; the steps still report status.
       - run: flutter analyze
-        continue-on-error: true
       - run: flutter test
-        continue-on-error: true

@@ -1,6 +1,6 @@
 import 'dart:math';
 
-import '../../../../core/di/SearchCancellationToken.dart';
+import '../../../../core/di/search_cancellation_token.dart';
 import '../entities/app_dashboard.dart';
 import '../repositories/rewards_platform_api.dart';
 import 'delay.dart';

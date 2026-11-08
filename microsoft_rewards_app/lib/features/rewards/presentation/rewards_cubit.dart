@@ -1,7 +1,7 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../core/di/SearchCancellationToken.dart';
+import '../../../core/di/search_cancellation_token.dart';
 import '../../../core/utils/error_handler.dart';
 import '../rewards.dart';
 import 'rewards_messages.dart';

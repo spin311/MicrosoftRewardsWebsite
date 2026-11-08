@@ -1,6 +1,6 @@
 import 'package:bloc/bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
-import '../../../../core/di/SearchCancellationToken.dart';
+import '../../../../core/di/search_cancellation_token.dart';
 import '../../../../core/utils/error_handler.dart';
 import '../../../rewards/presentation/rewards_messages.dart';
 import '../../../rewards/rewards.dart';
