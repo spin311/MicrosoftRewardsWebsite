@@ -31,7 +31,7 @@ class SearchRepositoryImpl implements SearchRepository {
           break;
         }
         onProgress(i + 1, count);
-        final query = dataSource.randomSentence();
+        final query = await dataSource.nextQuery();
         await SearchHelper.launchSearch(controller: controller, query: query);
 
         if (i < count - 1) {
