@@ -7,6 +7,9 @@ import '../../../../core/utils/validators/input_validators.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../notifications/notification_service.dart';
+import '../../../../core/di/injection_container.dart';
+import '../../../rewards/presentation/rewards_cubit.dart';
+import '../../../rewards/presentation/rewards_status_card.dart';
 import '../bloc/search_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/strings.dart';
@@ -29,7 +32,9 @@ class _SearchScreenState extends State<SearchScreen> {
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    return Scaffold(
+    return BlocProvider(
+      create: (_) => sl<RewardsCubit>()..refresh(),
+      child: Scaffold(
       appBar: AppBar(
         title: Builder(
           builder: (context) {
@@ -93,6 +98,7 @@ class _SearchScreenState extends State<SearchScreen> {
         ],
         ),
       ),
+      ),
     );
   }
 
@@ -128,9 +134,11 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               const Icon(Icons.check_circle_outline, color: Colors.white),
               const SizedBox(width: 12),
-              const Text(
-                Strings.searchCompleted,
-                style: TextStyle(color: Colors.white),
+              Expanded(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -139,11 +147,19 @@ class _SearchScreenState extends State<SearchScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 6),
         ),
       );
     }
-    if (state is SearchFailure || state is SearchSuccess) {
+    if (state is SearchSkipped) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.message), duration: const Duration(seconds: 5)),
+      );
+    }
+    if (state is SearchSuccess || state is SearchSkipped) {
+      context.read<RewardsCubit>().refresh();
+    }
+    if (state is! SearchInProgress) {
       WakelockPlus.disable();
     }
   }
@@ -295,6 +311,7 @@ class SearchFormState extends State<SearchForm> {
       key: _formKey,
       child: Column(
         children: [
+          const RewardsStatusCard(),
           CustomTextField(
             controller: _countController,
             labelText: Strings.searchCountLabel,

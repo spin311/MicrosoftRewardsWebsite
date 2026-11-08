@@ -33,9 +33,18 @@ class AppPointsReport extends Equatable {
   List<Object?> get props => [auth, authFailureReason, readToEarn, dailyCheckIn];
 }
 
+/// What the UI needs from the app-points feature; lets tests swap in a fake.
+abstract interface class AppPointsEarner {
+  Future<AppPointsReport> earn({
+    SearchCancellationToken? cancellationToken,
+    ProgressCallback? onReadToEarnProgress,
+    bool includeDailyCheckIn = true,
+  });
+}
+
 /// Earns the points only the Bing mobile app can: Read to Earn, then
 /// (best effort) the daily check-in. The single entry point for the UI.
-class AppPointsService {
+class AppPointsService implements AppPointsEarner {
   AppPointsService({
     required AppTokenSource tokenSource,
     required RewardsPlatformApiFactory apiFactory,
@@ -51,6 +60,7 @@ class AppPointsService {
   final ReadToEarnRunner _readToEarn;
   final DailyCheckInRunner _dailyCheckIn;
 
+  @override
   Future<AppPointsReport> earn({
     SearchCancellationToken? cancellationToken,
     ProgressCallback? onReadToEarnProgress,
