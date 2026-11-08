@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import '../../../../core/utils/error_handler.dart';
 import '../../../../core/utils/validators/input_validators.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
@@ -48,7 +49,11 @@ class _SearchScreenState extends State<SearchScreen> {
           },
         ),
       ),
-      body: Stack(
+      // Android 15+ always draws the app edge to edge, so keep the bottom row
+      // clear of the navigation bar (3-button nav is ~48dp tall).
+      body: SafeArea(
+        top: false,
+        child: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.all(AppConstants.defaultPadding),
@@ -86,6 +91,7 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
         ],
+        ),
       ),
     );
   }
@@ -207,6 +213,37 @@ class SearchFormState extends State<SearchForm> {
         minute: prefs.getInt('reminder_minute') ?? 0,
       );
     });
+    // Before 1.2.1 an enabled reminder could fail to schedule (exact alarms are
+    // denied on Android 14+) while the box stayed ticked: schedule it again.
+    if (_sendDailyReminder) await _setDailyReminder(true);
+  }
+
+  /// Turns the reminder on or off. The box only stays ticked when the reminder
+  /// was actually scheduled.
+  Future<void> _setDailyReminder(bool enable) async {
+    final isEnabled = enable ? await _scheduleReminder(_selectedTime) : false;
+    if (!enable) await NotificationService.cancelReminder();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('send_daily_reminder', isEnabled);
+    if (mounted) setState(() => _sendDailyReminder = isEnabled);
+  }
+
+  Future<bool> _scheduleReminder(TimeOfDay time) async {
+    try {
+      final isScheduled = await NotificationService.scheduleDailyReminder(
+          hour: time.hour, minute: time.minute);
+      if (!isScheduled) _showMessage('Allow notifications to get the daily reminder.');
+      return isScheduled;
+    } catch (e) {
+      ErrorHandler.logError('daily reminder', e);
+      _showMessage('Could not set the daily reminder.');
+      return false;
+    }
+  }
+
+  void _showMessage(String text) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -238,9 +275,7 @@ class SearchFormState extends State<SearchForm> {
 
       setState(() => _selectedTime = pickedTime);
 
-      if (_sendDailyReminder) {
-        await NotificationService.scheduleDailyReminder(hour: pickedTime.hour, minute: pickedTime.minute);
-      }
+      if (_sendDailyReminder) await _setDailyReminder(true);
     }
   }
 
@@ -279,17 +314,7 @@ class SearchFormState extends State<SearchForm> {
             children: [
               Checkbox(
                 value: _sendDailyReminder,
-                onChanged: (value) async {
-                  setState(() => _sendDailyReminder = value!);
-                  final prefs = await SharedPreferences.getInstance();
-                  prefs.setBool('send_daily_reminder', value!);
-
-                  if (value) {
-                    await NotificationService.scheduleDailyReminder(hour: _selectedTime.hour, minute: _selectedTime.minute);
-                  } else {
-                    await NotificationService.cancelReminder();
-                  }
-                },
+                onChanged: (value) => _setDailyReminder(value ?? false),
               ),
               Expanded(
                 child: InkWell(
@@ -414,7 +439,8 @@ class SearchFormState extends State<SearchForm> {
     ],
     ),
     ],
-          BlocBuilder<SearchBloc, SearchState>(
+          Expanded(
+            child: BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               final isInProgress = state is SearchInProgress;
               return Column(
@@ -485,9 +511,9 @@ class SearchFormState extends State<SearchForm> {
                     ),
                   ],
                   const SizedBox(height: AppConstants.defaultPadding * 2),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height *
-                        (state is SearchInProgress ? 0.3 : 0.4),
+                  // Fills whatever height is left, so the form never overflows
+                  // into the bottom row when the system bars take more room.
+                  Expanded(
                     child: InAppWebView(
                       initialUrlRequest: URLRequest(url: WebUri("https://www.bing.com")),
                       onWebViewCreated: (controller) => _webViewController = controller,
@@ -505,6 +531,7 @@ class SearchFormState extends State<SearchForm> {
               );
 
             },
+            ),
           ),
         ],
       ),
