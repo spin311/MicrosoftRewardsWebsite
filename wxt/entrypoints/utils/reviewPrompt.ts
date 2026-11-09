@@ -38,3 +38,10 @@ export function shouldShowReviewPrompt({ completedRuns, answer, hasReviewUrl }: 
     if (!hasReviewUrl || answer !== null) return false;
     return Number.isFinite(completedRuns) && (completedRuns as number) >= REVIEW_PROMPT_THRESHOLD;
 }
+
+// The popup can close the moment the review tab opens, so the answer must be
+// durably saved first or the card would come back next time.
+export async function saveThenOpen(save: () => Promise<void>, open: () => Promise<unknown>): Promise<void> {
+    await save();
+    await open();
+}

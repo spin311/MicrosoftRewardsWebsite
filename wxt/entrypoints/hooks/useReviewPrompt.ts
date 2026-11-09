@@ -6,6 +6,7 @@ import {
     REVIEW_PROMPT_KEY,
     getReviewUrl,
     parseReviewAnswer,
+    saveThenOpen,
     shouldShowReviewPrompt,
     type ReviewAnswer,
 } from '@/entrypoints/utils/reviewPrompt';
@@ -29,17 +30,21 @@ export function useReviewPrompt() {
         });
     }, []);
 
-    function answerPrompt(value: ReviewAnswer): void {
+    async function answerPrompt(value: ReviewAnswer): Promise<void> {
         setAnswer(value);
-        void setStorageItem(REVIEW_PROMPT_KEY, value);
+        await setStorageItem(REVIEW_PROMPT_KEY, value);
     }
 
     const isVisible = isLoaded && shouldShowReviewPrompt({ completedRuns, answer, hasReviewUrl: reviewUrl !== null });
 
-    function rate(): void {
-        if (reviewUrl) void browser.tabs.create({ url: reviewUrl });
-        answerPrompt('rated');
+    async function rate(): Promise<void> {
+        if (!reviewUrl) return;
+        setAnswer('rated');
+        await saveThenOpen(
+            () => setStorageItem(REVIEW_PROMPT_KEY, 'rated'),
+            () => browser.tabs.create({ url: reviewUrl })
+        );
     }
 
-    return { isVisible, rate, dismiss: () => answerPrompt('dismissed') };
+    return { isLoaded, isVisible, rate, dismiss: () => void answerPrompt('dismissed') };
 }

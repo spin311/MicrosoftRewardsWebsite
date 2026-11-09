@@ -111,7 +111,7 @@ function App() {
 
                 {/* One-time review ask, shown once it is due; the header Sponsor button stays as it is. */}
                 {reviewPrompt.isVisible && (
-                    <ReviewPromptCard onRate={reviewPrompt.rate} onDismiss={reviewPrompt.dismiss} />
+                    <ReviewPromptCard onRate={() => void reviewPrompt.rate()} onDismiss={reviewPrompt.dismiss} />
                 )}
 
                 <nav className="promo-tiles" aria-label="More from the developer">

@@ -4,6 +4,7 @@ import {
     REVIEW_PROMPT_THRESHOLD,
     getReviewUrl,
     parseReviewAnswer,
+    saveThenOpen,
     shouldShowReviewPrompt,
 } from './reviewPrompt';
 
@@ -66,5 +67,17 @@ describe('shouldShowReviewPrompt', () => {
     it('treats a missing or corrupt counter as zero', () => {
         expect(shouldShowReviewPrompt({ ...base, completedRuns: undefined })).toBe(false);
         expect(shouldShowReviewPrompt({ ...base, completedRuns: Number.NaN })).toBe(false);
+    });
+});
+
+describe('saveThenOpen', () => {
+    it('finishes saving before it opens the tab', async () => {
+        const calls: string[] = [];
+        const save = async () => { await Promise.resolve(); calls.push('saved'); };
+        const open = async () => { calls.push('opened'); };
+
+        await saveThenOpen(save, open);
+
+        expect(calls).toEqual(['saved', 'opened']);
     });
 });
