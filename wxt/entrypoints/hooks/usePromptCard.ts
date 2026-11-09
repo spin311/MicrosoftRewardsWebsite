@@ -20,8 +20,8 @@ import {
 } from '@/entrypoints/utils/sponsorPrompt';
 
 // Reads storage once on popup open and decides which single card to show (if
-// any); nothing renders until then, so neither card nor the regular sponsor
-// promo flashes. Answers persist before any tab opens, since the popup can
+// any); nothing renders until then, so neither a card nor the promo tiles it
+// replaces flash in first. Answers persist before any tab opens, since the popup can
 // close the moment it does.
 export function usePromptCard() {
     const [isLoaded, setIsLoaded] = useState(false);

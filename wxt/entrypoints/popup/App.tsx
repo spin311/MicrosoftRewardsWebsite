@@ -109,13 +109,14 @@ function App() {
                                info="In each search tab, opens the first result after a short random delay." />
                 </section>
 
-                {/* One prompt card at a time, shown once it is due (card stays null until the prompt state loads); the header Sponsor button stays as it is. */}
-                {prompt.card === 'review' ? (
+                {/* One ask at a time: a due prompt card takes the promo tiles' place, which also keeps the
+                    popup within Chrome's 600px. Nothing renders here until the prompt state has loaded, so
+                    the tiles never flash in ahead of a card. The header Sponsor button always stays. */}
+                {!prompt.isLoaded ? null : prompt.card === 'review' ? (
                     <ReviewPromptCard onRate={() => void prompt.rate()} onDismiss={prompt.dismiss} />
                 ) : prompt.card === 'sponsor' ? (
                     <SponsorMilestoneCard completedRuns={prompt.completedRuns} onSponsor={() => void prompt.sponsor()} onDismiss={prompt.dismiss} />
-                ) : null}
-
+                ) : (
                 <nav className="promo-tiles" aria-label="More from the developer">
                     <a href={REFERRAL_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
                         <span className="promo-icon" aria-hidden="true">🎁</span>
@@ -132,6 +133,7 @@ function App() {
                         </span>
                     </a>
                 </nav>
+                )}
             </main>
 
             <footer className="footer">
