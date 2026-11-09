@@ -13,6 +13,11 @@ import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
+// The referrer shows up in Play Console's acquisition reports. The QR code
+// encodes the plain listing URL instead, so it stays sparse enough to scan
+// off a screen.
+const MOBILE_APP_URL =
+    'https://play.google.com/store/apps/details?id=com.spin311.microsoft_automatic_rewards&referrer=utm_source%3Dextension%26utm_medium%3Dpopup';
 const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=MicrosoftRewardsWebsite-popup';
 
 function App() {
@@ -97,16 +102,22 @@ function App() {
                         </li>
                     </ul>
                 </div>
-                <div className="left-align ml-2 small-title">Mobile app to earn more points:</div>
-                <div className="website-header">
-                    <div className="qr-code-with-text">
-                        <img src="/imgs/svgs/qr-code-app.svg" alt="QR code" className="qr-code" />
-                        <span className="website-phone-text">Scan on phone</span>
+                <div className="app-promo">
+                    <img
+                        src="/imgs/svgs/qr-code-app.svg"
+                        alt="QR code for the Microsoft Automatic Rewards app on Google Play"
+                        className="app-promo-qr"
+                    />
+                    <div className="app-promo-body">
+                        <p className="app-promo-title">Earn more points on your phone</p>
+                        <p className="app-promo-text">
+                            The Android app also collects <b>Read to Earn</b> and the <b>daily check-in</b>,
+                            which a browser can't. Scan the code, or:
+                        </p>
+                        <a href={MOBILE_APP_URL} className="normal-link app-promo-button" target="_blank" rel="noopener noreferrer">
+                            Get it on Google Play
+                        </a>
                     </div>
-                    <a href="https://play.google.com/store/apps/details?id=com.spin311.microsoft_automatic_rewards" className="website-phone normal-link no-underline try-mobile" target="_blank" rel="noopener noreferrer">
-                        <img className="website-phone-image" src="/imgs/mar-phone.png" alt="Microsoft Automatic Rewards Phone App" />
-                        <div className="normal-color">Download App</div>
-                    </a>
                 </div>
 
                 <div className="inputs">
