@@ -485,3 +485,74 @@ a {
         transition: none !important;
     }
 }
+
+/* One-time review ask; same card insets as .sponsor-promo, which it replaces
+   while visible. */
+.review-card {
+  margin: 0.6em 1.5em 0;
+  padding: 0.6em 0.7em;
+  background-color: #fff;
+  border: 1px solid #2282ad;
+  border-radius: 8px;
+  text-align: center;
+  color: #18272F;
+}
+
+.review-card-title {
+  margin: 0;
+  font-size: 0.8em;
+  font-weight: 700;
+}
+
+.review-card-body {
+  margin: 0.2em 0 0.5em;
+  font-size: 0.7em;
+  line-height: 1.35;
+}
+
+.review-card-actions {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 0.6em;
+}
+
+.review-card-button {
+  font-size: 0.75em;
+  padding: 0.25rem 0.9rem;
+}
+
+.review-card-secondary {
+  font: inherit;
+  font-size: 0.7em;
+  color: #5b5f5c;
+  background: none;
+  border: none;
+  padding: 0.25em 0.4em;
+  cursor: pointer;
+}
+
+.review-card-secondary:hover {
+  text-decoration: underline;
+}
+
+.review-card-report {
+  display: inline-block;
+  margin-top: 0.5em;
+  font-size: 0.6em;
+  color: #5b5f5c;
+}
+
+/* Subtle footer line promoting the developer's other extensions. */
+.cross-promo {
+  margin: 0 1.5em 0.6em;
+  font-size: 0.6em;
+  line-height: 1.4;
+  text-align: center;
+  color: #5b5f5c;
+}
+
+.cross-promo-link {
+  display: block;
+  color: #2282ad;
+}

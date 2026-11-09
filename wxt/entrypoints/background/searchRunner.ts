@@ -6,6 +6,7 @@ import { getStorageItem, getStorageItems, setStorageItem, setStorageItems } from
 import { StorageValues } from '@/entrypoints/enums/storageValues';
 import { DEFAULTS } from '@/entrypoints/utils/settings';
 import { clearBadge, setSearchCountBadge } from '@/entrypoints/utils/browserAction';
+import { COMPLETED_RUNS_KEY } from '@/entrypoints/utils/reviewPrompt';
 import { trackTab, untrackTab } from './tabCleanup';
 
 const ALARM_NAME = 'openTabAlarm';
@@ -25,7 +26,7 @@ export async function startSearches(searchTimeout: number, searches: number, clo
     if (shouldOpenMore(1, searches)) {
         scheduleNextStep(searchTimeout);
     } else {
-        await stopSearches();
+        await finishRun();
     }
 }
 
@@ -51,7 +52,7 @@ export async function handleAlarmStep(alarm: { name: string }): Promise<void> {
     if (shouldOpenMore(nowOpened, searches)) {
         scheduleNextStep(searchTimeout);
     } else {
-        await stopSearches();
+        await finishRun();
     }
 }
 
@@ -72,6 +73,14 @@ function scheduleNextStep(searchTimeout: number): void {
     if (delayMs < ALARM_MIN_DELAY_MS) {
         setTimeout(() => void handleAlarmStep({ name: ALARM_NAME }), delayMs);
     }
+}
+
+// A run that opened its last search tab. Counted for the popup's review prompt;
+// aborted runs (toggle off, Stop button, restart) go through stopSearches alone.
+async function finishRun(): Promise<void> {
+    const completed = toInt(await getStorageItem<number>(COMPLETED_RUNS_KEY), 0);
+    await setStorageItem(COMPLETED_RUNS_KEY, completed + 1);
+    await stopSearches();
 }
 
 export async function stopSearches(): Promise<void> {

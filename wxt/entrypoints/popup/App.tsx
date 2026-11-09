@@ -11,12 +11,17 @@ import AccountLevelSelect from '@/entrypoints/components/AccountLevelSelect';
 import ManualClaimButton from '@/entrypoints/components/ManualClaimButton';
 import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
 import ToggleRow from '@/entrypoints/components/ToggleRow';
+import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
+import { useReviewPrompt } from '@/entrypoints/hooks/useReviewPrompt';
+import { getCrossPromoLinks } from '@/entrypoints/utils/crossPromo';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
 const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=MicrosoftRewardsWebsite-popup';
 const FREE_GAMES_URL = 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk';
 const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=yHey9rv4Kyk&ref=rafsrchae';
+
+const CROSS_PROMO_LINKS = getCrossPromoLinks(import.meta.env.FIREFOX);
 
 function App() {
     const [active, setActive] = useStorage<boolean>('active', DEFAULTS.active, StorageValues.SYNC);
@@ -28,6 +33,7 @@ function App() {
     const [openFirstResult, setOpenFirstResult] = useStorage<boolean>('openFirstResult', DEFAULTS.openFirstResult, StorageValues.SYNC);
     const [claimPoints, setClaimPoints] = useStorage<boolean>('claimPoints', DEFAULTS.claimPoints, StorageValues.SYNC);
     const { isLoaded, isSearching, completed, total } = useSearchProgress();
+    const reviewPrompt = useReviewPrompt();
 
     // The "New" badge from an update is dismissed once the popup is opened — but
     // the badge doubles as the live search counter, so wait for the run state and
@@ -103,6 +109,11 @@ function App() {
                                info="In each search tab, opens the first result after a short random delay." />
                 </section>
 
+                {/* One-time review ask, shown once it is due; the header Sponsor button stays as it is. */}
+                {reviewPrompt.isVisible && (
+                    <ReviewPromptCard onRate={reviewPrompt.rate} onDismiss={reviewPrompt.dismiss} />
+                )}
+
                 <nav className="promo-tiles" aria-label="More from the developer">
                     <a href={REFERRAL_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
                         <span className="promo-icon" aria-hidden="true">🎁</span>
@@ -127,6 +138,13 @@ function App() {
                 <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
                 <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
             </footer>
+
+            <p className="cross-promo">
+                More free tools by the same developer:
+                {CROSS_PROMO_LINKS.map((link) => (
+                    <a key={link.href} href={link.href} className="normal-link cross-promo-link" target="_blank" rel="noopener noreferrer">{link.label}</a>
+                ))}
+            </p>
         </>
     );
 }
