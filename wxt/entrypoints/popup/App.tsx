@@ -19,7 +19,6 @@ import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
 const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=MicrosoftRewardsWebsite-popup';
-const FREE_GAMES_URL = 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk';
 const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=yHey9rv4Kyk&ref=rafsrchae';
 
 const CROSS_PROMO_LINK = getCrossPromoLink(import.meta.env.FIREFOX);
@@ -125,7 +124,7 @@ function App() {
                             <span>Earn with Bing</span>
                         </span>
                     </a>
-                    <a href={FREE_GAMES_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
+                    <a href={CROSS_PROMO_LINK.href} className="promo-tile" title={CROSS_PROMO_LINK.label} target="_blank" rel="noopener noreferrer">
                         <img src="/imgs/free-games.png" alt="" className="promo-icon" />
                         <span className="promo-text">
                             <strong>Free games</strong>
@@ -141,11 +140,6 @@ function App() {
                 <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
                 <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
             </footer>
-
-            <p className="cross-promo">
-                Another free tool by the same developer:
-                <a href={CROSS_PROMO_LINK.href} className="normal-link cross-promo-link" target="_blank" rel="noopener noreferrer">{CROSS_PROMO_LINK.label}</a>
-            </p>
         </>
     );
 }

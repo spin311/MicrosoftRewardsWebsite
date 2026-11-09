@@ -1,4 +1,5 @@
-// Footer cross-promotion for the developer's other extension.
+// Cross-promotion of the developer's other extension (the popup's Free games
+// tile): the store page for the browser this copy runs in, tagged with UTM.
 
 export interface CrossPromoLink {
     label: string;

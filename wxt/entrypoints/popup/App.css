@@ -542,17 +542,3 @@ a {
   font-size: 0.6em;
   color: #5b5f5c;
 }
-
-/* Subtle footer line promoting the developer's other extensions. */
-.cross-promo {
-  margin: 0 1.5em 0.6em;
-  font-size: 0.6em;
-  line-height: 1.4;
-  text-align: center;
-  color: #5b5f5c;
-}
-
-.cross-promo-link {
-  display: block;
-  color: #2282ad;
-}
