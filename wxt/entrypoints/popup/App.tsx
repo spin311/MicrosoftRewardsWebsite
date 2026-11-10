@@ -13,6 +13,7 @@ import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
 import ToggleRow from '@/entrypoints/components/ToggleRow';
 import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
 import SponsorMilestoneCard from '@/entrypoints/components/SponsorMilestoneCard';
+import PhoneAppTile from '@/entrypoints/components/PhoneAppTile';
 import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
 import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
 import { choosePopupSlots } from '@/entrypoints/utils/popupSlots';
@@ -129,20 +130,15 @@ function App() {
                     <SponsorMilestoneCard completedRuns={prompt.completedRuns} onSponsor={() => void prompt.sponsor()} onDismiss={prompt.dismiss} />
                 ) : (
                 <nav className="promo-tiles" aria-label="More from the developer">
-                    <a href={REFERRAL_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
+                    <a href={REFERRAL_URL} className="promo-tile" title="Join Microsoft Rewards and earn points with Bing" target="_blank" rel="noopener noreferrer">
                         <span className="promo-icon" aria-hidden="true">🎁</span>
-                        <span className="promo-text">
-                            <strong>Join Rewards</strong>
-                            <span>Earn with Bing</span>
-                        </span>
+                        <span className="promo-text"><strong>Join Rewards</strong></span>
                     </a>
                     <a href={CROSS_PROMO_LINK.href} className="promo-tile" title={CROSS_PROMO_LINK.label} target="_blank" rel="noopener noreferrer">
                         <img src="/imgs/free-games.png" alt="" className="promo-icon" />
-                        <span className="promo-text">
-                            <strong>Free games</strong>
-                            <span>Steam &amp; Epic</span>
-                        </span>
+                        <span className="promo-text"><strong>Free games</strong></span>
                     </a>
+                    <PhoneAppTile />
                 </nav>
                 )}
             </main>
