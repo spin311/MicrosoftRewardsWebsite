@@ -92,6 +92,57 @@ describe('searchRunner', () => {
     });
   });
 
+  describe('completed run counter', () => {
+    it('counts a run that opens its last search tab', async () => {
+      await seed({ currentSearch: 4, isSearching: true });
+
+      await handleAlarmStep(ALARM);
+
+      expect(await getStorageItem<number>('completedRuns')).toBe(1);
+    });
+
+    it('counts a one-search run started from scratch', async () => {
+      await seed({ searches: 1 });
+
+      await startSearches(60, 1, 5);
+
+      expect(await getStorageItem<number>('completedRuns')).toBe(1);
+    });
+
+    it('adds to the existing total', async () => {
+      await setStorageItems({ completedRuns: 4 }, StorageValues.LOCAL);
+      await seed({ currentSearch: 4, isSearching: true });
+
+      await handleAlarmStep(ALARM);
+
+      expect(await getStorageItem<number>('completedRuns')).toBe(5);
+    });
+
+    it('does not count a run that is still in progress', async () => {
+      await seed({ currentSearch: 1, isSearching: true });
+
+      await handleAlarmStep(ALARM);
+
+      expect(await getStorageItem<number>('completedRuns')).toBeNull();
+    });
+
+    it('does not count a run stopped by turning "Daily searches" off', async () => {
+      await seed({ active: false, currentSearch: 2, isSearching: true });
+
+      await handleAlarmStep(ALARM);
+
+      expect(await getStorageItem<number>('completedRuns')).toBeNull();
+    });
+
+    it('does not count a stale alarm after every search already ran', async () => {
+      await seed({ currentSearch: 5, isSearching: true });
+
+      await handleAlarmStep(ALARM);
+
+      expect(await getStorageItem<number>('completedRuns')).toBeNull();
+    });
+  });
+
   describe('stopSearches', () => {
     it('clears the running flag and any pending alarm', async () => {
       await seed({ isSearching: true });

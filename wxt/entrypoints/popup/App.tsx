@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStorage } from '@/entrypoints/hooks/useStorage';
 import { useSearchProgress } from '@/entrypoints/hooks/useSearchProgress';
 import { StorageValues } from '@/entrypoints/enums/storageValues';
@@ -11,12 +11,18 @@ import AccountLevelSelect from '@/entrypoints/components/AccountLevelSelect';
 import ManualClaimButton from '@/entrypoints/components/ManualClaimButton';
 import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
 import ToggleRow from '@/entrypoints/components/ToggleRow';
+import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
+import SponsorMilestoneCard from '@/entrypoints/components/SponsorMilestoneCard';
+import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
+import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
+import { choosePopupSlots } from '@/entrypoints/utils/popupSlots';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
 const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=MicrosoftRewardsWebsite-popup';
-const FREE_GAMES_URL = 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk';
 const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=yHey9rv4Kyk&ref=rafsrchae';
+
+const CROSS_PROMO_LINK = getCrossPromoLink(import.meta.env.FIREFOX);
 
 function App() {
     const [active, setActive] = useStorage<boolean>('active', DEFAULTS.active, StorageValues.SYNC);
@@ -28,6 +34,7 @@ function App() {
     const [openFirstResult, setOpenFirstResult] = useStorage<boolean>('openFirstResult', DEFAULTS.openFirstResult, StorageValues.SYNC);
     const [claimPoints, setClaimPoints] = useStorage<boolean>('claimPoints', DEFAULTS.claimPoints, StorageValues.SYNC);
     const { isLoaded, isSearching, completed, total } = useSearchProgress();
+    const prompt = usePromptCard();
 
     // The "New" badge from an update is dismissed once the popup is opened — but
     // the badge doubles as the live search counter, so wait for the run state and
@@ -36,9 +43,20 @@ function App() {
         if (isLoaded && !isSearching) clearBadge();
     }, [isLoaded, isSearching]);
 
-    // Only shown for a run that is in flight or already finished this session:
-    // a zero count means nothing has run, and showing 0/5 would read as stalled.
-    const hasRunToShow = isLoaded && (isSearching || completed > 0);
+    // Latched, so a run that finishes while the popup is open keeps its panel.
+    const [wasSearchingThisPopup, setWasSearchingThisPopup] = useState(false);
+    useEffect(() => {
+        if (isSearching) setWasSearchingThisPopup(true);
+    }, [isSearching]);
+
+    const slots = choosePopupSlots({
+        isRunStateLoaded: isLoaded,
+        isSearching,
+        wasSearchingThisPopup,
+        completedSearches: completed,
+        isPromptLoaded: prompt.isLoaded,
+        dueCard: prompt.card,
+    });
 
     // Gaps this short are honoured, but they are below what Microsoft reliably
     // credits — so the field warns rather than silently overriding the choice.
@@ -72,7 +90,7 @@ function App() {
 
             <main className="content">
                 <ManualClaimButton isSearching={isSearching} />
-                {hasRunToShow && (
+                {slots.showRunPanel && (
                     <SearchProgressBar completed={completed} total={total} isSearching={isSearching} />
                 )}
 
@@ -103,6 +121,13 @@ function App() {
                                info="In each search tab, opens the first result after a short random delay." />
                 </section>
 
+                {/* One ask at a time: a due prompt card takes the promo tiles' place, which also keeps the
+                    popup within Chrome's 600px (see choosePopupSlots). The header Sponsor button always stays. */}
+                {slots.lower === 'loading' ? null : slots.lower === 'review' ? (
+                    <ReviewPromptCard onRate={() => void prompt.rate()} onDismiss={prompt.dismiss} />
+                ) : slots.lower === 'sponsor' ? (
+                    <SponsorMilestoneCard completedRuns={prompt.completedRuns} onSponsor={() => void prompt.sponsor()} onDismiss={prompt.dismiss} />
+                ) : (
                 <nav className="promo-tiles" aria-label="More from the developer">
                     <a href={REFERRAL_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
                         <span className="promo-icon" aria-hidden="true">🎁</span>
@@ -111,7 +136,7 @@ function App() {
                             <span>Earn with Bing</span>
                         </span>
                     </a>
-                    <a href={FREE_GAMES_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
+                    <a href={CROSS_PROMO_LINK.href} className="promo-tile" title={CROSS_PROMO_LINK.label} target="_blank" rel="noopener noreferrer">
                         <img src="/imgs/free-games.png" alt="" className="promo-icon" />
                         <span className="promo-text">
                             <strong>Free games</strong>
@@ -119,6 +144,7 @@ function App() {
                         </span>
                     </a>
                 </nav>
+                )}
             </main>
 
             <footer className="footer">
