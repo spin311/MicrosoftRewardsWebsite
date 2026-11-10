@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useStorage } from '@/entrypoints/hooks/useStorage';
 import { useSearchProgress } from '@/entrypoints/hooks/useSearchProgress';
 import { StorageValues } from '@/entrypoints/enums/storageValues';
@@ -15,6 +15,7 @@ import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
 import SponsorMilestoneCard from '@/entrypoints/components/SponsorMilestoneCard';
 import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
 import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
+import { choosePopupSlots } from '@/entrypoints/utils/popupSlots';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
@@ -42,9 +43,20 @@ function App() {
         if (isLoaded && !isSearching) clearBadge();
     }, [isLoaded, isSearching]);
 
-    // Only shown for a run that is in flight or already finished this session:
-    // a zero count means nothing has run, and showing 0/5 would read as stalled.
-    const hasRunToShow = isLoaded && (isSearching || completed > 0);
+    // Latched, so a run that finishes while the popup is open keeps its panel.
+    const [wasSearchingThisPopup, setWasSearchingThisPopup] = useState(false);
+    useEffect(() => {
+        if (isSearching) setWasSearchingThisPopup(true);
+    }, [isSearching]);
+
+    const slots = choosePopupSlots({
+        isRunStateLoaded: isLoaded,
+        isSearching,
+        wasSearchingThisPopup,
+        completedSearches: completed,
+        isPromptLoaded: prompt.isLoaded,
+        dueCard: prompt.card,
+    });
 
     // Gaps this short are honoured, but they are below what Microsoft reliably
     // credits — so the field warns rather than silently overriding the choice.
@@ -78,7 +90,7 @@ function App() {
 
             <main className="content">
                 <ManualClaimButton isSearching={isSearching} />
-                {hasRunToShow && (
+                {slots.showRunPanel && (
                     <SearchProgressBar completed={completed} total={total} isSearching={isSearching} />
                 )}
 
@@ -110,11 +122,10 @@ function App() {
                 </section>
 
                 {/* One ask at a time: a due prompt card takes the promo tiles' place, which also keeps the
-                    popup within Chrome's 600px. Nothing renders here until the prompt state has loaded, so
-                    the tiles never flash in ahead of a card. The header Sponsor button always stays. */}
-                {!prompt.isLoaded ? null : prompt.card === 'review' ? (
+                    popup within Chrome's 600px (see choosePopupSlots). The header Sponsor button always stays. */}
+                {slots.lower === 'loading' ? null : slots.lower === 'review' ? (
                     <ReviewPromptCard onRate={() => void prompt.rate()} onDismiss={prompt.dismiss} />
-                ) : prompt.card === 'sponsor' ? (
+                ) : slots.lower === 'sponsor' ? (
                     <SponsorMilestoneCard completedRuns={prompt.completedRuns} onSponsor={() => void prompt.sponsor()} onDismiss={prompt.dismiss} />
                 ) : (
                 <nav className="promo-tiles" aria-label="More from the developer">
