@@ -29,8 +29,8 @@ free (with a donation link) via the Chrome Web Store, Firefox Add-ons, and as an
 
 ## Non-goals
 
-- No analytics/telemetry back to the author (aside from external help/uninstall page
-  hits). **Needs Verification.**
+- No analytics/telemetry back to the author (aside from external help page hits).
+  **Needs Verification.**
 - No handling or storage of Microsoft credentials — login happens in the browser/WebView.
 
 ## Compliance note (flag, not a judgment)
