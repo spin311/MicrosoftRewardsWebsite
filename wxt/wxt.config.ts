@@ -1,4 +1,4 @@
-import { copyFileSync, rmSync } from 'node:fs';
+import { copyFileSync, existsSync, rmSync } from 'node:fs';
 import { resolve } from 'node:path';
 import { defineConfig } from 'wxt';
 
@@ -7,12 +7,15 @@ import { defineConfig } from 'wxt';
 const LICENSE_PATH = resolve(__dirname, '../LICENSE');
 // Sources are zipped from this folder, so the license is staged here for the zip only.
 const STAGED_LICENSE_PATH = resolve(__dirname, 'LICENSE');
+// The unzipped sources (what Firefox add-on reviewers build from) have no repo
+// root above them; there the staged copy is the only license.
+const BUILD_LICENSE_PATH = existsSync(STAGED_LICENSE_PATH) ? STAGED_LICENSE_PATH : LICENSE_PATH;
 
 export default defineConfig({
   outDir: 'dist',
   modules: ['@wxt-dev/module-react'],
   hooks: {
-    'build:done': (wxt) => copyFileSync(LICENSE_PATH, resolve(wxt.config.outDir, 'LICENSE')),
+    'build:done': (wxt) => copyFileSync(BUILD_LICENSE_PATH, resolve(wxt.config.outDir, 'LICENSE')),
     'zip:sources:start': () => copyFileSync(LICENSE_PATH, STAGED_LICENSE_PATH),
     'zip:sources:done': () => rmSync(STAGED_LICENSE_PATH, { force: true }),
   },

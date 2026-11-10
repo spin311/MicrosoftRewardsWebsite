@@ -25,6 +25,14 @@ jobs:
       # enough that one passing does not imply the other does.
       - run: npm run build
       - run: npm run build:firefox
+      # Firefox add-on reviewers rebuild from the sources zip, so it has to build
+      # on its own and give the same files as the release.
+      - name: Rebuild Firefox from the sources zip
+        run: |
+          npm run zip:firefox
+          unzip -q dist/*-sources.zip -d "$RUNNER_TEMP/sources"
+          (cd "$RUNNER_TEMP/sources" && npm ci && npm run build:firefox)
+          diff -r "$RUNNER_TEMP/sources/dist/firefox-mv2" dist/firefox-mv2
 
   mobile:
     name: Flutter — analyze + test
