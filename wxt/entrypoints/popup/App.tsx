@@ -1,5 +1,5 @@
 import './App.css';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useStorage } from '@/entrypoints/hooks/useStorage';
 import { useSearchProgress } from '@/entrypoints/hooks/useSearchProgress';
 import { StorageValues } from '@/entrypoints/enums/storageValues';
@@ -10,10 +10,13 @@ import NumberInput from '@/entrypoints/components/NumberInput';
 import AccountLevelSelect from '@/entrypoints/components/AccountLevelSelect';
 import ManualClaimButton from '@/entrypoints/components/ManualClaimButton';
 import SearchProgressBar from '@/entrypoints/components/SearchProgressBar';
+import ToggleRow from '@/entrypoints/components/ToggleRow';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
 const SPONSOR_URL = 'https://github.com/sponsors/spin311?metadata_source=MicrosoftRewardsWebsite-popup';
+const FREE_GAMES_URL = 'https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk';
+const REFERRAL_URL = 'https://rewards.bing.com/welcome?rh=yHey9rv4Kyk&ref=rafsrchae';
 
 function App() {
     const [active, setActive] = useStorage<boolean>('active', DEFAULTS.active, StorageValues.SYNC);
@@ -24,7 +27,6 @@ function App() {
     const [accountLevel, setAccountLevel] = useStorage<string>('accountLevel', DEFAULTS.accountLevel, StorageValues.SYNC);
     const [openFirstResult, setOpenFirstResult] = useStorage<boolean>('openFirstResult', DEFAULTS.openFirstResult, StorageValues.SYNC);
     const [claimPoints, setClaimPoints] = useStorage<boolean>('claimPoints', DEFAULTS.claimPoints, StorageValues.SYNC);
-    const [donateHover, setDonateHover] = useState(false);
     const { isLoaded, isSearching, completed, total } = useSearchProgress();
 
     // The "New" badge from an update is dismissed once the popup is opened — but
@@ -51,113 +53,80 @@ function App() {
 
     return (
         <>
-            <h3 className="container-fluid text-center mt-2 heading">Search automatic rewards</h3>
-            <div className="container-fluid text-center my-2">
-                <a href="https://svitspindler.com/microsoft-automatic-rewards" className="float-start links" target="_blank">Help</a>
-                <a href="https://svitspindler.com/microsoft-automatic-rewards/mobile/test-app" className="float-start links" target="_blank">Mobile</a>
-                <a className="links" href="https://svitspindler.com/contact" target="_blank" id="contact">Contact Me</a>
-            </div>
+            <header className="top-bar">
+                <img src="/imgs/logo.png" alt="" className="top-bar-logo" />
+                <h1 className="top-bar-title">Search automatic rewards</h1>
+                <a
+                    href={SPONSOR_URL}
+                    className="sponsor-button"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    title="Enjoying the extension? Sponsor from $5/month and get your name featured in the README."
+                >
+                    <svg className="sponsor-heart" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
+                        <path d="M8 14.25.345 6.595a4.25 4.25 0 0 1 6.01-6.01L8 2.23 9.645.585a4.25 4.25 0 0 1 6.01 6.01Z" />
+                    </svg>
+                    Sponsor
+                </a>
+            </header>
 
-            <div className="text-center">
+            <main className="content">
                 <ManualClaimButton isSearching={isSearching} />
                 {hasRunToShow && (
                     <SearchProgressBar completed={completed} total={total} isSearching={isSearching} />
                 )}
-                <div className="checkboxes">
-                    <div className="input-with-info">
-                        <input className="form-check-input" type="checkbox" id="autoCheckbox" checked={active} onChange={(e) => setActive(e.target.checked)} />
-                        <label htmlFor="autoCheckbox">Daily searches</label>
-                        <span className="tooltip-icon info" data-tooltip="Opens bing tabs the first time browser opens every day">ℹ</span>
-                    </div>
-                    <div className="input-with-info">
-                        <input className="form-check-input" type="checkbox" id="autoDaily" checked={autoDaily} onChange={(e) => setAutoDaily(e.target.checked)} />
-                        <label htmlFor="autoDaily">Daily set</label>
-                        <span className="tooltip-icon info" data-tooltip="Opens bing rewards tab and completes daily tasks for extra points">ℹ</span>
-                    </div>
-                    <div className="input-with-info">
-                        <input className="form-check-input" type="checkbox" id="claimPoints" checked={claimPoints} onChange={(e) => setClaimPoints(e.target.checked)} />
-                        <label htmlFor="claimPoints">Claim points</label>
-                        <span className="tooltip-icon info" data-tooltip="Opens bing rewards tab and presses Ready to claim, so earned points land in your balance. The tab briefly takes focus.">ℹ</span>
-                    </div>
-                    <div className="input-with-info">
-                        <input className="form-check-input" type="checkbox" id="openFirstResult" checked={openFirstResult} onChange={(e) => setOpenFirstResult(e.target.checked)} />
-                        <label htmlFor="openFirstResult">Open first result in search tabs</label>
-                        <span className="tooltip-icon info" data-tooltip="In each opened search tab, navigate to the first result after a short random delay">ℹ</span>
-                    </div>
-                </div>
 
-                <div className="left-align small-title">
-                    <div className="ml-2">Extension for free games:</div>
-                    <ul className="earn-list">
-                        <li>
-                            <a href="https://chromewebstore.google.com/detail/free-game-claimer-for-ste/mndghaafpgiinfecbbbcppppiblmjepk" className="normal-link" target="_blank" style={{ display: 'flex', alignItems: 'center', width: '100%', height: '100%' }}>
-                                <img src="/imgs/free-games.png" alt="free games" className="earn-logo" />
-                                Free games claimer for Steam & Epic
-                            </a>
-                        </li>
-                    </ul>
-                </div>
-                <div className="left-align ml-2 small-title">Mobile app to earn more points:</div>
-                <div className="website-header">
-                    <div className="qr-code-with-text">
-                        <img src="/imgs/svgs/qr-code-app.svg" alt="QR code" className="qr-code" />
-                        <span className="website-phone-text">Scan on phone</span>
-                    </div>
-                    <a href="https://play.google.com/store/apps/details?id=com.spin311.microsoft_automatic_rewards" className="website-phone normal-link no-underline try-mobile" target="_blank" rel="noopener noreferrer">
-                        <img className="website-phone-image" src="/imgs/mar-phone.png" alt="Microsoft Automatic Rewards Phone App" />
-                        <div className="normal-color">Download App</div>
+                <section className="card" aria-labelledby="tasks-title">
+                    <h2 className="card-title" id="tasks-title">Daily tasks</h2>
+                    <ToggleRow id="autoCheckbox" label="Search automatically" checked={active} onChange={setActive}
+                               info="Opens your Bing searches automatically the first time the browser opens each day." />
+                    <ToggleRow id="autoDaily" label="Daily set" checked={autoDaily} onChange={setAutoDaily}
+                               info="Opens the Rewards dashboard and clicks today's daily set for extra points." />
+                    <ToggleRow id="claimPoints" label="Claim points" checked={claimPoints} onChange={setClaimPoints}
+                               info="Opens the Rewards dashboard and presses Ready to claim, so earned points land in your balance. The tab briefly takes focus." />
+                </section>
+
+                <section className="card" aria-labelledby="settings-title">
+                    <h2 className="card-title" id="settings-title">Search settings</h2>
+                    <AccountLevelSelect value={accountLevel} onChange={handleLevelChange} />
+                    <NumberInput id="searches" label="Searches per run" value={searches} min={1} max={999} onChange={setSearches}
+                                 info="How many Bing searches each run opens, one tab at a time." />
+                    <NumberInput id="timeout" label="Seconds between searches" value={timeout} min={0} max={9999} onChange={setTimeoutValue} />
+                    {isTimeoutRisky && (
+                        <p className="field-warning" role="status">
+                            Under {RECOMMENDED_MIN_TIMEOUT_SECONDS}s Microsoft often stops crediting searches.
+                            {' '}{DEFAULTS.timeout}s or more is recommended.
+                        </p>
+                    )}
+                    <NumberInput id="closeTime" label="Close each tab after (s)" value={closeTime} min={0} max={300} onChange={setCloseTime} />
+                    <ToggleRow id="openFirstResult" label="Open first result" checked={openFirstResult} onChange={setOpenFirstResult}
+                               info="In each search tab, opens the first result after a short random delay." />
+                </section>
+
+                <nav className="promo-tiles" aria-label="More from the developer">
+                    <a href={REFERRAL_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
+                        <span className="promo-icon" aria-hidden="true">🎁</span>
+                        <span className="promo-text">
+                            <strong>Join Rewards</strong>
+                            <span>Earn with Bing</span>
+                        </span>
                     </a>
-                </div>
+                    <a href={FREE_GAMES_URL} className="promo-tile" target="_blank" rel="noopener noreferrer">
+                        <img src="/imgs/free-games.png" alt="" className="promo-icon" />
+                        <span className="promo-text">
+                            <strong>Free games</strong>
+                            <span>Steam &amp; Epic</span>
+                        </span>
+                    </a>
+                </nav>
+            </main>
 
-                <div className="inputs">
-                    <div className="width-100">
-                        <div className="input-with-info">
-                            <AccountLevelSelect value={accountLevel} onChange={handleLevelChange} />
-                            <span className="tooltip-icon info" data-tooltip="Your Rewards level sets a default number of searches (Member 5, Silver 10, Gold 20)">ℹ</span>
-                        </div>
-                    </div>
-                    <div className="width-100">
-                        <div className="input-with-info">
-                            <NumberInput id="searches" label="Number of searches" value={searches} min={1} max={999} onChange={setSearches} />
-                            <span className="tooltip-icon info" data-tooltip="Number of random tabs to open in bing">ℹ</span>
-                        </div>
-                    </div>
-                    <div>
-                        <NumberInput id="timeout" label="Time between searches (s)" value={timeout} min={0} max={9999} onChange={setTimeoutValue} />
-                        {isTimeoutRisky && (
-                            <p className="field-warning" role="status">
-                                ⚠ Under {RECOMMENDED_MIN_TIMEOUT_SECONDS}s, Microsoft often stops crediting the
-                                searches, and the browser can stretch a short gap anyway.
-                                {' '}{DEFAULTS.timeout}s or more is recommended.
-                            </p>
-                        )}
-                    </div>
-                    <div>
-                        <NumberInput id="closeTime" label="Time before closing tabs (s)" value={closeTime} min={0} max={300} onChange={setCloseTime} />
-                    </div>
-                </div>
-            </div>
-
-            <div className="sponsor-promo">
-                <p className="sponsor-promo-text">
-                    Enjoying the extension? Sponsor from <b>$5/month</b> and get your name featured in the README.
-                </p>
-                <a href={SPONSOR_URL} className="normal-link sponsor-button" target="_blank" rel="noopener noreferrer">
-                    <span className="sponsor-heart" aria-hidden="true">♥</span> Sponsor
-                </a>
-            </div>
-
-            <div className="container-fluid text-center footer-links">
-                <span>
-                    <a href="https://github.com/spin311/MicrosoftRewardsWebsite" className="float-start links" target="_blank">Github</a>
-                    <img src="/imgs/github.png" alt="github-logo" />
-                </span>
-                <a className="links" href="https://rewards.bing.com/" target="_blank" id="rewardsLink">Rewards</a>
-                <span className="float-end" style={{ display: 'flex', alignItems: 'center' }}>
-                    <a href="https://svitspindler.com/donate" className="links" target="_blank" id="donateText" onMouseOver={() => setDonateHover(true)}>Donate</a>
-                    <img src="/imgs/justAGirlSmol.png" alt="Cat" id="donateImg" style={{ visibility: donateHover ? 'visible' : 'hidden' }} />
-                </span>
-            </div>
+            <footer className="footer">
+                <a href="https://svitspindler.com/microsoft-automatic-rewards" target="_blank" rel="noopener noreferrer">Help</a>
+                <a href="https://svitspindler.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
+                <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
+                <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
+            </footer>
         </>
     );
 }

@@ -1,3 +1,5 @@
+import InfoTip from './InfoTip';
+
 interface NumberInputProps {
     id: string;
     label: string;
@@ -5,15 +7,20 @@ interface NumberInputProps {
     min: number;
     max: number;
     onChange: (value: number) => void;
+    info?: string;
 }
 
-function NumberInput({ id, label, value, min, max, onChange }: NumberInputProps) {
+function NumberInput({ id, label, value, min, max, onChange, info }: NumberInputProps) {
     return (
-        <span className="field">
-            <input type="number" id={id} min={min} max={max} value={value}
+        <div className="row">
+            <span className="row-label">
+                <label htmlFor={id}>{label}</label>
+                {info && <InfoTip text={info} />}
+            </span>
+            <input type="number" className="control" id={id} min={min} max={max}
+                   value={Number.isFinite(value) ? value : ''}
                    onChange={(e) => onChange(parseFloat(e.target.value))} />
-            <label htmlFor={id}>{label}</label>
-        </span>
+        </div>
     );
 }
 
