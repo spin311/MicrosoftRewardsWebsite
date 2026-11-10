@@ -414,17 +414,27 @@ a {
 
 /* ---- Promos and footer ---- */
 
+/* Three across, so each tile stacks its icon over a one-line title. Positioned
+   so the phone app's QR panel can float above the row. */
 .promo-tiles {
+    position: relative;
     display: grid;
-    grid-template-columns: 1fr 1fr;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
     gap: 8px;
 }
 
 .promo-tile {
     display: flex;
+    flex-direction: column;
     align-items: center;
-    gap: 8px;
-    padding: 7px 9px;
+    justify-content: center;
+    gap: 3px;
+    width: 100%;
+    padding: 7px 4px;
+    font: inherit;
+    color: inherit;
+    text-align: center;
+    cursor: pointer;
     text-decoration: none;
     background-color: var(--color-surface);
     border: 1px solid var(--color-border);
@@ -432,7 +442,8 @@ a {
     transition: border-color 0.15s ease;
 }
 
-.promo-tile:hover {
+.promo-tile:hover,
+.promo-tile[aria-expanded='true'] {
     border-color: var(--color-primary);
 }
 
@@ -448,7 +459,8 @@ a {
 .promo-text {
     display: flex;
     flex-direction: column;
-    min-width: 0;
+    max-width: 100%;
+    white-space: nowrap;
     font-size: 11.5px;
     line-height: 1.25;
     color: var(--color-text-muted);
@@ -457,6 +469,56 @@ a {
 .promo-text strong {
     font-size: 12.5px;
     color: var(--color-text);
+}
+
+/* The phone app tile's QR panel: floats above the tiles, right-aligned, so
+   opening it never changes the popup's height. */
+.phone-app {
+    display: grid;
+}
+
+.phone-app-panel {
+    position: absolute;
+    right: 0;
+    bottom: calc(100% + 6px);
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    background-color: var(--color-surface);
+    border: 1px solid rgba(var(--color-primary-rgb), 0.45);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.18);
+}
+
+.phone-app-panel[hidden] {
+    display: none;
+}
+
+/* The code is 90px (2px per module of its 45, so crisp at 1x). The white
+   padding widens its quiet zone, which phones need to find it on a dark panel. */
+.phone-app-qr {
+    flex: 0 0 auto;
+    box-sizing: content-box;
+    width: 90px;
+    height: 90px;
+    padding: 4px;
+    background-color: #fff;
+    border-radius: 4px;
+}
+
+.phone-app-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+}
+
+.phone-app-link {
+    display: inline-block;
+    margin-top: 7px;
+    text-decoration: none;
+    white-space: nowrap;
 }
 
 /* ---- One-time asks: review and sponsor milestone (PromptCard) ----
