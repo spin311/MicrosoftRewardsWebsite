@@ -59,8 +59,7 @@ All state is key/value in `chrome.storage.sync` (roams with the browser profile)
 ### Networking
 
 None of our own. The extension merely navigates the browser to `bing.com/search` and
-`rewards.bing.com`. External links point at `svitspindler.com` (help, donate, uninstall
-URL).
+`rewards.bing.com`. External links point at `svitspindler.com` (help, donate).
 
 ## Client 3 — Flutter mobile app
 

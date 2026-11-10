@@ -44,7 +44,7 @@ Targets present: `android/`, `ios/`, plus `linux/`, `macos/`, `windows/`, `web/`
 - **Bing** (`bing.com/search`, `rewards.bing.com`) — the automation target. Content
   script depends on Bing's DOM selectors (`#daily-sets > mee-card-group:nth-child(7)`,
   `.ds-card-sec.ng-scope`) — brittle to Microsoft markup changes.
-- **svitspindler.com** — external help, donate, and uninstall-tracking pages.
+- **svitspindler.com** — external help and donate pages.
 - **PayPal** — donation link.
 - **Play Store / Chrome Web Store / Firefox Add-ons** — distribution.
 

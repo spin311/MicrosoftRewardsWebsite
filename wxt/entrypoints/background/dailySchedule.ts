@@ -109,12 +109,13 @@ export async function handleInstallOrUpdate(details: { reason: string }): Promis
             isSearching: false,
             currentSearch: 0,
         }, StorageValues.SYNC);
-        await browser.runtime.setUninstallURL(
-            `https://svitspindler.com/uninstall?extension=${encodeURI('Microsoft Automatic Rewards')}`
-        );
         setTimeout(() => { browser.tabs.create({ url: WEBSITE_URL, active: true }); }, 1000);
     } else if (details.reason === 'update') {
         setBadgeText('New');
+        // Versions up to 3.2.0 set an uninstall page at install, and the browser
+        // keeps it; '' clears it so uninstalling opens nothing. Best effort: it is
+        // only tidy-up.
+        await browser.runtime.setUninstallURL('').catch(() => {});
     }
 }
 

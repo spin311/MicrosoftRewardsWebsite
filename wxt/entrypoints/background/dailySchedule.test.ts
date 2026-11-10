@@ -196,8 +196,6 @@ describe('handleInstallOrUpdate', () => {
   // risks the search not being credited, so a fresh install must start with it off.
   it('seeds a new install with "open first result" disabled', async () => {
     trackCreatedTabs();
-    // Not implemented by the fake browser, and irrelevant to what this asserts.
-    vi.spyOn(fakeBrowser.runtime, 'setUninstallURL').mockResolvedValue(undefined);
 
     await handleInstallOrUpdate({ reason: 'install' });
 
@@ -208,11 +206,40 @@ describe('handleInstallOrUpdate', () => {
   // a fresh install must not start out pressing it.
   it('seeds a new install with "claim points" disabled', async () => {
     trackCreatedTabs();
-    vi.spyOn(fakeBrowser.runtime, 'setUninstallURL').mockResolvedValue(undefined);
 
     await handleInstallOrUpdate({ reason: 'install' });
 
     expect(await getStorageItem<boolean>('claimPoints', StorageValues.SYNC)).toBe(false);
+  });
+
+  // The uninstall page is no longer checked, so uninstalling opens nothing.
+  it('sets no uninstall page on install', async () => {
+    trackCreatedTabs();
+    const setUninstallURL = vi.spyOn(fakeBrowser.runtime, 'setUninstallURL').mockResolvedValue(undefined);
+
+    await handleInstallOrUpdate({ reason: 'install' });
+
+    expect(setUninstallURL).not.toHaveBeenCalled();
+  });
+
+  // The browser keeps the uninstall URL that versions up to 3.2.0 set at install,
+  // so an update has to clear it ('' = open nothing).
+  it('clears the uninstall page an older version set, on update', async () => {
+    const setUninstallURL = vi.spyOn(fakeBrowser.runtime, 'setUninstallURL').mockResolvedValue(undefined);
+
+    await handleInstallOrUpdate({ reason: 'update' });
+
+    expect(setUninstallURL).toHaveBeenCalledExactlyOnceWith('');
+  });
+
+  // Clearing is tidy-up: if the browser refuses, the update must still badge "New".
+  it('still badges "New" on update when clearing the uninstall page fails', async () => {
+    vi.spyOn(fakeBrowser.runtime, 'setUninstallURL').mockRejectedValue(new Error('not supported'));
+    const setBadgeText = vi.spyOn(fakeBrowser.action, 'setBadgeText');
+
+    await expect(handleInstallOrUpdate({ reason: 'update' })).resolves.toBeUndefined();
+
+    expect(setBadgeText).toHaveBeenCalledWith(expect.objectContaining({ text: 'New' }));
   });
 });
 

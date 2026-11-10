@@ -40,6 +40,6 @@ Legend: ✅ implemented · 🟡 partial / unclear · ⛔ absent · 🔎 Needs Ve
 |------|--------|
 | Backend / DB / owned auth | ⛔ (by design) |
 | CI/CD | ✅ GitHub Actions (extensions gate strict; mobile non-blocking) |
-| Telemetry | 🔎 (external help/uninstall page hits only, assumed) |
+| Telemetry | 🔎 (external help page hits only, assumed) |
 | Build reproducibility (extensions) | ✅ (npm run build) |
 | Build reproducibility (mobile) | ✅ (standard Flutter) |
