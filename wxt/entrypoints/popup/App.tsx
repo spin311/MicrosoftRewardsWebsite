@@ -14,6 +14,7 @@ import ToggleRow from '@/entrypoints/components/ToggleRow';
 import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
 import SponsorMilestoneCard from '@/entrypoints/components/SponsorMilestoneCard';
 import PhoneAppTile from '@/entrypoints/components/PhoneAppTile';
+import HeartIcon from '@/entrypoints/components/HeartIcon';
 import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
 import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
 import { choosePopupSlots } from '@/entrypoints/utils/popupSlots';
@@ -59,8 +60,9 @@ function App() {
         dueCard: prompt.card,
     });
 
-    // Gaps this short are honoured, but they are below what Microsoft reliably
-    // credits — so the field warns rather than silently overriding the choice.
+    // Gaps this short are honoured. Testing found them credited, but a steady
+    // burst of searches reads as automated, so the field warns rather than
+    // silently overriding the choice.
     const isTimeoutRisky = Number.isFinite(timeout) && timeout < RECOMMENDED_MIN_TIMEOUT_SECONDS;
 
     // Picking a level sets a sensible search count; the number field stays
@@ -80,11 +82,9 @@ function App() {
                     className="sponsor-button"
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Enjoying the extension? Sponsor from $5/month and get your name featured in the README."
+                    title="Enjoying the extension? Sponsor from $2 a month, or from $5 a month to get your name in the README."
                 >
-                    <svg className="sponsor-heart" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-                        <path d="M8 14.25.345 6.595a4.25 4.25 0 0 1 6.01-6.01L8 2.23 9.645.585a4.25 4.25 0 0 1 6.01 6.01Z" />
-                    </svg>
+                    <HeartIcon className="sponsor-heart" size={14} />
                     Sponsor
                 </a>
             </header>
@@ -97,8 +97,8 @@ function App() {
 
                 <section className="card" aria-labelledby="tasks-title">
                     <h2 className="card-title" id="tasks-title">Daily tasks</h2>
-                    <ToggleRow id="autoCheckbox" label="Search automatically" checked={active} onChange={setActive}
-                               info="Opens your Bing searches automatically the first time the browser opens each day." />
+                    <ToggleRow id="autoCheckbox" label="Daily searches" checked={active} onChange={setActive}
+                               info="Runs your Bing searches once a day: when the browser opens, or within 6 hours of a new day if it stays open. While off, Get rewards skips the searches too." />
                     <ToggleRow id="autoDaily" label="Daily set" checked={autoDaily} onChange={setAutoDaily}
                                info="Opens the Rewards dashboard and clicks today's daily set for extra points." />
                     <ToggleRow id="claimPoints" label="Claim points" checked={claimPoints} onChange={setClaimPoints}
@@ -113,8 +113,7 @@ function App() {
                     <NumberInput id="timeout" label="Seconds between searches" value={timeout} min={0} max={9999} onChange={setTimeoutValue} />
                     {isTimeoutRisky && (
                         <p className="field-warning" role="status">
-                            Under {RECOMMENDED_MIN_TIMEOUT_SECONDS}s Microsoft often stops crediting searches.
-                            {' '}{DEFAULTS.timeout}s or more is recommended.
+                            Very short gaps may look automated. Try {DEFAULTS.timeout}s.
                         </p>
                     )}
                     <NumberInput id="closeTime" label="Close each tab after (s)" value={closeTime} min={0} max={300} onChange={setCloseTime} />
@@ -143,12 +142,15 @@ function App() {
                 )}
             </main>
 
-            <footer className="footer">
-                <a href="https://svitspindler.com/microsoft-automatic-rewards" target="_blank" rel="noopener noreferrer">Help</a>
-                <a href="https://svitspindler.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
-                <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
-            </footer>
+            {slots.showFooter && (
+                <footer className="footer">
+                    <a href="https://rewards.bing.com/" target="_blank" rel="noopener noreferrer">Rewards</a>
+                    <a href="https://svitspindler.com/microsoft-automatic-rewards" target="_blank" rel="noopener noreferrer">Help</a>
+                    <a href="https://svitspindler.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
+                    <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
+                </footer>
+            )}
         </>
     );
 }

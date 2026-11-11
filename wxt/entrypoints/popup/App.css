@@ -24,6 +24,11 @@
     --sponsor-border: #d0d7de;
     --sponsor-text: #24292f;
     --sponsor-heart: #bf3989;
+    /* The sponsor prompt card: a soft pink tint and a pink fill with white text. */
+    --sponsor-soft: #fdf2f8;
+    --sponsor-line: #f2cde1;
+    --sponsor-fill: #bf3989;
+    --sponsor-fill-hover: #9c2e6f;
     --radius: 8px;
 }
 
@@ -50,6 +55,9 @@
         --sponsor-border: #3d444d;
         --sponsor-text: #e6edf3;
         --sponsor-heart: #db61a2;
+        --sponsor-soft: #36212e;
+        --sponsor-line: #5a3350;
+        --sponsor-fill-hover: #a8327a;
     }
 }
 
@@ -148,6 +156,11 @@ a {
     flex-direction: column;
     gap: 8px;
     padding: 0 12px;
+}
+
+/* No footer below (see choosePopupSlots): keep the bottom edge it would have given. */
+.content:last-child {
+    padding-bottom: 12px;
 }
 
 .primary-action {
@@ -514,28 +527,42 @@ a {
     align-items: flex-start;
 }
 
+/* A compact .primary-action: same fill and hover, sized like the header pill. */
 .phone-app-link {
     display: inline-block;
+    min-height: 24px;
     margin-top: 7px;
-    text-decoration: none;
+    padding: 3px 12px;
+    font-size: 12.5px;
+    font-weight: 600;
+    line-height: 18px;
     white-space: nowrap;
+    color: var(--color-on-primary);
+    text-decoration: none;
+    background-color: var(--color-primary);
+    border-radius: 6px;
+    transition: background-color 0.15s ease;
+}
+
+.phone-app-link:hover {
+    background-color: var(--color-primary-hover);
 }
 
 /* ---- One-time asks: review and sponsor milestone (PromptCard) ----
+   Same look as Prolific Studies Notifier's: the ask and "Not now" side by side.
    A due card takes the promo tiles' place, so it is sized to fit where they
    were without pushing the popup past 600px. */
 
 .prompt-card {
     display: grid;
-    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-columns: minmax(0, 1fr);
     grid-template-areas:
-        'title dismiss'
-        'body body'
-        'actions actions';
+        'title'
+        'body'
+        'actions';
     padding: 8px 12px 9px;
     background-color: var(--color-surface);
-    /* Tinted border sets the ask apart from the settings cards without shouting. */
-    border: 1px solid rgba(var(--color-primary-rgb), 0.45);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius);
 }
 
@@ -545,6 +572,12 @@ a {
     font-size: 13px;
     font-weight: 600;
     line-height: 1.3;
+}
+
+/* Scoped: the phone app panel reuses the title class and keeps its plain text colour.
+   The higher-contrast brand blue: darker in light mode, lighter in dark. */
+.prompt-card .prompt-card-title {
+    color: var(--color-primary-hover);
 }
 
 .prompt-card-body {
@@ -558,70 +591,106 @@ a {
 .prompt-card-actions {
     grid-area: actions;
     display: flex;
-    flex-wrap: wrap;
     align-items: center;
-    gap: 6px 12px;
+    gap: 8px;
     margin-top: 7px;
 }
 
-/* A compact .primary-action: same fill and hover, sized like the header pill. */
-.prompt-card-primary {
-    min-height: 24px;
-    padding: 3px 12px;
+.prompt-card-button {
+    flex: 1;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    height: 26px;
+    padding: 0 10px;
     font: inherit;
-    font-size: 12.5px;
+    font-size: 13px;
     font-weight: 600;
-    line-height: 18px;
+    white-space: nowrap;
     color: var(--color-on-primary);
     background-color: var(--color-primary);
-    border: 0;
+    border: 1px solid transparent;
     border-radius: 6px;
     cursor: pointer;
     transition: background-color 0.15s ease;
 }
 
-.prompt-card-primary:hover {
+.prompt-card-button:hover {
     background-color: var(--color-primary-hover);
 }
 
+.prompt-card-button--quiet {
+    color: var(--color-primary-hover);
+    background-color: var(--color-surface);
+    border-color: var(--color-border);
+}
+
+.prompt-card-button--quiet:hover {
+    background-color: var(--color-bg);
+}
+
+/* Beside the buttons rather than under them: a line less in a popup with no height to spare. */
 .prompt-card-link {
+    flex: none;
     font-size: 12px;
+    white-space: nowrap;
     color: var(--color-text-muted);
     text-underline-offset: 2px;
 }
 
 .prompt-card-link:hover {
-    color: var(--color-primary);
+    color: var(--color-primary-hover);
 }
 
-/* 24px hit area, pulled into the padding so it doesn't make the title row taller. */
-.prompt-card-dismiss {
-    grid-area: dismiss;
-    align-self: start;
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 24px;
-    height: 24px;
-    margin: -4px -7px -4px 6px;
-    padding: 0;
-    color: var(--color-text-muted);
-    background: none;
-    border: 0;
-    border-radius: 6px;
-    cursor: pointer;
+/* The header Sponsor button's pink, as a soft tint, a heart badge beside the copy and a
+   pink button, so the milestone reads as a thank-you rather than another settings box. */
+.prompt-card--sponsor {
+    grid-template-columns: auto minmax(0, 1fr);
+    grid-template-areas:
+        'badge title'
+        'badge body'
+        'actions actions';
+    column-gap: 10px;
+    background: linear-gradient(135deg, var(--sponsor-soft) 0%, var(--color-surface) 75%);
+    border-color: var(--sponsor-line);
 }
 
-.prompt-card-dismiss:hover {
+.prompt-card--sponsor .prompt-card-title {
     color: var(--color-text);
-    background-color: var(--color-track);
 }
 
-.prompt-card-dismiss svg {
-    fill: none;
-    stroke: currentColor;
-    stroke-width: 1.75;
-    stroke-linecap: round;
+.prompt-card-badge {
+    grid-area: badge;
+    align-self: center;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #e0619f, var(--sponsor-fill));
+    box-shadow: 0 2px 6px rgba(191, 57, 137, 0.3);
+    animation: heart-beat 0.9s ease-in-out 0.4s 2;
+}
+
+.prompt-card-badge svg,
+.prompt-card-button--sponsor svg {
+    fill: #fff;
+}
+
+.prompt-card-count {
+    color: var(--sponsor-heart);
+    font-weight: 700;
+}
+
+.prompt-card-button--sponsor {
+    flex: 1.5;
+    color: #fff;
+    background-color: var(--sponsor-fill);
+}
+
+.prompt-card-button--sponsor:hover {
+    background-color: var(--sponsor-fill-hover);
 }
 
 .footer {

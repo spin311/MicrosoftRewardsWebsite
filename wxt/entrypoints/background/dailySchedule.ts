@@ -1,6 +1,6 @@
 import { storage } from '#imports';
 import { browser } from 'wxt/browser';
-import { getStorageItems, setStorageItem, setStorageItems } from '@/entrypoints/hooks/useStorage';
+import { getStorageItem, getStorageItems, setStorageItem, setStorageItems } from '@/entrypoints/hooks/useStorage';
 import { StorageValues } from '@/entrypoints/enums/storageValues';
 import { toInt } from '@/entrypoints/utils/search';
 import { DEFAULTS } from '@/entrypoints/utils/settings';
@@ -17,6 +17,24 @@ const DAILY_CHECK_ALARM = 'dailyCheck';
 // once-per-day gate below (checkLastOpened) entirely. This alarm re-runs that
 // gate periodically so the day rollover is caught without needing a restart.
 const DAILY_CHECK_PERIOD_MINUTES = 360;
+
+// When runRewards last started something (local area). Compared with when this
+// worker started, it tells a run begun in this session from one left over from
+// before a browser restart.
+const RUN_STARTED_AT_KEY = 'runStartedAt';
+const WORKER_STARTED_AT = Date.now();
+
+// The startup handler and the daily-check alarm both run the once-a-day check,
+// and on a morning start Chrome can deliver both together: the alarm came due
+// while the browser was closed. Each waits for the one before it to finish, so
+// the second sees today's date and the run happens once.
+let dailyQueue: Promise<unknown> = Promise.resolve();
+
+function oneAtATime<T>(task: () => Promise<T>): Promise<T> {
+    const result = dailyQueue.then(task, task);
+    dailyQueue = result.catch(() => {});
+    return result;
+}
 
 // Runs whatever the user has enabled: the dashboard visit if "Daily set" or
 // "Claim points" is on, and the Bing searches if "Daily searches" is on. Both
@@ -41,6 +59,8 @@ export async function runRewards(): Promise<void> {
     // meant not a single search ran that day. One tab covers both dashboard
     // jobs — two would fight over the foreground, and the SPA only renders while
     // it is visible.
+    const isStartingAnything = isDailySetEnabled || isClaimEnabled || (isSearchesEnabled && searches > 0);
+    if (isStartingAnything) await setStorageItem(RUN_STARTED_AT_KEY, Date.now());
     if (isDailySetEnabled || isClaimEnabled) {
         void openDailyRewards({
             doDailySet: isDailySetEnabled,
@@ -52,7 +72,11 @@ export async function runRewards(): Promise<void> {
     }
 }
 
-export async function checkLastOpened(): Promise<void> {
+export function checkLastOpened(): Promise<void> {
+    return oneAtATime(runIfNewDay);
+}
+
+async function runIfNewDay(): Promise<void> {
     const today = new Date().toLocaleDateString();
     const s = await getStorageItems(['lastOpened'], StorageValues.SYNC);
     if (s.lastOpened !== today) {
@@ -75,7 +99,11 @@ export async function scheduleDailyCheckAlarm(): Promise<void> {
         (s.autoDaily ?? DEFAULTS.autoDaily) ||
         (s.claimPoints ?? DEFAULTS.claimPoints);
     if (isEnabled) {
-        browser.alarms.create(DAILY_CHECK_ALARM, { periodInMinutes: DAILY_CHECK_PERIOD_MINUTES });
+        // This runs on every worker start, and re-creating an alarm restarts its
+        // countdown, so one that is already armed keeps its schedule.
+        if (!(await browser.alarms.get(DAILY_CHECK_ALARM))) {
+            browser.alarms.create(DAILY_CHECK_ALARM, { periodInMinutes: DAILY_CHECK_PERIOD_MINUTES });
+        }
     } else {
         await browser.alarms.clear(DAILY_CHECK_ALARM);
     }
@@ -120,16 +148,27 @@ export async function handleInstallOrUpdate(details: { reason: string }): Promis
 }
 
 export async function handleStartup(): Promise<void> {
-    // A search run never survives a browser restart, so clear its state *before*
-    // today's run is considered: alarms outlive the session and would resume
-    // opening Bing tabs on their own, and resetting the flag afterwards used to
-    // clobber the `isSearching` that a fresh run had just set.
-    await stopSearches();
-    await setStorageItems({ currentSearch: 0 }, StorageValues.SYNC);
-    // Tab ids do not survive a browser restart, so anything still registered for
-    // cleanup points at tabs that no longer exist.
-    await clearTrackedTabs();
-    const s = await getStorageItems(['active', 'autoDaily', 'claimPoints'], StorageValues.SYNC);
-    if (s.active || s.autoDaily || s.claimPoints) await checkLastOpened();
+    await oneAtATime(async () => {
+        // A search run never survives a browser restart, so clear its state *before*
+        // today's run is considered: alarms outlive the session and would resume
+        // opening Bing tabs on their own, and resetting the flag afterwards used to
+        // clobber the `isSearching` that a fresh run had just set. The daily-check
+        // alarm can start today's run just before this gets its turn, though, and
+        // that run belongs to this session, so it is left alone.
+        if (!(await hasRunStartedInThisWorker())) {
+            await stopSearches();
+            await setStorageItems({ currentSearch: 0 }, StorageValues.SYNC);
+            // Tab ids do not survive a browser restart, so anything still registered
+            // for cleanup points at tabs that no longer exist.
+            await clearTrackedTabs();
+        }
+        const s = await getStorageItems(['active', 'autoDaily', 'claimPoints'], StorageValues.SYNC);
+        if (s.active || s.autoDaily || s.claimPoints) await runIfNewDay();
+    });
     await scheduleDailyCheckAlarm();
+}
+
+async function hasRunStartedInThisWorker(): Promise<boolean> {
+    const startedAt = await getStorageItem<number>(RUN_STARTED_AT_KEY);
+    return Number.isFinite(startedAt) && (startedAt as number) >= WORKER_STARTED_AT;
 }

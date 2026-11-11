@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import HeartIcon from './HeartIcon';
 
 interface PromptCardProps {
     // Names the region for screen readers' landmark lists.
@@ -6,24 +7,32 @@ interface PromptCardProps {
     title: ReactNode;
     body: ReactNode;
     onDismiss: () => void;
-    // The card's actions, primary first.
-    children: ReactNode;
+    // The ask itself, rendered before "Not now".
+    action: ReactNode;
+    // An optional quiet link after "Not now".
+    link?: ReactNode;
+    // The sponsor ask gets the header Sponsor button's pink, as a thank-you rather
+    // than another settings box.
+    isSponsor?: boolean;
 }
 
-// Shared shell for the popup's one-time asks: title, one line of text, actions.
-// The dismiss button sits top-right but comes last in the DOM, so screen readers
-// and Tab reach the ask and its actions before "Not now".
-export default function PromptCard({ label, title, body, onDismiss, children }: PromptCardProps) {
+// Shared shell for the popup's one-time asks, matching Prolific Studies Notifier's:
+// title, one line of text, then the ask and a "Not now" of equal weight side by side.
+export default function PromptCard({ label, title, body, onDismiss, action, link, isSponsor = false }: PromptCardProps) {
     return (
-        <div className="prompt-card" role="region" aria-label={label}>
+        <div className={isSponsor ? 'prompt-card prompt-card--sponsor' : 'prompt-card'} role="region" aria-label={label}>
+            {isSponsor && (
+                <span className="prompt-card-badge" aria-hidden="true">
+                    <HeartIcon size={16} />
+                </span>
+            )}
             <h2 className="prompt-card-title">{title}</h2>
             <p className="prompt-card-body">{body}</p>
-            <div className="prompt-card-actions">{children}</div>
-            <button type="button" className="prompt-card-dismiss" onClick={onDismiss} aria-label="Not now" title="Not now">
-                <svg viewBox="0 0 16 16" width="12" height="12" aria-hidden="true">
-                    <path d="M3.5 3.5l9 9m0-9-9 9" />
-                </svg>
-            </button>
+            <div className="prompt-card-actions">
+                {action}
+                <button type="button" className="prompt-card-button prompt-card-button--quiet" onClick={onDismiss}>Not now</button>
+                {link}
+            </div>
         </div>
     );
 }

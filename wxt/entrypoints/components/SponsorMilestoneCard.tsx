@@ -1,3 +1,4 @@
+import HeartIcon from './HeartIcon';
 import PromptCard from './PromptCard';
 
 interface SponsorMilestoneCardProps {
@@ -10,11 +11,17 @@ export default function SponsorMilestoneCard({ completedRuns, onSponsor, onDismi
     return (
         <PromptCard
             label="Support this extension"
-            title={`${completedRuns} search runs done for you`}
-            body="Sponsoring keeps it working when Bing changes."
+            title={<><strong className="prompt-card-count">{completedRuns}</strong> search runs done for you</>}
+            body="Free and built in my spare time. Sponsoring keeps it working when Bing changes."
             onDismiss={onDismiss}
-        >
-            <button type="button" className="prompt-card-primary" onClick={onSponsor}>Sponsor on GitHub</button>
-        </PromptCard>
+            isSponsor
+            action={
+                <button type="button" className="prompt-card-button prompt-card-button--sponsor" onClick={onSponsor}
+                        title="On GitHub, monthly or one-time">
+                    <HeartIcon size={13} />
+                    Sponsor from $2
+                </button>
+            }
+        />
     );
 }
