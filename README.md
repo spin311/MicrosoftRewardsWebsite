@@ -4,6 +4,8 @@
 
 Get the most out of your Microsoft rewards account and earn points every day!
 
+Free and open source under the [MIT License](LICENSE).
+
 If you like the extension, please give it a star on GitHub! <img src="docs/images/github-star.png" alt="icon" height="32">
 
 ## Download
@@ -112,7 +114,9 @@ branch. Nothing on the default branch depends on it.
 
 ## License
 
-Versions up to 3.2.0 were released under the MIT License. From 3.3.0 on, the code is under the PolyForm Noncommercial License 1.0.0 (see [LICENSE](LICENSE)): you're free to use, modify and share it for non-commercial purposes, but not to sell it or use it commercially.
+[MIT License](LICENSE). Free and open source: you can use, change and share the code, as long as you keep the copyright notice.
+
+The MIT License applies to every version, including 3.3.0, which shipped under the PolyForm Noncommercial License 1.0.0.
 
 ## Contact
 
