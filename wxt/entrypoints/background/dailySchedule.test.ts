@@ -310,6 +310,47 @@ describe('handleDailyCheckAlarm', () => {
     expect(await getStorageItem<string>('lastOpened', StorageValues.SYNC)).toBe(new Date().toLocaleDateString());
   });
 
+  // On a morning start Chrome can deliver onStartup and the daily-check alarm
+  // that came due overnight together. Both used to read yesterday's date before
+  // either recorded today, so the dashboard and the searches opened twice.
+  it('starts today\'s run once when startup and the alarm arrive together', async () => {
+    const urls = trackCreatedTabs();
+    await seed({ lastOpened: new Date(0).toLocaleDateString() });
+
+    await Promise.all([handleStartup(), handleDailyCheckAlarm({ name: 'dailyCheck' })]);
+    await flushPendingWork();
+
+    expect(urls.filter((url) => url === DASHBOARD_URL)).toHaveLength(1);
+    expect(urls.filter((url) => url.startsWith('https://www.bing.com/search?q='))).toHaveLength(1);
+  });
+
+  // The alarm can win the race outright: its run is already going when the
+  // startup handler's "leftover run" cleanup comes along, which used to stop it
+  // after the first search.
+  it('keeps a run the alarm started just before the startup handler ran', async () => {
+    trackCreatedTabs();
+    await seed({ lastOpened: new Date(0).toLocaleDateString() });
+
+    await handleDailyCheckAlarm({ name: 'dailyCheck' });
+    await handleStartup();
+    await flushPendingWork();
+
+    expect(await getStorageItem<boolean>('isSearching', StorageValues.SYNC)).toBe(true);
+    expect(await fakeBrowser.alarms.get('openTabAlarm')).toBeDefined();
+  });
+
+  it('still stops a run left over from before the browser restarted', async () => {
+    trackCreatedTabs();
+    await seed({ active: false, autoDaily: false, isSearching: true, currentSearch: 3 });
+    await setStorageItems({ runStartedAt: 0 }, StorageValues.LOCAL);
+    await fakeBrowser.alarms.create('openTabAlarm', { delayInMinutes: 1 });
+
+    await handleStartup();
+
+    expect(await getStorageItem<boolean>('isSearching', StorageValues.SYNC)).toBe(false);
+    expect(await fakeBrowser.alarms.get('openTabAlarm')).toBeUndefined();
+  });
+
   it('does nothing when today has already run', async () => {
     const urls = trackCreatedTabs();
     await seed({ lastOpened: new Date().toLocaleDateString() });
