@@ -98,7 +98,7 @@ function App() {
                 <section className="card" aria-labelledby="tasks-title">
                     <h2 className="card-title" id="tasks-title">Daily tasks</h2>
                     <ToggleRow id="autoCheckbox" label="Daily searches" checked={active} onChange={setActive}
-                               info="Runs your Bing searches once a day: when the browser opens, or within a few hours of a new day if it stays open. While off, Get rewards skips the searches too." />
+                               info="Runs your Bing searches once a day: when the browser opens, or within 6 hours of a new day if it stays open. While off, Get rewards skips the searches too." />
                     <ToggleRow id="autoDaily" label="Daily set" checked={autoDaily} onChange={setAutoDaily}
                                info="Opens the Rewards dashboard and clicks today's daily set for extra points." />
                     <ToggleRow id="claimPoints" label="Claim points" checked={claimPoints} onChange={setClaimPoints}
@@ -113,7 +113,7 @@ function App() {
                     <NumberInput id="timeout" label="Seconds between searches" value={timeout} min={0} max={9999} onChange={setTimeoutValue} />
                     {isTimeoutRisky && (
                         <p className="field-warning" role="status">
-                            Very short gaps may look automated. {DEFAULTS.timeout}s is the default.
+                            Very short gaps may look automated. Try {DEFAULTS.timeout}s.
                         </p>
                     )}
                     <NumberInput id="closeTime" label="Close each tab after (s)" value={closeTime} min={0} max={300} onChange={setCloseTime} />

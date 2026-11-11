@@ -99,7 +99,11 @@ export async function scheduleDailyCheckAlarm(): Promise<void> {
         (s.autoDaily ?? DEFAULTS.autoDaily) ||
         (s.claimPoints ?? DEFAULTS.claimPoints);
     if (isEnabled) {
-        browser.alarms.create(DAILY_CHECK_ALARM, { periodInMinutes: DAILY_CHECK_PERIOD_MINUTES });
+        // This runs on every worker start, and re-creating an alarm restarts its
+        // countdown, so one that is already armed keeps its schedule.
+        if (!(await browser.alarms.get(DAILY_CHECK_ALARM))) {
+            browser.alarms.create(DAILY_CHECK_ALARM, { periodInMinutes: DAILY_CHECK_PERIOD_MINUTES });
+        }
     } else {
         await browser.alarms.clear(DAILY_CHECK_ALARM);
     }

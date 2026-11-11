@@ -259,6 +259,19 @@ describe('scheduleDailyCheckAlarm', () => {
 
   // "Claim points" alone (no daily set, no daily searches) still needs the
   // once-per-day gate to run, so it has to arm the alarm on its own too.
+  // This runs on every worker start, and re-creating an alarm restarts its
+  // countdown, so a worker woken more often than every 6 hours used to keep
+  // pushing the day check back.
+  it('leaves an already armed alarm on its schedule', async () => {
+    await seed({});
+    const when = Date.now() + 60 * 60 * 1000;
+    await fakeBrowser.alarms.create('dailyCheck', { when, periodInMinutes: 360 });
+
+    await scheduleDailyCheckAlarm();
+
+    expect((await fakeBrowser.alarms.get('dailyCheck'))?.scheduledTime).toBe(when);
+  });
+
   it('arms the alarm when only "Claim points" is enabled', async () => {
     await seed({ active: false, autoDaily: false, claimPoints: true });
 
@@ -337,6 +350,28 @@ describe('handleDailyCheckAlarm', () => {
 
     expect(await getStorageItem<boolean>('isSearching', StorageValues.SYNC)).toBe(true);
     expect(await fakeBrowser.alarms.get('openTabAlarm')).toBeDefined();
+  });
+
+  it('starts the run once and keeps it when the alarm is delivered first', async () => {
+    const urls = trackCreatedTabs();
+    await seed({ lastOpened: new Date(0).toLocaleDateString() });
+
+    await Promise.all([handleDailyCheckAlarm({ name: 'dailyCheck' }), handleStartup()]);
+    await flushPendingWork();
+
+    expect(urls.filter((url) => url.startsWith('https://www.bing.com/search?q='))).toHaveLength(1);
+    expect(await getStorageItem<boolean>('isSearching', StorageValues.SYNC)).toBe(true);
+  });
+
+  it('keeps taking daily checks after one of them fails', async () => {
+    await seed({ autoDaily: false, lastOpened: new Date(0).toLocaleDateString() });
+    vi.spyOn(fakeBrowser.tabs, 'create').mockRejectedValueOnce(new Error('tab refused'));
+
+    await expect(handleDailyCheckAlarm({ name: 'dailyCheck' })).rejects.toThrow('tab refused');
+    const urls = trackCreatedTabs();
+    await handleDailyCheckAlarm({ name: 'dailyCheck' });
+
+    expect(urls.some((url) => url.startsWith('https://www.bing.com/search?q='))).toBe(true);
   });
 
   it('still stops a run left over from before the browser restarted', async () => {
