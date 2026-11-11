@@ -2,15 +2,26 @@ import 'package:bloc/bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import '../../../../core/di/SearchCancellationToken.dart';
 import '../../../../core/utils/error_handler.dart';
+import '../../../rewards/presentation/rewards_messages.dart';
+import '../../../rewards/rewards.dart';
 import '../../domain/useCases/perform_search.dart';
 import 'package:equatable/equatable.dart';
 
+/// Rewards credits a search within ~5s; wait that long before the final read
+/// so the last search shows up in the summary.
+const _defaultFinalCheckDelay = Duration(seconds: 5);
 
 class SearchBloc extends Bloc<SearchEvent, SearchState> {
-  late SearchCancellationToken _cancelToken;
+  SearchCancellationToken _cancelToken = SearchCancellationToken();
   final PerformSearch performSearch;
+  final RewardsStatusSource statusSource;
+  final Duration finalCheckDelay;
 
-  SearchBloc({required this.performSearch}) : super(SearchInitial()) {
+  SearchBloc({
+    required this.performSearch,
+    required this.statusSource,
+    this.finalCheckDelay = _defaultFinalCheckDelay,
+  }) : super(SearchInitial()) {
     on<StartSearchEvent>(_onStartSearch);
     on<CancelSearchEvent>(_onCancelSearch);
   }
@@ -19,30 +30,78 @@ class SearchBloc extends Bloc<SearchEvent, SearchState> {
       StartSearchEvent event,
       Emitter<SearchState> emit,
       ) async {
-    emit(SearchInProgress());
-    _cancelToken = SearchCancellationToken();
+    emit(const SearchInProgress());
+    final cancelToken = SearchCancellationToken();
+    _cancelToken = cancelToken;
     try {
-      await performSearch(
+      // The status only ever stops a run when it confirms the counter is full;
+      // an unknown or signed-out status never blocks searching.
+      final before = await _safeFetch();
+      if (cancelToken.isCancelled) return;
+      if (_isMaxed(before)) {
+        emit(SearchSkipped(describeAlreadyComplete(before)));
+        return;
+      }
+
+      RewardsStatus? latest;
+      final searchesDone = await performSearch(
         count: event.count,
         delay: event.delay,
-        cancellationToken: _cancelToken,
+        cancellationToken: cancelToken,
         controller: event.controller,
         onProgress: (currentCount, totalCount) {
+          if (cancelToken.isCancelled) return;
           emit(SearchInProgress(currentCount: currentCount, totalCount: event.count));
         },
+        shouldStop: () async {
+          latest = await _safeFetch();
+          return _isMaxed(latest!);
+        },
       );
-      emit(SearchSuccess());
+      if (cancelToken.isCancelled) return;
+
+      final stoppedMaxed = latest != null && _isMaxed(latest!);
+      final after = stoppedMaxed ? latest! : await _finalStatus();
+      if (cancelToken.isCancelled) return;
+      emit(SearchSuccess(
+        describeSearchRun(
+          before: before,
+          after: after,
+          searchesDone: searchesDone,
+          stoppedMaxed: stoppedMaxed,
+        ),
+        pointsEarned: pointsEarnedBetween(before, after),
+      ));
     } catch (e) {
+      if (cancelToken.isCancelled) return;
       emit(SearchFailure(ErrorHandler.getErrorMessage(e)));
     }
   }
+
+  Future<RewardsStatus> _finalStatus() async {
+    await Future.delayed(finalCheckDelay);
+    return _safeFetch();
+  }
+
+  /// A status read that throws counts as unknown: it must never end a run.
+  Future<RewardsStatus> _safeFetch() async {
+    try {
+      return await statusSource.fetchStatus();
+    } catch (e) {
+      ErrorHandler.logError('rewards status', e);
+      return RewardsStatusFailed(error: RewardsStatusError.network, fetchedAt: DateTime.now());
+    }
+  }
+
+  static bool _isMaxed(RewardsStatus status) =>
+      status is RewardsStatusLoaded && status.snapshot.isPhoneSearchMaxed;
 
   void _onCancelSearch(
       CancelSearchEvent event,
       Emitter<SearchState> emit,
       ) {
-    emit(SearchCancelled());
     _cancelToken.cancel();
+    emit(SearchCancelled());
   }
 }
 
@@ -82,12 +141,32 @@ class SearchInProgress extends SearchState {
   const SearchInProgress({this.isCancelled = false, this.currentCount = 0, this.totalCount = 0});
 
   @override
-  List<Object> get props => [isCancelled, currentCount];
+  List<Object> get props => [isCancelled, currentCount, totalCount];
 }
 
 class SearchCancelled extends SearchState {}
 
-class SearchSuccess extends SearchState {}
+class SearchSuccess extends SearchState {
+  final String message;
+
+  /// Points the run earned, when both Rewards readings were known.
+  final int? pointsEarned;
+
+  const SearchSuccess(this.message, {this.pointsEarned});
+
+  @override
+  List<Object> get props => [message, pointsEarned ?? -1];
+}
+
+/// The run didn't start because today's search counter is already full.
+class SearchSkipped extends SearchState {
+  final String message;
+
+  const SearchSkipped(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
 
 class SearchFailure extends SearchState {
   final String message;

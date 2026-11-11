@@ -2,10 +2,17 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
 import 'package:wakelock_plus/wakelock_plus.dart';
+import '../../../../core/utils/error_handler.dart';
 import '../../../../core/utils/validators/input_validators.dart';
 import '../../../../core/widgets/custom_button.dart';
 import '../../../../core/widgets/custom_text_field.dart';
 import '../../../../notifications/notification_service.dart';
+import '../../../../core/di/injection_container.dart';
+import '../../../rewards/presentation/rewards_cubit.dart';
+import '../../../rewards/presentation/rewards_status_card.dart';
+import '../../../support/support_links.dart';
+import '../../../support/support_prompt_presenter.dart';
+import '../../domain/search_pacing.dart';
 import '../bloc/search_bloc.dart';
 import '../../../../core/constants/app_constants.dart';
 import '../../../../core/constants/strings.dart';
@@ -23,12 +30,15 @@ class SearchScreen extends StatefulWidget {
 
 class _SearchScreenState extends State<SearchScreen> {
   final GlobalKey<SearchFormState> _searchFormKey = GlobalKey();
+  final SupportPromptPresenter _supportPrompts = SupportPromptPresenter();
 
   @override
   Widget build(BuildContext context) {
     final isKeyboardVisible = MediaQuery.of(context).viewInsets.bottom > 0;
 
-    return Scaffold(
+    return BlocProvider(
+      create: (_) => sl<RewardsCubit>()..refresh(),
+      child: Scaffold(
       appBar: AppBar(
         title: Builder(
           builder: (context) {
@@ -42,21 +52,45 @@ class _SearchScreenState extends State<SearchScreen> {
                   height: 32,
                 ),
                 const SizedBox(width: 10),
-                const Text(Strings.appTitle),
+                const Flexible(
+                  child: Text(Strings.appTitle, overflow: TextOverflow.ellipsis),
+                ),
               ],
             );
           },
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.favorite, color: Colors.pinkAccent),
+            tooltip: 'Sponsor this app',
+            onPressed: _openSponsor,
+          ),
+        ],
       ),
-      body: Stack(
+      // Android 15+ always draws the app edge to edge, so keep the bottom row
+      // clear of the navigation bar (3-button nav is ~48dp tall).
+      body: SafeArea(
+        top: false,
+        child: Stack(
         children: [
           Padding(
             padding: const EdgeInsets.all(AppConstants.defaultPadding),
             child: Column(
               children: [
                 Expanded(
-                  child: BlocListener<SearchBloc, SearchState>(
-                    listener: _handleStateChanges,
+                  child: MultiBlocListener(
+                    listeners: [
+                      BlocListener<SearchBloc, SearchState>(listener: _handleStateChanges),
+                      // A finished app-points run that earned something counts
+                      // as the app helping, like a search run that did.
+                      BlocListener<RewardsCubit, RewardsState>(
+                        listenWhen: (previous, current) =>
+                            previous.isCollecting && !current.isCollecting,
+                        listener: (context, state) {
+                          if ((state.appPointsEarned ?? 0) > 0) _supportPrompts.onHelpfulRun(context);
+                        },
+                      ),
+                    ],
                     child: SearchForm(key: _searchFormKey),
                   ),
                 ),
@@ -81,12 +115,26 @@ class _SearchScreenState extends State<SearchScreen> {
                   TextButton(
                     onPressed: () => openInWebView(context, 'https://rewards.bing.com/'),
                     child: const Text('Rewards'),
-                  )
+                  ),
+                  TextButton.icon(
+                    onPressed: _openSponsor,
+                    icon: const Icon(Icons.favorite, color: Colors.pinkAccent, size: 18),
+                    label: const Text('Sponsor'),
+                  ),
                 ],
               ),
             ),
         ],
+        ),
       ),
+      ),
+    );
+  }
+
+  Future<void> _openSponsor() async {
+    if (await openSponsorPage() || !mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(
+      const SnackBar(content: Text("Couldn't open the browser. Visit github.com/sponsors/spin311")),
     );
   }
 
@@ -122,9 +170,11 @@ class _SearchScreenState extends State<SearchScreen> {
             children: [
               const Icon(Icons.check_circle_outline, color: Colors.white),
               const SizedBox(width: 12),
-              const Text(
-                Strings.searchCompleted,
-                style: TextStyle(color: Colors.white),
+              Expanded(
+                child: Text(
+                  state.message,
+                  style: const TextStyle(color: Colors.white),
+                ),
               ),
             ],
           ),
@@ -133,11 +183,22 @@ class _SearchScreenState extends State<SearchScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8.0),
           ),
-          duration: const Duration(seconds: 3),
+          duration: const Duration(seconds: 6),
         ),
       );
     }
-    if (state is SearchFailure || state is SearchSuccess) {
+    if (state is SearchSkipped) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text(state.message), duration: const Duration(seconds: 5)),
+      );
+    }
+    if (state is SearchSuccess || state is SearchSkipped) {
+      context.read<RewardsCubit>().refresh();
+    }
+    if (state is SearchSuccess && (state.pointsEarned ?? 0) > 0) {
+      _supportPrompts.onHelpfulRun(context);
+    }
+    if (state is! SearchInProgress) {
       WakelockPlus.disable();
     }
   }
@@ -159,6 +220,9 @@ class SearchForm extends StatefulWidget {
   @override
   State<SearchForm> createState() => SearchFormState();
 }
+
+/// Set once the pre-1.3.0 20s default has been moved to the new default.
+const _delayMigratedKey = 'delay_default_migrated';
 
 class SearchFormState extends State<SearchForm> {
   final _formKey = GlobalKey<FormState>();
@@ -196,9 +260,17 @@ class SearchFormState extends State<SearchForm> {
 
   Future<void> _loadSavedValues() async {
     final prefs = await SharedPreferences.getInstance();
+    final delay = migrateOldDefaultDelay(
+      stored: prefs.getString('search_delay'),
+      isMigrated: prefs.getBool(_delayMigratedKey) ?? false,
+    );
+    if (prefs.getBool(_delayMigratedKey) != true) {
+      await prefs.setBool(_delayMigratedKey, true);
+      await prefs.setString('search_delay', delay);
+    }
     setState(() {
       _countController.text = prefs.getString('search_count') ?? '22';
-      _delayController.text = prefs.getString('search_delay') ?? '20';
+      _delayController.text = delay;
       _sendDailyReminder = prefs.getBool('send_daily_reminder') ?? false;
       _keepScreenOn = prefs.getBool('keep_screen_on') ?? true;
       _loggedIn = prefs.getBool('loggedIn') ?? false;
@@ -207,6 +279,41 @@ class SearchFormState extends State<SearchForm> {
         minute: prefs.getInt('reminder_minute') ?? 0,
       );
     });
+    // Before 1.2.1 an enabled reminder could fail to schedule (exact alarms are
+    // denied on Android 14+) while the box stayed ticked: schedule it again,
+    // quietly, without prompting or changing the user's setting.
+    if (_sendDailyReminder) {
+      await NotificationService.rescheduleIfAllowed(
+          hour: _selectedTime.hour, minute: _selectedTime.minute);
+    }
+  }
+
+  /// Turns the reminder on or off. The box only stays ticked when the reminder
+  /// was actually scheduled.
+  Future<void> _setDailyReminder(bool enable) async {
+    final isEnabled = enable ? await _scheduleReminder(_selectedTime) : false;
+    if (!enable) await NotificationService.cancelReminder();
+    final prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('send_daily_reminder', isEnabled);
+    if (mounted) setState(() => _sendDailyReminder = isEnabled);
+  }
+
+  Future<bool> _scheduleReminder(TimeOfDay time) async {
+    try {
+      final isScheduled = await NotificationService.scheduleDailyReminder(
+          hour: time.hour, minute: time.minute);
+      if (!isScheduled) _showMessage('Allow notifications to get the daily reminder.');
+      return isScheduled;
+    } catch (e) {
+      ErrorHandler.logError('daily reminder', e);
+      _showMessage('Could not set the daily reminder.');
+      return false;
+    }
+  }
+
+  void _showMessage(String text) {
+    if (!mounted) return;
+    ScaffoldMessenger.of(context).showSnackBar(SnackBar(content: Text(text)));
   }
 
   Future<void> _selectTime(BuildContext context) async {
@@ -238,9 +345,7 @@ class SearchFormState extends State<SearchForm> {
 
       setState(() => _selectedTime = pickedTime);
 
-      if (_sendDailyReminder) {
-        await NotificationService.scheduleDailyReminder(hour: pickedTime.hour, minute: pickedTime.minute);
-      }
+      if (_sendDailyReminder) await _setDailyReminder(true);
     }
   }
 
@@ -260,6 +365,7 @@ class SearchFormState extends State<SearchForm> {
       key: _formKey,
       child: Column(
         children: [
+          const RewardsStatusCard(),
           CustomTextField(
             controller: _countController,
             labelText: Strings.searchCountLabel,
@@ -275,21 +381,12 @@ class SearchFormState extends State<SearchForm> {
             keyboardType: TextInputType.number,
             validator: InputValidators.validateDelay,
           ),
+          _DelayWarning(controller: _delayController),
           Row(
             children: [
               Checkbox(
                 value: _sendDailyReminder,
-                onChanged: (value) async {
-                  setState(() => _sendDailyReminder = value!);
-                  final prefs = await SharedPreferences.getInstance();
-                  prefs.setBool('send_daily_reminder', value!);
-
-                  if (value) {
-                    await NotificationService.scheduleDailyReminder(hour: _selectedTime.hour, minute: _selectedTime.minute);
-                  } else {
-                    await NotificationService.cancelReminder();
-                  }
-                },
+                onChanged: (value) => _setDailyReminder(value ?? false),
               ),
               Expanded(
                 child: InkWell(
@@ -414,7 +511,8 @@ class SearchFormState extends State<SearchForm> {
     ],
     ),
     ],
-          BlocBuilder<SearchBloc, SearchState>(
+          Expanded(
+            child: BlocBuilder<SearchBloc, SearchState>(
             builder: (context, state) {
               final isInProgress = state is SearchInProgress;
               return Column(
@@ -485,9 +583,9 @@ class SearchFormState extends State<SearchForm> {
                     ),
                   ],
                   const SizedBox(height: AppConstants.defaultPadding * 2),
-                  SizedBox(
-                    height: MediaQuery.of(context).size.height *
-                        (state is SearchInProgress ? 0.3 : 0.4),
+                  // Fills whatever height is left, so the form never overflows
+                  // into the bottom row when the system bars take more room.
+                  Expanded(
                     child: InAppWebView(
                       initialUrlRequest: URLRequest(url: WebUri("https://www.bing.com")),
                       onWebViewCreated: (controller) => _webViewController = controller,
@@ -505,6 +603,7 @@ class SearchFormState extends State<SearchForm> {
               );
 
             },
+            ),
           ),
         ],
       ),
@@ -567,5 +666,31 @@ class SearchFormState extends State<SearchForm> {
     if (mounted) {
       navigateToLoginScreen(context);
     }
+  }
+}
+
+/// Same warning as the extension: short gaps are honoured, not overridden,
+/// but Microsoft credits them less often.
+class _DelayWarning extends StatelessWidget {
+  const _DelayWarning({required this.controller});
+
+  final TextEditingController controller;
+
+  @override
+  Widget build(BuildContext context) {
+    return ValueListenableBuilder<TextEditingValue>(
+      valueListenable: controller,
+      builder: (context, value, _) {
+        if (!isDelayRisky(double.tryParse(value.text))) return const SizedBox.shrink();
+        return Padding(
+          padding: const EdgeInsets.only(top: 6, left: 4, right: 4),
+          child: Text(
+            '⚠ Under ${recommendedMinDelaySeconds}s, Microsoft often stops crediting the '
+            'searches. ${defaultDelaySeconds}s or more is recommended.',
+            style: TextStyle(color: Colors.orange.shade900, fontSize: 13),
+          ),
+        );
+      },
+    );
   }
 }

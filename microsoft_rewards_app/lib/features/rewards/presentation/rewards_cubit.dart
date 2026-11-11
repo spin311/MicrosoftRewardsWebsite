@@ -1,0 +1,118 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../core/di/SearchCancellationToken.dart';
+import '../../../core/utils/error_handler.dart';
+import '../rewards.dart';
+import 'rewards_messages.dart';
+
+class RewardsState extends Equatable {
+  const RewardsState({
+    this.status,
+    this.isRefreshing = false,
+    this.isCollecting = false,
+    this.readProgress,
+    this.readMax,
+    this.appPointsMessage,
+    this.appPointsEarned,
+  });
+
+  /// The last Rewards status read; null until the first one arrives.
+  final RewardsStatus? status;
+  final bool isRefreshing;
+
+  /// Whether app points (Read to Earn, check-in) are being collected.
+  final bool isCollecting;
+  final int? readProgress;
+  final int? readMax;
+
+  /// The outcome of the last app-points run, shown under the status.
+  final String? appPointsMessage;
+
+  /// Points the last app-points run earned.
+  final int? appPointsEarned;
+
+  @override
+  List<Object?> get props =>
+      [status, isRefreshing, isCollecting, readProgress, readMax, appPointsMessage, appPointsEarned];
+}
+
+/// Today's Rewards status and the app-points run behind the search screen's
+/// status card.
+class RewardsCubit extends Cubit<RewardsState> {
+  RewardsCubit({required RewardsStatusSource statusSource, required AppPointsEarner appPoints})
+      : _statusSource = statusSource,
+        _appPoints = appPoints,
+        super(const RewardsState());
+
+  final RewardsStatusSource _statusSource;
+  final AppPointsEarner _appPoints;
+  SearchCancellationToken? _appPointsToken;
+
+  Future<void> refresh() async {
+    if (state.isRefreshing) return;
+    _emit(isRefreshing: true);
+    RewardsStatus status;
+    try {
+      status = await _statusSource.fetchStatus();
+    } catch (e) {
+      // Without this the spinner would stay and block every later refresh.
+      ErrorHandler.logError('rewards status', e);
+      status = RewardsStatusFailed(error: RewardsStatusError.network, fetchedAt: DateTime.now());
+    }
+    _emit(status: status, isRefreshing: false);
+  }
+
+  Future<void> collectAppPoints() async {
+    if (state.isCollecting) return;
+    final token = SearchCancellationToken();
+    _appPointsToken = token;
+    emit(RewardsState(status: state.status, isRefreshing: state.isRefreshing, isCollecting: true));
+    final (message, earned) = await _earn(token);
+    _emit(isCollecting: false, appPointsMessage: message, appPointsEarned: earned);
+    if (!isClosed) await refresh();
+  }
+
+  void cancelAppPoints() => _appPointsToken?.cancel();
+
+  Future<(String, int)> _earn(SearchCancellationToken token) async {
+    try {
+      final report = await _appPoints.earn(
+        cancellationToken: token,
+        onReadToEarnProgress: (progress, max) => _emit(readProgress: progress, readMax: max),
+      );
+      return (describeAppPoints(report), appPointsEarned(report));
+    } catch (e) {
+      ErrorHandler.logError('app points', e);
+      return ("Couldn't collect app points. Try again later.", 0);
+    }
+  }
+
+  /// Emits a copy of the state with the given fields replaced, unless closed.
+  void _emit({
+    RewardsStatus? status,
+    bool? isRefreshing,
+    bool? isCollecting,
+    int? readProgress,
+    int? readMax,
+    String? appPointsMessage,
+    int? appPointsEarned,
+  }) {
+    if (isClosed) return;
+    emit(RewardsState(
+      status: status ?? state.status,
+      isRefreshing: isRefreshing ?? state.isRefreshing,
+      isCollecting: isCollecting ?? state.isCollecting,
+      readProgress: readProgress ?? state.readProgress,
+      readMax: readMax ?? state.readMax,
+      appPointsMessage: appPointsMessage ?? state.appPointsMessage,
+      appPointsEarned: appPointsEarned ?? state.appPointsEarned,
+    ));
+  }
+
+  @override
+  Future<void> close() {
+    _appPointsToken?.cancel();
+    return super.close();
+  }
+}

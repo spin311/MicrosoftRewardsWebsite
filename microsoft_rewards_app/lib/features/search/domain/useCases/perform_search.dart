@@ -8,12 +8,13 @@ class PerformSearch {
 
   PerformSearch(this.repository);
 
-  Future<void> call({
+  Future<int> call({
     required int count,
     required double delay,
     required SearchCancellationToken cancellationToken,
     required InAppWebViewController controller,
     required void Function(int currentCount, int totalCount) onProgress,
+    Future<bool> Function()? shouldStop,
   }) async {
     if (count < 1) throw ArgumentError('Count must be positive');
     if (delay < 0) throw ArgumentError('Delay must be non-negative');
@@ -24,6 +25,7 @@ class PerformSearch {
         cancellationToken: cancellationToken,
         controller: controller,
         onProgress: onProgress,
+        shouldStop: shouldStop,
     );
   }
 }

@@ -1,30 +1,28 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/widgets.dart';
 import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:flutter_timezone/flutter_timezone.dart';
 import 'package:timezone/timezone.dart' as tz;
 import 'package:timezone/data/latest_all.dart' as tzdata;
 
-
 class NotificationService {
   static final _notifications = FlutterLocalNotificationsPlugin();
   static const int _reminderId = 0;
 
+  /// A reminder doesn't need to fire on the exact minute, and exact modes need
+  /// SCHEDULE_EXACT_ALARM, which Android 14+ denies by default: scheduling then
+  /// throws `exact_alarms_not_permitted` and no reminder is ever set.
+  @visibleForTesting
+  static const AndroidScheduleMode reminderScheduleMode =
+      AndroidScheduleMode.inexactAllowWhileIdle;
+
   static Future<void> init() async {
     WidgetsFlutterBinding.ensureInitialized();
 
-    // 1) Load all the TZ database.
     tzdata.initializeTimeZones();
-
-    // 2) Figure out the device’s current zone name
     final String nativeName = await FlutterTimezone.getLocalTimezone();
+    tz.setLocalLocation(tz.getLocation(nativeName));
 
-    // 3) Tell the timezone package to treat that as “local”
-    final tz.Location deviceLocation = tz.getLocation(nativeName);
-    print('Device timezone: $nativeName');
-    tz.setLocalLocation(deviceLocation);
-
-    // 4) Continue initializing your notifications plugin…
     const androidSettings = AndroidInitializationSettings('@mipmap/ic_launcher');
     await _notifications.initialize(
       const InitializationSettings(android: androidSettings),
@@ -46,35 +44,51 @@ class NotificationService {
         AndroidFlutterLocalNotificationsPlugin>()?.createNotificationChannel(androidChannel);
   }
 
-  static Future<void> _requestNotificationPermissions() async {
-    if (defaultTargetPlatform == TargetPlatform.android) {
-      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
-          AndroidFlutterLocalNotificationsPlugin>();
-
-      await androidPlugin?.requestNotificationsPermission();
-    }
+  /// Asks for the notification permission (Android 13+). True when granted.
+  static Future<bool> _requestNotificationPermission() async {
+    if (defaultTargetPlatform != TargetPlatform.android) return true;
+    final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+        AndroidFlutterLocalNotificationsPlugin>();
+    return await androidPlugin?.requestNotificationsPermission() ?? false;
   }
 
-  static Future<void> scheduleDailyReminder({int hour = 19, int minute = 0}) async {
-    await _requestNotificationPermissions();
+  /// Schedules the daily reminder. Returns false, without scheduling, when the
+  /// user doesn't allow notifications. Throws if the platform call fails.
+  static Future<bool> scheduleDailyReminder({int hour = 19, int minute = 0}) async {
+    if (!await _requestNotificationPermission()) return false;
     await cancelReminder();
     await _notifications.zonedSchedule(
       _reminderId,
       'Reminder',
       'Don\'t forget to run your Bing searches today!',
-      _nextInstanceOfTime(hour, minute),
+      nextInstanceOfTime(hour, minute, tz.TZDateTime.now(tz.local)),
       const NotificationDetails(
         android: AndroidNotificationDetails(
           'daily_reminder_channel',
           'Daily Reminders',
-          channelDescription: 'Daily search reminder at 7 PM',
+          channelDescription: 'Daily search reminder',
           importance: Importance.max,
           priority: Priority.high,
         ),
       ),
       matchDateTimeComponents: DateTimeComponents.time,
-      androidScheduleMode: AndroidScheduleMode.exactAllowWhileIdle,
+      androidScheduleMode: reminderScheduleMode,
     );
+    return true;
+  }
+
+  /// Re-schedules the reminder at launch only when notifications are already
+  /// allowed: never prompts, never throws. Returns whether it was scheduled.
+  static Future<bool> rescheduleIfAllowed({required int hour, required int minute}) async {
+    try {
+      final androidPlugin = _notifications.resolvePlatformSpecificImplementation<
+          AndroidFlutterLocalNotificationsPlugin>();
+      if (await androidPlugin?.areNotificationsEnabled() != true) return false;
+      return await scheduleDailyReminder(hour: hour, minute: minute);
+    } catch (e) {
+      debugPrint('Daily reminder reschedule failed: ${e.runtimeType}');
+      return false;
+    }
   }
 
   static Future<void> sendImmediateNotification({
@@ -96,12 +110,12 @@ class NotificationService {
       ),
     );
   }
-  static tz.TZDateTime _nextInstanceOfTime(int hour, int minute) {
-    final now = tz.TZDateTime.now(tz.local);
-    print('Current time: ${now}');
-    final scheduled = tz.TZDateTime(tz.local, now.year, now.month, now.day, hour, minute);
-    print('Scheduled time: ${scheduled}');
-    return scheduled.isBefore(now) ? scheduled.add(const Duration(days: 1)) : scheduled;
+
+  /// The next [hour]:[minute] after [now]: today if it's still ahead, else tomorrow.
+  @visibleForTesting
+  static tz.TZDateTime nextInstanceOfTime(int hour, int minute, tz.TZDateTime now) {
+    final scheduled = tz.TZDateTime(now.location, now.year, now.month, now.day, hour, minute);
+    return scheduled.isAfter(now) ? scheduled : scheduled.add(const Duration(days: 1));
   }
 
   static Future<void> cancelReminder() async {
