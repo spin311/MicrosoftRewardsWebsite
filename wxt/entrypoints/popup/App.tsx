@@ -14,6 +14,7 @@ import ToggleRow from '@/entrypoints/components/ToggleRow';
 import ReviewPromptCard from '@/entrypoints/components/ReviewPromptCard';
 import SponsorMilestoneCard from '@/entrypoints/components/SponsorMilestoneCard';
 import PhoneAppTile from '@/entrypoints/components/PhoneAppTile';
+import HeartIcon from '@/entrypoints/components/HeartIcon';
 import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
 import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
 import { choosePopupSlots } from '@/entrypoints/utils/popupSlots';
@@ -82,9 +83,7 @@ function App() {
                     rel="noopener noreferrer"
                     title="Enjoying the extension? Sponsor from $5/month and get your name featured in the README."
                 >
-                    <svg className="sponsor-heart" viewBox="0 0 16 16" width="14" height="14" aria-hidden="true">
-                        <path d="M8 14.25.345 6.595a4.25 4.25 0 0 1 6.01-6.01L8 2.23 9.645.585a4.25 4.25 0 0 1 6.01 6.01Z" />
-                    </svg>
+                    <HeartIcon className="sponsor-heart" size={14} />
                     Sponsor
                 </a>
             </header>
@@ -143,12 +142,14 @@ function App() {
                 )}
             </main>
 
-            <footer className="footer">
-                <a href="https://svitspindler.com/microsoft-automatic-rewards" target="_blank" rel="noopener noreferrer">Help</a>
-                <a href="https://svitspindler.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
-                <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
-                <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
-            </footer>
+            {slots.showFooter && (
+                <footer className="footer">
+                    <a href="https://svitspindler.com/microsoft-automatic-rewards" target="_blank" rel="noopener noreferrer">Help</a>
+                    <a href="https://svitspindler.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
+                    <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
+                    <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
+                </footer>
+            )}
         </>
     );
 }

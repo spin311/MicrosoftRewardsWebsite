@@ -62,7 +62,7 @@ export default function PhoneAppTile() {
                 <div className="phone-app-text">
                     <p className="prompt-card-title">Get the Android app</p>
                     <p className="prompt-card-body">Scan with your phone, or</p>
-                    <a href={PHONE_APP_URL} className="prompt-card-primary phone-app-link" target="_blank" rel="noopener noreferrer">
+                    <a href={PHONE_APP_URL} className="phone-app-link" target="_blank" rel="noopener noreferrer">
                         Open Google Play
                     </a>
                 </div>

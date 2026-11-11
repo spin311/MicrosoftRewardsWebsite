@@ -11,14 +11,15 @@ export default function ReviewPromptCard({ onRate, onDismiss }: ReviewPromptCard
     return (
         <PromptCard
             label="Rate this extension"
-            title="Enjoying Microsoft Automatic Rewards?"
+            title="Enjoying Search automatic rewards?"
             body="A quick rating helps other people find it."
             onDismiss={onDismiss}
-        >
-            <button type="button" className="prompt-card-primary" onClick={onRate}>Rate it</button>
-            <a href={ISSUES_URL} className="prompt-card-link" target="_blank" rel="noopener noreferrer">
-                Something not working? Report it
-            </a>
-        </PromptCard>
+            action={<button type="button" className="prompt-card-button" onClick={onRate}>Rate it</button>}
+            link={
+                <a href={ISSUES_URL} className="prompt-card-link" target="_blank" rel="noopener noreferrer">
+                    Not working? Report it
+                </a>
+            }
+        />
     );
 }
