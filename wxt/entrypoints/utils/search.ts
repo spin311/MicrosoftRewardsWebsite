@@ -55,8 +55,8 @@ const MAX_JITTER_FRACTION = 0.5;
 export const RECOMMENDED_MIN_TIMEOUT_SECONDS = 30;
 
 // Absolute floor: a zero-length gap would open every remaining tab at once.
-// Gaps below the recommendation are otherwise honoured, even though Microsoft is
-// less likely to credit them — the popup warns instead of overriding the choice.
+// Gaps below the recommendation are otherwise honoured, even though they look
+// more automated — the popup warns instead of overriding the choice.
 const MIN_DELAY_SECONDS = 1;
 
 // Grows smoothly with the configured gap: ±20% of it at the short end, ±50% once
