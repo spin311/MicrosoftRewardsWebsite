@@ -7,6 +7,10 @@
     "message": "Script that gives you maximum amount of microsoft rewards points every day automatically or by a click of a button.",
     "description": "Short description of the extension, shown on the browser's extensions page and in store listings. At most 132 characters (Chrome Web Store limit)."
   },
+  "localeTag": {
+    "message": "en",
+    "description": "BCP 47 tag of this catalogue's language (for example pt-BR). Not shown: it tells the browser and screen readers which language the popup is in."
+  },
   "updateBadge": {
     "message": "New",
     "description": "Badge on the extension's toolbar icon after it updates, until the popup is opened. At most 4 characters: the badge cuts off anything longer."

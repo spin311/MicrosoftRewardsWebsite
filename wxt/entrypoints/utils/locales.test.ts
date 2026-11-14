@@ -91,6 +91,11 @@ describe.each(locales)('%s catalogue', (locale) => {
     }
   });
 
+  // It becomes <html lang>, so the folder name (pt_BR) must come back as its BCP 47 tag (pt-BR).
+  it('names its own language in localeTag', () => {
+    expect(Intl.getCanonicalLocales(catalogue.localeTag?.message ?? '')).toEqual(Intl.getCanonicalLocales(locale.replace('_', '-')));
+  });
+
   it(`keeps extName within ${NAME_MAX_LENGTH} characters`, () => {
     expect(catalogue.extName.message.length).toBeLessThanOrEqual(NAME_MAX_LENGTH);
   });
