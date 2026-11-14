@@ -1,0 +1,36 @@
+{
+  "_note": "Store screenshots per language. tag: the Chrome UI language the popup is captured in. newTab: Chrome's own title for a new tab in that language (the browser frame shows a neutral new tab). copies: locales whose images are copied from another one. Captions are in <locale>.json, keyed by the page in source/ (h = headline, s = subline, c = callouts in the page's order); English is in the HTML.",
+  "locales": {
+    "en": {
+      "tag": "en-US",
+      "newTab": "New Tab"
+    },
+    "zh_CN": {
+      "tag": "zh-CN",
+      "newTab": "新标签页"
+    },
+    "zh_TW": {
+      "tag": "zh-TW",
+      "newTab": "新分頁"
+    },
+    "pt_BR": {
+      "tag": "pt-BR",
+      "newTab": "Nova guia"
+    },
+    "es": {
+      "tag": "es",
+      "newTab": "Nueva pestaña"
+    },
+    "fr": {
+      "tag": "fr",
+      "newTab": "Nouvel onglet"
+    },
+    "vi": {
+      "tag": "vi",
+      "newTab": "Thẻ mới"
+    }
+  },
+  "copies": {
+    "es_419": "es"
+  }
+}

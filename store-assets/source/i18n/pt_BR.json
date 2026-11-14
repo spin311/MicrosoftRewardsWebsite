@@ -1,0 +1,26 @@
+{
+  "screenshot-1-main": {
+    "h": "Suas pesquisas diárias, feitas para você",
+    "s": "Faz suas pesquisas diárias ao abrir o navegador, ou com um clique.",
+    "c": [
+      "Comece com um clique",
+      "Ligue ou desligue cada tarefa"
+    ]
+  },
+  "screenshot-2-progress": {
+    "h": "Acompanhe cada rodada",
+    "s": "As pesquisas abrem uma aba por vez e fecham depois de carregar.",
+    "c": [
+      "Progresso da rodada",
+      "Pare quando quiser"
+    ]
+  },
+  "screenshot-3-settings": {
+    "h": "Do seu jeito",
+    "s": "Escolha quantas pesquisas fazer, o intervalo entre elas e quanto tempo cada aba fica aberta.",
+    "c": [
+      "Número de pesquisas",
+      "Intervalo entre pesquisas"
+    ]
+  }
+}

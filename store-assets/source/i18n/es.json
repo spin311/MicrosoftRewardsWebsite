@@ -1,0 +1,26 @@
+{
+  "screenshot-1-main": {
+    "h": "Tus búsquedas diarias, hechas para ti",
+    "s": "Hace tus búsquedas diarias al abrir el navegador, o con un clic.",
+    "c": [
+      "Empieza con un clic",
+      "Activa o desactiva cada tarea"
+    ]
+  },
+  "screenshot-2-progress": {
+    "h": "Sigue el progreso de cada ronda",
+    "s": "Las búsquedas se abren de una en una y se cierran al cargar.",
+    "c": [
+      "Progreso de la ronda",
+      "Detenlo cuando quieras"
+    ]
+  },
+  "screenshot-3-settings": {
+    "h": "A tu manera",
+    "s": "Elige cuántas búsquedas hacer, el intervalo entre ellas y cuánto tiempo queda abierta cada pestaña.",
+    "c": [
+      "Número de búsquedas",
+      "Pausa entre búsquedas"
+    ]
+  }
+}

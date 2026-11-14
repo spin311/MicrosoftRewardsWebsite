@@ -1,0 +1,291 @@
+/* Chrome Web Store images for Search automatic rewards, in the same style as Free
+   Game Claimer's (store-assets/source/store.css there). Flat charcoal, Mona Sans
+   captions, and the real popup where Chrome opens it: under its toolbar button, in a
+   plain light browser window on a new tab. layout.js builds the window, sizes the
+   captures and draws the callouts. No gradients, glows or decoration. */
+
+@font-face {
+    font-family: "Mona Sans";
+    src: url("fonts/MonaSans-latin.woff2") format("woff2");
+    font-weight: 200 900;
+}
+
+/* The rest of Mona Sans for the localized captions: Google Fonts' latin-ext and
+   vietnamese subsets of the same font (v2.000; the latin file above is its latin
+   subset). The browser loads them only for characters in their unicode-range, so
+   English captions render exactly as before. License: fonts/OFL.txt. */
+@font-face {
+    font-family: "Mona Sans";
+    src: url("fonts/MonaSans-latin-ext.woff2") format("woff2");
+    font-weight: 200 900;
+    unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+    font-family: "Mona Sans";
+    src: url("fonts/MonaSans-vietnamese.woff2") format("woff2");
+    font-weight: 200 900;
+    unicode-range: U+0102-0103, U+0110-0111, U+0128-0129, U+0168-0169, U+01A0-01A1, U+01AF-01B0, U+0300-0301, U+0303-0304, U+0308-0309, U+0323, U+0329, U+1EA0-1EF9, U+20AB;
+}
+
+:root {
+    --canvas: #16171a;
+    --ink: #16171a;
+    --caption: "Mona Sans", -apple-system, system-ui, sans-serif;
+    --os: -apple-system, system-ui, "Segoe UI", Roboto, sans-serif;
+    --muted: rgba(255, 255, 255, 0.7);
+}
+
+/* Mona Sans has no Chinese: Chinese captions fall back per character to the
+   matching system font (layout.js sets <html lang> from the locale's config). */
+:root:lang(zh-CN) {
+    --caption: "Mona Sans", "PingFang SC", "Noto Sans SC", "Microsoft YaHei", sans-serif;
+}
+
+:root:lang(zh-TW) {
+    --caption: "Mona Sans", "PingFang TC", "Noto Sans TC", "Microsoft JhengHei", sans-serif;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+html,
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    -webkit-font-smoothing: antialiased;
+}
+
+.shot {
+    position: relative;
+    width: 1280px;
+    height: 800px;
+    overflow: hidden;
+    background: var(--canvas);
+    color: #fff;
+}
+
+/* ---------- Caption ---------- */
+
+.caption {
+    position: absolute;
+    top: 54px;
+    left: 72px;
+    max-width: 1136px;
+    font-family: var(--caption);
+}
+
+.caption h1 {
+    margin: 0 0 12px;
+    font-size: 46px;
+    line-height: 1.1;
+    font-weight: 700;
+    letter-spacing: -0.022em;
+}
+
+.caption p {
+    margin: 0;
+    font-size: 20px;
+    line-height: 1.45;
+    color: var(--muted);
+}
+
+/* ---------- Browser window ---------- */
+
+.browser {
+    position: absolute;
+    top: 178px;
+    left: 72px;
+    width: 1136px;
+    height: 900px;
+    overflow: hidden;
+    border-radius: 12px 12px 0 0;
+    background: #f8f9fa;
+    font-family: var(--os);
+}
+
+.tabstrip {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+    height: 44px;
+    padding: 0 14px;
+    background: #dfe2e6;
+}
+
+.lights {
+    display: flex;
+    gap: 8px;
+    align-self: center;
+}
+
+.lights i {
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background: #bfc4ca;
+}
+
+.tab {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    width: 250px;
+    height: 35px;
+    padding: 0 14px;
+    border-radius: 10px 10px 0 0;
+    background: #fff;
+    color: #2b2f33;
+    font-size: 13.5px;
+}
+
+.tab svg {
+    flex: none;
+    width: 16px;
+    height: 16px;
+    color: #6b7178;
+}
+
+.toolbar {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    height: 48px;
+    padding: 0 14px;
+    background: #fff;
+    border-bottom: 1px solid #e3e6e9;
+    color: #5f666d;
+}
+
+.toolbar svg {
+    flex: none;
+    width: 18px;
+    height: 18px;
+}
+
+.url {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 32px;
+    padding: 0 14px;
+    border-radius: 16px;
+    background: #f0f2f4;
+    color: #2b2f33;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.url svg {
+    width: 14px;
+    height: 14px;
+}
+
+.ext-button {
+    display: grid;
+    place-items: center;
+    width: 30px;
+    height: 30px;
+    border-radius: 7px;
+}
+
+.ext-button.is-open {
+    background: #e3e6e9;
+}
+
+.ext-button img {
+    width: 20px;
+    height: 20px;
+}
+
+/* A quiet stand-in for the page underneath: a grid of tiles, no real site. */
+.page {
+    display: grid;
+    grid-template-columns: repeat(3, 180px);
+    gap: 22px 20px;
+    padding: 30px 36px;
+}
+
+.page-head {
+    grid-column: 1 / -1;
+    width: 200px;
+    height: 14px;
+    margin-bottom: 4px;
+    border-radius: 7px;
+    background: #e1e4e8;
+}
+
+.page-tile::before {
+    content: "";
+    display: block;
+    height: 100px;
+    margin-bottom: 12px;
+    border-radius: 8px;
+    background: #e6e9ec;
+}
+
+.page-tile::after {
+    content: "";
+    display: block;
+    width: 70%;
+    height: 10px;
+    border-radius: 5px;
+    background: #e6e9ec;
+}
+
+/* ---------- The popup, where Chrome opens it ---------- */
+
+.popup {
+    position: absolute;
+    display: block;
+    border-radius: 10px;
+    box-shadow:
+        0 0 0 1px rgba(0, 0, 0, 0.35),
+        0 24px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+/* ---------- Callouts (positioned by layout.js) ---------- */
+
+.leaders {
+    position: absolute;
+    inset: 0;
+    width: 1280px;
+    height: 800px;
+    overflow: visible;
+    pointer-events: none;
+}
+
+/* Each leader is drawn twice: a white halo keeps it visible over the dark popup. */
+.leaders .halo {
+    fill: none;
+    stroke: #fff;
+    stroke-width: 5;
+}
+
+.leaders .line {
+    fill: none;
+    stroke: var(--ink);
+    stroke-width: 1.75;
+}
+
+.leaders circle {
+    fill: #fff;
+    stroke: var(--ink);
+    stroke-width: 2.5;
+}
+
+.callout {
+    position: absolute;
+    padding: 9px 14px;
+    white-space: nowrap;
+    border-radius: 10px;
+    background: var(--ink);
+    color: #fff;
+    font-family: var(--caption);
+    font-size: 16.5px;
+    font-weight: 600;
+    line-height: 1.3;
+}
