@@ -1,0 +1,238 @@
+{
+  "extName": {
+    "message": "Search automatic rewards"
+  },
+  "extDescription": {
+    "message": "Hace tus búsquedas diarias de Microsoft Rewards en Bing automáticamente o con un clic."
+  },
+  "localeTag": {
+    "message": "es"
+  },
+  "updateBadge": {
+    "message": "New"
+  },
+  "sponsorButton": {
+    "message": "Apoyar"
+  },
+  "sponsorButtonTooltip": {
+    "message": "¿Te gusta la extensión? Apoya desde 2 USD al mes, o desde 5 USD al mes para que tu nombre aparezca en el README."
+  },
+  "getRewardsButton": {
+    "message": "Obtener recompensas"
+  },
+  "stopSearchesButton": {
+    "message": "Detener búsquedas"
+  },
+  "progressRunning": {
+    "message": "Buscando…"
+  },
+  "progressDone": {
+    "message": "Búsquedas completadas"
+  },
+  "progressStopped": {
+    "message": "Búsquedas detenidas"
+  },
+  "progressBarLabel_one": {
+    "message": "Búsquedas diarias: $done$ de $total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "1"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "progressBarLabel_other": {
+    "message": "Búsquedas diarias: $done$ de $total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "3"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "dailyTasksHeading": {
+    "message": "Tareas diarias"
+  },
+  "dailySearchesLabel": {
+    "message": "Búsquedas diarias"
+  },
+  "dailySearchesInfo": {
+    "message": "Hace tus búsquedas en Bing una vez al día: al abrir el navegador, o en las 6 horas siguientes al inicio de un nuevo día si sigue abierto. Si está desactivado, $button$ tampoco hace las búsquedas.",
+    "placeholders": {
+      "button": {
+        "content": "$1",
+        "example": "Get rewards"
+      }
+    }
+  },
+  "dailySetLabel": {
+    "message": "Conjunto diario"
+  },
+  "dailySetInfo": {
+    "message": "Abre el panel de Rewards y completa el conjunto diario de hoy para conseguir puntos extra."
+  },
+  "claimPointsLabel": {
+    "message": "Reclamar puntos"
+  },
+  "claimPointsInfo": {
+    "message": "Abre el panel de Rewards y pulsa Listo para reclamar, para que los puntos ganados lleguen a tu saldo. La pestaña pasa al frente un momento."
+  },
+  "searchSettingsHeading": {
+    "message": "Ajustes de búsqueda"
+  },
+  "accountLevelLabel": {
+    "message": "Nivel de la cuenta"
+  },
+  "accountLevelInfo": {
+    "message": "Fija un número de búsquedas por defecto: Miembro 5, Plata 10, Oro 20. Puedes cambiarlo abajo."
+  },
+  "accountLevelMember": {
+    "message": "Miembro"
+  },
+  "accountLevelSilver": {
+    "message": "Plata"
+  },
+  "accountLevelGold": {
+    "message": "Oro"
+  },
+  "searchesPerRunLabel": {
+    "message": "Búsquedas por ronda"
+  },
+  "searchesPerRunInfo": {
+    "message": "Cuántas búsquedas de Bing abre cada ronda, una pestaña a la vez."
+  },
+  "searchGapLabel": {
+    "message": "Segundos entre búsquedas"
+  },
+  "searchGapWarning": {
+    "message": "Los intervalos muy cortos pueden parecer automáticos. Prueba con $seconds$ s.",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "60"
+      }
+    }
+  },
+  "closeTabDelayLabel": {
+    "message": "Cerrar cada pestaña tras (s)"
+  },
+  "openFirstResultLabel": {
+    "message": "Abrir el primer resultado"
+  },
+  "openFirstResultInfo": {
+    "message": "En cada pestaña de búsqueda, abre el primer resultado tras una breve espera aleatoria."
+  },
+  "promoTilesLabel": {
+    "message": "Más del desarrollador"
+  },
+  "joinRewardsTile": {
+    "message": "Únete"
+  },
+  "joinRewardsTooltip": {
+    "message": "Únete a Microsoft Rewards y gana puntos con Bing"
+  },
+  "freeGamesTile": {
+    "message": "Juegos gratis"
+  },
+  "crossPromoLabel": {
+    "message": "$product$: juegos gratis de Epic, Steam, GOG y Prime",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Free Game Claimer"
+      }
+    }
+  },
+  "phoneAppTile": {
+    "message": "App Android"
+  },
+  "androidAppHeading": {
+    "message": "Descarga la app para Android"
+  },
+  "androidAppPanelLabel": {
+    "message": "App para Android"
+  },
+  "androidAppQrAlt": {
+    "message": "Código QR de la app en Google Play"
+  },
+  "androidAppScanHint": {
+    "message": "Escanea con tu teléfono, o"
+  },
+  "androidAppOpenStore": {
+    "message": "Abrir Google Play"
+  },
+  "notNowButton": {
+    "message": "Ahora no"
+  },
+  "reviewCardLabel": {
+    "message": "Valora esta extensión"
+  },
+  "reviewCardTitle": {
+    "message": "¿Te gusta $name$?",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Search automatic rewards"
+      }
+    }
+  },
+  "reviewCardBody": {
+    "message": "Una valoración rápida ayuda a que otras personas la encuentren."
+  },
+  "rateButton": {
+    "message": "Valorar"
+  },
+  "reportProblemLink": {
+    "message": "¿Falla? Avísanos"
+  },
+  "sponsorCardLabel": {
+    "message": "Apoya esta extensión"
+  },
+  "sponsorCardTitle_one": {
+    "message": "Ya va $count$ ronda de búsquedas por ti",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "sponsorCardTitle_other": {
+    "message": "Ya van $count$ rondas de búsquedas por ti",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "30"
+      }
+    }
+  },
+  "sponsorCardBody": {
+    "message": "Gratis y hecha en mi tiempo libre. Tu apoyo la mantiene funcionando cuando Bing cambia."
+  },
+  "sponsorCardButton": {
+    "message": "Apoyar desde 2 USD"
+  },
+  "sponsorCardButtonTooltip": {
+    "message": "En GitHub, mensual o una sola vez"
+  },
+  "footerRewardsLink": {
+    "message": "Rewards"
+  },
+  "footerHelpLink": {
+    "message": "Ayuda"
+  },
+  "footerContactLink": {
+    "message": "Contacto"
+  },
+  "footerDonateLink": {
+    "message": "Donar"
+  }
+}

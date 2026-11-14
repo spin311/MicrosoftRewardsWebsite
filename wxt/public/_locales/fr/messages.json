@@ -1,0 +1,238 @@
+{
+  "extName": {
+    "message": "Search automatic rewards"
+  },
+  "extDescription": {
+    "message": "Effectue vos recherches Bing quotidiennes pour Microsoft Rewards, automatiquement ou en un clic."
+  },
+  "localeTag": {
+    "message": "fr"
+  },
+  "updateBadge": {
+    "message": "MàJ"
+  },
+  "sponsorButton": {
+    "message": "Soutenir"
+  },
+  "sponsorButtonTooltip": {
+    "message": "Vous aimez l’extension ? Soutenez-la dès 2 $$ US par mois, ou dès 5 $$ US par mois pour voir votre nom dans le README."
+  },
+  "getRewardsButton": {
+    "message": "Obtenir les récompenses"
+  },
+  "stopSearchesButton": {
+    "message": "Arrêter les recherches"
+  },
+  "progressRunning": {
+    "message": "Recherche…"
+  },
+  "progressDone": {
+    "message": "Recherches terminées"
+  },
+  "progressStopped": {
+    "message": "Recherches arrêtées"
+  },
+  "progressBarLabel_one": {
+    "message": "Recherches quotidiennes : $done$ sur $total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "1"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "progressBarLabel_other": {
+    "message": "Recherches quotidiennes : $done$ sur $total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "3"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "dailyTasksHeading": {
+    "message": "Tâches quotidiennes"
+  },
+  "dailySearchesLabel": {
+    "message": "Recherches quotidiennes"
+  },
+  "dailySearchesInfo": {
+    "message": "Lance vos recherches Bing une fois par jour : à l’ouverture du navigateur, ou dans les 6 h d’un nouveau jour s’il reste ouvert. Désactivé, « $button$ » saute aussi les recherches.",
+    "placeholders": {
+      "button": {
+        "content": "$1",
+        "example": "Get rewards"
+      }
+    }
+  },
+  "dailySetLabel": {
+    "message": "Ensemble quotidien"
+  },
+  "dailySetInfo": {
+    "message": "Ouvre le tableau de bord Rewards et effectue l’ensemble quotidien du jour pour des points supplémentaires."
+  },
+  "claimPointsLabel": {
+    "message": "Récupérer les points"
+  },
+  "claimPointsInfo": {
+    "message": "Ouvre le tableau de bord Rewards et appuie sur Prêt à récupérer, pour que les points gagnés arrivent sur votre solde. L’onglet passe brièvement au premier plan."
+  },
+  "searchSettingsHeading": {
+    "message": "Paramètres de recherche"
+  },
+  "accountLevelLabel": {
+    "message": "Niveau du compte"
+  },
+  "accountLevelInfo": {
+    "message": "Définit un nombre de recherches par défaut : Membre 5, Argent 10, Or 20. Vous pouvez toujours le modifier ci-dessous."
+  },
+  "accountLevelMember": {
+    "message": "Membre"
+  },
+  "accountLevelSilver": {
+    "message": "Argent"
+  },
+  "accountLevelGold": {
+    "message": "Or"
+  },
+  "searchesPerRunLabel": {
+    "message": "Recherches par série"
+  },
+  "searchesPerRunInfo": {
+    "message": "Nombre de recherches Bing ouvertes à chaque série, un onglet à la fois."
+  },
+  "searchGapLabel": {
+    "message": "Secondes entre recherches"
+  },
+  "searchGapWarning": {
+    "message": "Des intervalles très courts peuvent sembler automatisés. Essayez $seconds$ s.",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "60"
+      }
+    }
+  },
+  "closeTabDelayLabel": {
+    "message": "Fermer l’onglet après (s)"
+  },
+  "openFirstResultLabel": {
+    "message": "Ouvrir le premier résultat"
+  },
+  "openFirstResultInfo": {
+    "message": "Dans chaque onglet de recherche, ouvre le premier résultat après un court délai aléatoire."
+  },
+  "promoTilesLabel": {
+    "message": "Plus du développeur"
+  },
+  "joinRewardsTile": {
+    "message": "S’inscrire"
+  },
+  "joinRewardsTooltip": {
+    "message": "Rejoignez Microsoft Rewards et gagnez des points avec Bing"
+  },
+  "freeGamesTile": {
+    "message": "Jeux gratuits"
+  },
+  "crossPromoLabel": {
+    "message": "$product$ : jeux gratuits d’Epic, Steam, GOG et Prime",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Free Game Claimer"
+      }
+    }
+  },
+  "phoneAppTile": {
+    "message": "Appli mobile"
+  },
+  "androidAppHeading": {
+    "message": "Téléchargez l’appli Android"
+  },
+  "androidAppPanelLabel": {
+    "message": "Appli Android"
+  },
+  "androidAppQrAlt": {
+    "message": "QR code de l’appli sur Google Play"
+  },
+  "androidAppScanHint": {
+    "message": "Scannez avec votre téléphone, ou"
+  },
+  "androidAppOpenStore": {
+    "message": "Ouvrir Google Play"
+  },
+  "notNowButton": {
+    "message": "Plus tard"
+  },
+  "reviewCardLabel": {
+    "message": "Notez cette extension"
+  },
+  "reviewCardTitle": {
+    "message": "Vous aimez $name$ ?",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Search automatic rewards"
+      }
+    }
+  },
+  "reviewCardBody": {
+    "message": "Une note rapide aide d’autres personnes à la trouver."
+  },
+  "rateButton": {
+    "message": "Noter"
+  },
+  "reportProblemLink": {
+    "message": "Un souci ? Signalez-le"
+  },
+  "sponsorCardLabel": {
+    "message": "Soutenez cette extension"
+  },
+  "sponsorCardTitle_one": {
+    "message": "$count$ série de recherches faite pour vous",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "sponsorCardTitle_other": {
+    "message": "$count$ séries de recherches faites pour vous",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "30"
+      }
+    }
+  },
+  "sponsorCardBody": {
+    "message": "Gratuite et développée sur mon temps libre. Votre soutien la fait fonctionner quand Bing change."
+  },
+  "sponsorCardButton": {
+    "message": "Soutenir dès 2 $$ US"
+  },
+  "sponsorCardButtonTooltip": {
+    "message": "Sur GitHub, mensuel ou ponctuel"
+  },
+  "footerRewardsLink": {
+    "message": "Rewards"
+  },
+  "footerHelpLink": {
+    "message": "Aide"
+  },
+  "footerContactLink": {
+    "message": "Contact"
+  },
+  "footerDonateLink": {
+    "message": "Don"
+  }
+}

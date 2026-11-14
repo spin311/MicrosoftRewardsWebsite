@@ -1,0 +1,238 @@
+{
+  "extName": {
+    "message": "Search automatic rewards"
+  },
+  "extDescription": {
+    "message": "Tự động thực hiện các lượt tìm kiếm Bing hằng ngày cho Microsoft Rewards, hoặc chỉ với một cú nhấp."
+  },
+  "localeTag": {
+    "message": "vi"
+  },
+  "updateBadge": {
+    "message": "Mới"
+  },
+  "sponsorButton": {
+    "message": "Ủng hộ"
+  },
+  "sponsorButtonTooltip": {
+    "message": "Bạn thích tiện ích này? Ủng hộ từ 2 USD mỗi tháng, hoặc từ 5 USD mỗi tháng để có tên trong README."
+  },
+  "getRewardsButton": {
+    "message": "Nhận thưởng"
+  },
+  "stopSearchesButton": {
+    "message": "Dừng tìm kiếm"
+  },
+  "progressRunning": {
+    "message": "Đang tìm kiếm…"
+  },
+  "progressDone": {
+    "message": "Đã tìm kiếm xong"
+  },
+  "progressStopped": {
+    "message": "Đã dừng tìm kiếm"
+  },
+  "progressBarLabel_one": {
+    "message": "Tìm kiếm hằng ngày: $done$/$total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "1"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "progressBarLabel_other": {
+    "message": "Tìm kiếm hằng ngày: $done$/$total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "3"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "dailyTasksHeading": {
+    "message": "Nhiệm vụ hằng ngày"
+  },
+  "dailySearchesLabel": {
+    "message": "Tìm kiếm hằng ngày"
+  },
+  "dailySearchesInfo": {
+    "message": "Chạy tìm kiếm Bing mỗi ngày một lần: khi mở trình duyệt, hoặc trong vòng 6 giờ sau khi sang ngày mới nếu trình duyệt vẫn mở. Khi tắt, nút $button$ cũng bỏ qua tìm kiếm.",
+    "placeholders": {
+      "button": {
+        "content": "$1",
+        "example": "Get rewards"
+      }
+    }
+  },
+  "dailySetLabel": {
+    "message": "Hoạt động hằng ngày"
+  },
+  "dailySetInfo": {
+    "message": "Mở bảng điều khiển Rewards và làm hoạt động hằng ngày hôm nay để nhận thêm điểm."
+  },
+  "claimPointsLabel": {
+    "message": "Nhận điểm"
+  },
+  "claimPointsInfo": {
+    "message": "Mở bảng điều khiển Rewards và bấm Sẵn sàng nhận, để điểm đã kiếm được vào số dư của bạn. Thẻ sẽ được đưa lên trước trong giây lát."
+  },
+  "searchSettingsHeading": {
+    "message": "Cài đặt tìm kiếm"
+  },
+  "accountLevelLabel": {
+    "message": "Cấp tài khoản"
+  },
+  "accountLevelInfo": {
+    "message": "Đặt số lượt tìm kiếm mặc định: Thành viên 5, Bạc 10, Vàng 20. Bạn vẫn có thể đổi ở bên dưới."
+  },
+  "accountLevelMember": {
+    "message": "Thành viên"
+  },
+  "accountLevelSilver": {
+    "message": "Bạc"
+  },
+  "accountLevelGold": {
+    "message": "Vàng"
+  },
+  "searchesPerRunLabel": {
+    "message": "Số lượt tìm mỗi lần chạy"
+  },
+  "searchesPerRunInfo": {
+    "message": "Số lượt tìm kiếm Bing mỗi lần chạy sẽ mở, từng thẻ một."
+  },
+  "searchGapLabel": {
+    "message": "Số giây giữa các lượt tìm"
+  },
+  "searchGapWarning": {
+    "message": "Khoảng cách quá ngắn có thể trông như tự động. Hãy thử $seconds$ giây.",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "60"
+      }
+    }
+  },
+  "closeTabDelayLabel": {
+    "message": "Đóng mỗi thẻ sau (giây)"
+  },
+  "openFirstResultLabel": {
+    "message": "Mở kết quả đầu tiên"
+  },
+  "openFirstResultInfo": {
+    "message": "Trong mỗi thẻ tìm kiếm, mở kết quả đầu tiên sau một khoảng chờ ngắn ngẫu nhiên."
+  },
+  "promoTilesLabel": {
+    "message": "Thêm từ nhà phát triển"
+  },
+  "joinRewardsTile": {
+    "message": "Tham gia"
+  },
+  "joinRewardsTooltip": {
+    "message": "Tham gia Microsoft Rewards và kiếm điểm với Bing"
+  },
+  "freeGamesTile": {
+    "message": "Game free"
+  },
+  "crossPromoLabel": {
+    "message": "$product$: game miễn phí từ Epic, Steam, GOG và Prime",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Free Game Claimer"
+      }
+    }
+  },
+  "phoneAppTile": {
+    "message": "App di động"
+  },
+  "androidAppHeading": {
+    "message": "Tải ứng dụng Android"
+  },
+  "androidAppPanelLabel": {
+    "message": "Ứng dụng Android"
+  },
+  "androidAppQrAlt": {
+    "message": "Mã QR của ứng dụng trên Google Play"
+  },
+  "androidAppScanHint": {
+    "message": "Quét bằng điện thoại, hoặc"
+  },
+  "androidAppOpenStore": {
+    "message": "Mở Google Play"
+  },
+  "notNowButton": {
+    "message": "Để sau"
+  },
+  "reviewCardLabel": {
+    "message": "Đánh giá tiện ích này"
+  },
+  "reviewCardTitle": {
+    "message": "Bạn có thích $name$ không?",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Search automatic rewards"
+      }
+    }
+  },
+  "reviewCardBody": {
+    "message": "Một đánh giá nhanh giúp người khác tìm thấy tiện ích."
+  },
+  "rateButton": {
+    "message": "Đánh giá"
+  },
+  "reportProblemLink": {
+    "message": "Không chạy? Báo lỗi"
+  },
+  "sponsorCardLabel": {
+    "message": "Ủng hộ tiện ích này"
+  },
+  "sponsorCardTitle_one": {
+    "message": "Đã chạy tìm kiếm $count$ lần cho bạn",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "sponsorCardTitle_other": {
+    "message": "Đã chạy tìm kiếm $count$ lần cho bạn",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "30"
+      }
+    }
+  },
+  "sponsorCardBody": {
+    "message": "Miễn phí và được làm trong thời gian rảnh của tôi. Sự ủng hộ giúp tiện ích tiếp tục chạy khi Bing thay đổi."
+  },
+  "sponsorCardButton": {
+    "message": "Ủng hộ từ 2 USD"
+  },
+  "sponsorCardButtonTooltip": {
+    "message": "Trên GitHub, hằng tháng hoặc một lần"
+  },
+  "footerRewardsLink": {
+    "message": "Rewards"
+  },
+  "footerHelpLink": {
+    "message": "Trợ giúp"
+  },
+  "footerContactLink": {
+    "message": "Liên hệ"
+  },
+  "footerDonateLink": {
+    "message": "Quyên góp"
+  }
+}

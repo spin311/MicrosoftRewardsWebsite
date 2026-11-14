@@ -1,0 +1,238 @@
+{
+  "extName": {
+    "message": "自動搜尋獎勵"
+  },
+  "extDescription": {
+    "message": "每天自動完成 Microsoft Rewards 的 Bing 搜尋，也可以一鍵執行。"
+  },
+  "localeTag": {
+    "message": "zh-TW"
+  },
+  "updateBadge": {
+    "message": "新"
+  },
+  "sponsorButton": {
+    "message": "贊助"
+  },
+  "sponsorButtonTooltip": {
+    "message": "喜歡這個擴充功能嗎？每月 $$2 起即可贊助，每月 $$5 起會把你的名字寫進 README。"
+  },
+  "getRewardsButton": {
+    "message": "取得獎勵"
+  },
+  "stopSearchesButton": {
+    "message": "停止搜尋"
+  },
+  "progressRunning": {
+    "message": "搜尋中…"
+  },
+  "progressDone": {
+    "message": "搜尋全部完成"
+  },
+  "progressStopped": {
+    "message": "搜尋已停止"
+  },
+  "progressBarLabel_one": {
+    "message": "每日搜尋：已完成 $done$/$total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "1"
+      },
+      "total": {
+        "content": "$2",
+        "example": "1"
+      }
+    }
+  },
+  "progressBarLabel_other": {
+    "message": "每日搜尋：已完成 $done$/$total$",
+    "placeholders": {
+      "done": {
+        "content": "$1",
+        "example": "3"
+      },
+      "total": {
+        "content": "$2",
+        "example": "5"
+      }
+    }
+  },
+  "dailyTasksHeading": {
+    "message": "每日任務"
+  },
+  "dailySearchesLabel": {
+    "message": "每日搜尋"
+  },
+  "dailySearchesInfo": {
+    "message": "每天執行一次 Bing 搜尋：在瀏覽器開啟時，或瀏覽器一直開著時在新的一天開始後 6 小時內。關閉時，「$button$」也會略過搜尋。",
+    "placeholders": {
+      "button": {
+        "content": "$1",
+        "example": "Get rewards"
+      }
+    }
+  },
+  "dailySetLabel": {
+    "message": "每日活動"
+  },
+  "dailySetInfo": {
+    "message": "開啟 Rewards 儀表板，完成今天的每日活動，獲得額外點數。"
+  },
+  "claimPointsLabel": {
+    "message": "領取點數"
+  },
+  "claimPointsInfo": {
+    "message": "開啟 Rewards 儀表板並點擊「可領取」，讓已獲得的點數計入餘額。該分頁會短暫切到前景。"
+  },
+  "searchSettingsHeading": {
+    "message": "搜尋設定"
+  },
+  "accountLevelLabel": {
+    "message": "帳戶等級"
+  },
+  "accountLevelInfo": {
+    "message": "設定預設搜尋次數：會員 5、銀級 10、金級 20。你仍可在下方修改。"
+  },
+  "accountLevelMember": {
+    "message": "會員"
+  },
+  "accountLevelSilver": {
+    "message": "銀級"
+  },
+  "accountLevelGold": {
+    "message": "金級"
+  },
+  "searchesPerRunLabel": {
+    "message": "每次執行的搜尋次數"
+  },
+  "searchesPerRunInfo": {
+    "message": "每次執行開啟多少個 Bing 搜尋，一次一個分頁。"
+  },
+  "searchGapLabel": {
+    "message": "搜尋間隔（秒）"
+  },
+  "searchGapWarning": {
+    "message": "間隔太短可能看起來像自動操作。建議 $seconds$ 秒。",
+    "placeholders": {
+      "seconds": {
+        "content": "$1",
+        "example": "60"
+      }
+    }
+  },
+  "closeTabDelayLabel": {
+    "message": "每個分頁在幾秒後關閉"
+  },
+  "openFirstResultLabel": {
+    "message": "開啟第一個結果"
+  },
+  "openFirstResultInfo": {
+    "message": "在每個搜尋分頁中，隨機等待片刻後開啟第一個結果。"
+  },
+  "promoTilesLabel": {
+    "message": "開發者的更多內容"
+  },
+  "joinRewardsTile": {
+    "message": "加入 Rewards"
+  },
+  "joinRewardsTooltip": {
+    "message": "加入 Microsoft Rewards，使用 Bing 賺取點數"
+  },
+  "freeGamesTile": {
+    "message": "免費遊戲"
+  },
+  "crossPromoLabel": {
+    "message": "$product$：Epic、Steam、GOG 和 Prime 的免費遊戲",
+    "placeholders": {
+      "product": {
+        "content": "$1",
+        "example": "Free Game Claimer"
+      }
+    }
+  },
+  "phoneAppTile": {
+    "message": "手機 App"
+  },
+  "androidAppHeading": {
+    "message": "取得 Android App"
+  },
+  "androidAppPanelLabel": {
+    "message": "Android App"
+  },
+  "androidAppQrAlt": {
+    "message": "Google Play 上此 App 的 QR 碼"
+  },
+  "androidAppScanHint": {
+    "message": "用手機掃描，或"
+  },
+  "androidAppOpenStore": {
+    "message": "開啟 Google Play"
+  },
+  "notNowButton": {
+    "message": "以後再說"
+  },
+  "reviewCardLabel": {
+    "message": "為此擴充功能評分"
+  },
+  "reviewCardTitle": {
+    "message": "喜歡 $name$ 嗎？",
+    "placeholders": {
+      "name": {
+        "content": "$1",
+        "example": "Search automatic rewards"
+      }
+    }
+  },
+  "reviewCardBody": {
+    "message": "花幾秒評個分，能幫更多人找到它。"
+  },
+  "rateButton": {
+    "message": "去評分"
+  },
+  "reportProblemLink": {
+    "message": "無法使用？回報問題"
+  },
+  "sponsorCardLabel": {
+    "message": "支持此擴充功能"
+  },
+  "sponsorCardTitle_one": {
+    "message": "已為你完成 $count$ 輪搜尋",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "1"
+      }
+    }
+  },
+  "sponsorCardTitle_other": {
+    "message": "已為你完成 $count$ 輪搜尋",
+    "placeholders": {
+      "count": {
+        "content": "$1",
+        "example": "30"
+      }
+    }
+  },
+  "sponsorCardBody": {
+    "message": "免費，由我利用業餘時間開發。你的贊助能讓它在 Bing 改版後繼續運作。"
+  },
+  "sponsorCardButton": {
+    "message": "$$2 起贊助"
+  },
+  "sponsorCardButtonTooltip": {
+    "message": "在 GitHub 上，按月或單次"
+  },
+  "footerRewardsLink": {
+    "message": "Rewards"
+  },
+  "footerHelpLink": {
+    "message": "說明"
+  },
+  "footerContactLink": {
+    "message": "聯絡"
+  },
+  "footerDonateLink": {
+    "message": "捐款"
+  }
+}
