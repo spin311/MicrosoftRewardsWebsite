@@ -5,6 +5,7 @@ import { StorageValues } from '@/entrypoints/enums/storageValues';
 import { toInt } from '@/entrypoints/utils/search';
 import { DEFAULTS } from '@/entrypoints/utils/settings';
 import { setBadgeText } from '@/entrypoints/utils/browserAction';
+import { t } from '@/entrypoints/utils/i18n';
 import { openDailyRewards } from './dailyRewards';
 import { startSearches, stopSearches } from './searchRunner';
 import { clearTrackedTabs } from './tabCleanup';
@@ -139,7 +140,7 @@ export async function handleInstallOrUpdate(details: { reason: string }): Promis
         }, StorageValues.SYNC);
         setTimeout(() => { browser.tabs.create({ url: WEBSITE_URL, active: true }); }, 1000);
     } else if (details.reason === 'update') {
-        setBadgeText('New');
+        setBadgeText(t('updateBadge'));
         // Versions up to 3.2.0 set an uninstall page at install, and the browser
         // keeps it; '' clears it so uninstalling opens nothing. Best effort: it is
         // only tidy-up.
