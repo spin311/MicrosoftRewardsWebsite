@@ -74,16 +74,16 @@
     }
   },
   "dailySetLabel": {
-    "message": "Hoạt động hằng ngày"
+    "message": "Daily set"
   },
   "dailySetInfo": {
-    "message": "Mở bảng điều khiển Rewards và làm hoạt động hằng ngày hôm nay để nhận thêm điểm."
+    "message": "Mở bảng điều khiển Rewards và bấm vào Daily set hôm nay để nhận thêm điểm."
   },
   "claimPointsLabel": {
     "message": "Nhận điểm"
   },
   "claimPointsInfo": {
-    "message": "Mở bảng điều khiển Rewards và bấm Sẵn sàng nhận, để điểm đã kiếm được vào số dư của bạn. Thẻ sẽ được đưa lên trước trong giây lát."
+    "message": "Mở bảng điều khiển Rewards và bấm Ready to claim, để điểm đã kiếm được vào số dư của bạn. Thẻ sẽ được đưa lên trước trong giây lát."
   },
   "searchSettingsHeading": {
     "message": "Cài đặt tìm kiếm"
@@ -92,19 +92,19 @@
     "message": "Cấp tài khoản"
   },
   "accountLevelInfo": {
-    "message": "Đặt số lượt tìm kiếm mặc định: Thành viên 5, Bạc 10, Vàng 20. Bạn vẫn có thể đổi ở bên dưới."
+    "message": "Đặt số lượt tìm kiếm mặc định: Member 5, Silver 10, Gold 20. Bạn vẫn có thể đổi ở bên dưới."
   },
   "accountLevelMember": {
-    "message": "Thành viên"
+    "message": "Member"
   },
   "accountLevelSilver": {
-    "message": "Bạc"
+    "message": "Silver"
   },
   "accountLevelGold": {
-    "message": "Vàng"
+    "message": "Gold"
   },
   "searchesPerRunLabel": {
-    "message": "Số lượt tìm mỗi lần chạy"
+    "message": "Số lượt tìm mỗi lần"
   },
   "searchesPerRunInfo": {
     "message": "Số lượt tìm kiếm Bing mỗi lần chạy sẽ mở, từng thẻ một."

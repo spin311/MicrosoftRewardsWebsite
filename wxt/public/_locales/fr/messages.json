@@ -65,7 +65,7 @@
     "message": "Recherches quotidiennes"
   },
   "dailySearchesInfo": {
-    "message": "Lance vos recherches Bing une fois par jour : à l’ouverture du navigateur, ou dans les 6 h d’un nouveau jour s’il reste ouvert. Désactivé, « $button$ » saute aussi les recherches.",
+    "message": "Lance vos recherches Bing une fois par jour : à l’ouverture du navigateur, ou dans les 6 h d’un nouveau jour s’il reste ouvert. Désactivé, « $button$ » ignore aussi les recherches.",
     "placeholders": {
       "button": {
         "content": "$1",
@@ -74,16 +74,16 @@
     }
   },
   "dailySetLabel": {
-    "message": "Ensemble quotidien"
+    "message": "Objectifs quotidiens"
   },
   "dailySetInfo": {
-    "message": "Ouvre le tableau de bord Rewards et effectue l’ensemble quotidien du jour pour des points supplémentaires."
+    "message": "Ouvre le tableau de bord Rewards et clique sur les objectifs quotidiens du jour pour des points supplémentaires."
   },
   "claimPointsLabel": {
-    "message": "Récupérer les points"
+    "message": "Réclamer les points"
   },
   "claimPointsInfo": {
-    "message": "Ouvre le tableau de bord Rewards et appuie sur Prêt à récupérer, pour que les points gagnés arrivent sur votre solde. L’onglet passe brièvement au premier plan."
+    "message": "Ouvre le tableau de bord Rewards et appuie sur Prêt à réclamer, pour que les points gagnés arrivent sur votre solde. L’onglet passe brièvement au premier plan."
   },
   "searchSettingsHeading": {
     "message": "Paramètres de recherche"
@@ -215,7 +215,7 @@
     }
   },
   "sponsorCardBody": {
-    "message": "Gratuite et développée sur mon temps libre. Votre soutien la fait fonctionner quand Bing change."
+    "message": "Gratuite et développée sur mon temps libre. Votre soutien permet de la maintenir à jour quand Bing change."
   },
   "sponsorCardButton": {
     "message": "Soutenir dès 2 $$ US"

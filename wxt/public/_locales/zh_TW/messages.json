@@ -74,16 +74,16 @@
     }
   },
   "dailySetLabel": {
-    "message": "每日活動"
+    "message": "每日設定任務"
   },
   "dailySetInfo": {
-    "message": "開啟 Rewards 儀表板，完成今天的每日活動，獲得額外點數。"
+    "message": "開啟 Rewards 儀表板，點擊今天的每日設定任務，獲得額外點數。"
   },
   "claimPointsLabel": {
     "message": "領取點數"
   },
   "claimPointsInfo": {
-    "message": "開啟 Rewards 儀表板並點擊「可領取」，讓已獲得的點數計入餘額。該分頁會短暫切到前景。"
+    "message": "開啟 Rewards 儀表板並點擊「準備領取」，讓已獲得的點數計入餘額。該分頁會短暫切到前景。"
   },
   "searchSettingsHeading": {
     "message": "搜尋設定"

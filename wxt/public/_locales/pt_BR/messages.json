@@ -65,7 +65,7 @@
     "message": "Pesquisas diárias"
   },
   "dailySearchesInfo": {
-    "message": "Faz suas pesquisas no Bing uma vez por dia: ao abrir o navegador, ou em até 6 horas depois que um novo dia começa, se ele continuar aberto. Desligado, $button$ também pula as pesquisas.",
+    "message": "Faz suas pesquisas no Bing uma vez por dia: ao abrir o navegador ou, se ele ficar aberto, até 6 h após a virada do dia. Desligado, $button$ também pula as pesquisas.",
     "placeholders": {
       "button": {
         "content": "$1",
@@ -77,7 +77,7 @@
     "message": "Conjunto diário"
   },
   "dailySetInfo": {
-    "message": "Abre o painel do Rewards e faz o conjunto diário de hoje para ganhar pontos extras."
+    "message": "Abre o painel do Rewards e clica no conjunto diário de hoje para ganhar pontos extras."
   },
   "claimPointsLabel": {
     "message": "Resgatar pontos"

@@ -74,16 +74,16 @@
     }
   },
   "dailySetLabel": {
-    "message": "每日活动"
+    "message": "每日任务集"
   },
   "dailySetInfo": {
-    "message": "打开 Rewards 仪表板，完成今天的每日活动，获得额外积分。"
+    "message": "打开 Rewards 仪表板，点击今天的每日任务集，获得额外积分。"
   },
   "claimPointsLabel": {
     "message": "领取积分"
   },
   "claimPointsInfo": {
-    "message": "打开 Rewards 仪表板并点击“可领取”，让已获得的积分计入余额。该标签页会短暂切到前台。"
+    "message": "打开 Rewards 仪表板并点击“准备领取”，让已获得的积分计入余额。该标签页会短暂切到前台。"
   },
   "searchSettingsHeading": {
     "message": "搜索设置"
@@ -92,16 +92,16 @@
     "message": "账户等级"
   },
   "accountLevelInfo": {
-    "message": "设置默认搜索次数：会员 5、银级 10、金级 20。你仍可在下方修改。"
+    "message": "设置默认搜索次数：会员 5、银牌 10、金牌 20。你仍可在下方修改。"
   },
   "accountLevelMember": {
     "message": "会员"
   },
   "accountLevelSilver": {
-    "message": "银级"
+    "message": "银牌"
   },
   "accountLevelGold": {
-    "message": "金级"
+    "message": "金牌"
   },
   "searchesPerRunLabel": {
     "message": "每次运行的搜索次数"
