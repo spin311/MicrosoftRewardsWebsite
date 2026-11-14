@@ -1,4 +1,5 @@
 import type { ReactNode } from 'react';
+import { t } from '@/entrypoints/utils/i18n';
 import HeartIcon from './HeartIcon';
 
 interface PromptCardProps {
@@ -30,7 +31,7 @@ export default function PromptCard({ label, title, body, onDismiss, action, link
             <p className="prompt-card-body">{body}</p>
             <div className="prompt-card-actions">
                 {action}
-                <button type="button" className="prompt-card-button prompt-card-button--quiet" onClick={onDismiss}>Not now</button>
+                <button type="button" className="prompt-card-button prompt-card-button--quiet" onClick={onDismiss}>{t('notNowButton')}</button>
                 {link}
             </div>
         </div>

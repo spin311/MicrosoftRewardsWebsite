@@ -1,4 +1,5 @@
 import { browser } from 'wxt/browser';
+import { t } from '@/entrypoints/utils/i18n';
 
 interface ManualClaimButtonProps {
     isSearching: boolean;
@@ -16,7 +17,7 @@ function ManualClaimButton({ isSearching }: ManualClaimButtonProps) {
 
     return (
         <button id="button" className={`primary-action${isSearching ? ' primary-action--stop' : ''}`} onClick={handleClick}>
-            {isSearching ? 'Stop searches' : 'Get rewards'}
+            {isSearching ? t('stopSearchesButton') : t('getRewardsButton')}
         </button>
     );
 }

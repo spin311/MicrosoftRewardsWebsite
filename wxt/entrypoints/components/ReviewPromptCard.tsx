@@ -1,4 +1,5 @@
 import { ISSUES_URL } from '@/entrypoints/utils/reviewPrompt';
+import { t } from '@/entrypoints/utils/i18n';
 import PromptCard from './PromptCard';
 
 interface ReviewPromptCardProps {
@@ -10,14 +11,14 @@ interface ReviewPromptCardProps {
 export default function ReviewPromptCard({ onRate, onDismiss }: ReviewPromptCardProps) {
     return (
         <PromptCard
-            label="Rate this extension"
-            title="Enjoying Search automatic rewards?"
-            body="A quick rating helps other people find it."
+            label={t('reviewCardLabel')}
+            title={t('reviewCardTitle', t('extName'))}
+            body={t('reviewCardBody')}
             onDismiss={onDismiss}
-            action={<button type="button" className="prompt-card-button" onClick={onRate}>Rate it</button>}
+            action={<button type="button" className="prompt-card-button" onClick={onRate}>{t('rateButton')}</button>}
             link={
                 <a href={ISSUES_URL} className="prompt-card-link" target="_blank" rel="noopener noreferrer">
-                    Not working? Report it
+                    {t('reportProblemLink')}
                 </a>
             }
         />
