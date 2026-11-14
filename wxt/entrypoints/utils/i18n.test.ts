@@ -36,9 +36,24 @@ describe('tPlural', () => {
     expect(tPlural('sponsorCardTitle', 0)).toBe('0 search runs done for you');
   });
 
-  // French counts 0 as "one"; English doesn't. The form follows the browser's language.
-  it('picks the form by the browser UI language', () => {
-    vi.spyOn(fakeBrowser.i18n, 'getUILanguage').mockReturnValue('fr');
+  // A Russian UI with no Russian catalogue is served English text, and Russian
+  // rules would call 31 "one". The form must follow the catalogue actually served.
+  it('picks the form by the served catalogue language, not the browser UI language', () => {
+    vi.spyOn(fakeBrowser.i18n, 'getUILanguage').mockReturnValue('ru');
+    const getMessage = fakeBrowser.i18n.getMessage;
+    vi.spyOn(fakeBrowser.i18n, 'getMessage').mockImplementation((name: string, substitutions?: string | string[]) =>
+      name === 'localeTag' ? 'en' : getMessage(name, substitutions),
+    );
+
+    expect(tPlural('sponsorCardTitle', 31)).toBe('31 search runs done for you');
+  });
+
+  // French counts 0 as "one"; English doesn't.
+  it('uses the served catalogue plural rules for other languages too', () => {
+    const getMessage = fakeBrowser.i18n.getMessage;
+    vi.spyOn(fakeBrowser.i18n, 'getMessage').mockImplementation((name: string, substitutions?: string | string[]) =>
+      name === 'localeTag' ? 'fr' : getMessage(name, substitutions),
+    );
 
     expect(tPlural('sponsorCardTitle', 0)).toBe('0 search run done for you');
   });
