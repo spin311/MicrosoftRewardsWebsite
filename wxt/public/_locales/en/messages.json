@@ -4,7 +4,7 @@
     "description": "Name of the extension. Shown in the toolbar tooltip, on the browser's extensions page, in store listings and as the popup's heading. At most 45 characters (addons.mozilla.org limit). Never add Microsoft, Bing or any other Microsoft name to it."
   },
   "extDescription": {
-    "message": "Script that gives you maximum amount of microsoft rewards points every day automatically or by a click of a button.",
+    "message": "Runs your daily Bing searches for Microsoft Rewards automatically or with one click.",
     "description": "Short description of the extension, shown on the browser's extensions page and in store listings. At most 132 characters (Chrome Web Store limit)."
   },
   "localeTag": {
