@@ -176,7 +176,7 @@
     "message": "為此擴充功能評分"
   },
   "reviewCardTitle": {
-    "message": "喜歡 $name$ 嗎？",
+    "message": "喜歡$name$嗎？",
     "placeholders": {
       "name": {
         "content": "$1",
