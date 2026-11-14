@@ -1,0 +1,264 @@
+{
+  "extName": {
+    "message": "Search automatic rewards",
+    "description": "Name of the extension. Shown in the toolbar tooltip, on the browser's extensions page, in store listings and as the popup's heading. At most 45 characters (addons.mozilla.org limit). Never add Microsoft, Bing or any other Microsoft name to it."
+  },
+  "extDescription": {
+    "message": "Script that gives you maximum amount of microsoft rewards points every day automatically or by a click of a button.",
+    "description": "Short description of the extension, shown on the browser's extensions page and in store listings. At most 132 characters (Chrome Web Store limit)."
+  },
+  "updateBadge": {
+    "message": "New",
+    "description": "Badge on the extension's toolbar icon after it updates, until the popup is opened. At most 4 characters: the badge cuts off anything longer."
+  },
+  "sponsorButton": {
+    "message": "Sponsor",
+    "description": "Button in the popup header that opens the developer's GitHub Sponsors page. One line, about 10 characters: it shares the narrow header with the extension name."
+  },
+  "sponsorButtonTooltip": {
+    "message": "Enjoying the extension? Sponsor from $$2 a month, or from $$5 a month to get your name in the README.",
+    "description": "Tooltip on the header Sponsor button. $$2 and $$5 are prices in US dollars: type $$ wherever a dollar sign should appear (a single $ breaks the message), or write the amount your language's way, such as 2 USD. README is the project's page on GitHub."
+  },
+  "getRewardsButton": {
+    "message": "Get rewards",
+    "description": "Main button at the top of the popup. Starts a run of Bing searches (and the other daily tasks that are on) right away."
+  },
+  "stopSearchesButton": {
+    "message": "Stop searches",
+    "description": "The main button's label while a run of searches is in progress. Pressing it stops the run."
+  },
+  "progressRunning": {
+    "message": "Searching…",
+    "description": "Status above the progress bar while a run of searches is in progress. Shares a line with the count (for example 3/5)."
+  },
+  "progressDone": {
+    "message": "All searches done",
+    "description": "Status above the progress bar once every search of the run has finished. Shares a line with the count (for example 5/5)."
+  },
+  "progressStopped": {
+    "message": "Searches stopped",
+    "description": "Status above the progress bar when the run was stopped before all its searches finished. Shares a line with the count (for example 2/5)."
+  },
+  "progressBarLabel_one": {
+    "message": "$done$ of $total$ daily searches done",
+    "description": "Screen-reader label for the progress bar, used when the total takes your language's 'one' (singular) form. Not shown on screen.",
+    "placeholders": {
+      "done": { "content": "$1", "example": "1" },
+      "total": { "content": "$2", "example": "1" }
+    }
+  },
+  "progressBarLabel_other": {
+    "message": "$done$ of $total$ daily searches done",
+    "description": "Screen-reader label for the progress bar, used for every total that is not your language's 'one' form. Not shown on screen.",
+    "placeholders": {
+      "done": { "content": "$1", "example": "3" },
+      "total": { "content": "$2", "example": "5" }
+    }
+  },
+  "dailyTasksHeading": {
+    "message": "Daily tasks",
+    "description": "Heading of the popup section with the daily on/off switches. Shown in capitals."
+  },
+  "dailySearchesLabel": {
+    "message": "Daily searches",
+    "description": "Label of the switch that runs the Bing searches automatically once a day. Shares a row with an info button and the switch."
+  },
+  "dailySearchesInfo": {
+    "message": "Runs your Bing searches once a day: when the browser opens, or within 6 hours of a new day if it stays open. While off, $button$ skips the searches too.",
+    "description": "Tooltip of the info button next to Daily searches (at most 200px wide, so keep it as short as the English). The placeholder is the main button's label, as translated in getRewardsButton.",
+    "placeholders": {
+      "button": { "content": "$1", "example": "Get rewards" }
+    }
+  },
+  "dailySetLabel": {
+    "message": "Daily set",
+    "description": "Label of the switch that completes today's daily set on the Microsoft Rewards dashboard. Use the name Microsoft Rewards gives the daily set in your language."
+  },
+  "dailySetInfo": {
+    "message": "Opens the Rewards dashboard and clicks today's daily set for extra points.",
+    "description": "Tooltip of the info button next to Daily set (at most 200px wide)."
+  },
+  "claimPointsLabel": {
+    "message": "Claim points",
+    "description": "Label of the switch that claims earned points on the Microsoft Rewards dashboard."
+  },
+  "claimPointsInfo": {
+    "message": "Opens the Rewards dashboard and presses Ready to claim, so earned points land in your balance. The tab briefly takes focus.",
+    "description": "Tooltip of the info button next to Claim points (at most 200px wide). Ready to claim is a button on the Microsoft Rewards dashboard: use the label Microsoft shows in your language."
+  },
+  "searchSettingsHeading": {
+    "message": "Search settings",
+    "description": "Heading of the popup section with the search settings. Shown in capitals."
+  },
+  "accountLevelLabel": {
+    "message": "Account level",
+    "description": "Label of the list for picking the user's Microsoft Rewards account level. It links to Microsoft's page about the levels."
+  },
+  "accountLevelInfo": {
+    "message": "Sets a default number of searches: Member 5, Silver 10, Gold 20. You can still change it below.",
+    "description": "Tooltip of the info button next to Account level (at most 200px wide). Member, Silver and Gold must match accountLevelMember, accountLevelSilver and accountLevelGold; the numbers are searches per run."
+  },
+  "accountLevelMember": {
+    "message": "Member",
+    "description": "Microsoft Rewards' first account level, an option in the Account level list. The list is 88px wide, so keep it short. Use the level name Microsoft Rewards shows in your language."
+  },
+  "accountLevelSilver": {
+    "message": "Silver",
+    "description": "Microsoft Rewards' second account level, an option in the Account level list. The list is 88px wide, so keep it short. Use the level name Microsoft Rewards shows in your language."
+  },
+  "accountLevelGold": {
+    "message": "Gold",
+    "description": "Microsoft Rewards' third account level, an option in the Account level list. The list is 88px wide, so keep it short. Use the level name Microsoft Rewards shows in your language."
+  },
+  "searchesPerRunLabel": {
+    "message": "Searches per run",
+    "description": "Label of the number field for how many Bing searches one run makes."
+  },
+  "searchesPerRunInfo": {
+    "message": "How many Bing searches each run opens, one tab at a time.",
+    "description": "Tooltip of the info button next to Searches per run (at most 200px wide)."
+  },
+  "searchGapLabel": {
+    "message": "Seconds between searches",
+    "description": "Label of the number field for how long to wait between two searches, in seconds."
+  },
+  "searchGapWarning": {
+    "message": "Very short gaps may look automated. Try $seconds$s.",
+    "description": "Warning under the Seconds between searches field when the wait is very short. The placeholder is the suggested wait; the s after it is the abbreviation for seconds.",
+    "placeholders": {
+      "seconds": { "content": "$1", "example": "60" }
+    }
+  },
+  "closeTabDelayLabel": {
+    "message": "Close each tab after (s)",
+    "description": "Label of the number field for how long each search tab stays open. (s) means the value is in seconds."
+  },
+  "openFirstResultLabel": {
+    "message": "Open first result",
+    "description": "Label of the switch that opens the first search result in each search tab."
+  },
+  "openFirstResultInfo": {
+    "message": "In each search tab, opens the first result after a short random delay.",
+    "description": "Tooltip of the info button next to Open first result (at most 200px wide)."
+  },
+  "promoTilesLabel": {
+    "message": "More from the developer",
+    "description": "Screen-reader name for the row of three link tiles at the bottom of the popup. Not shown on screen."
+  },
+  "joinRewardsTile": {
+    "message": "Join Rewards",
+    "description": "Text of the tile that links to the Microsoft Rewards sign-up page. One line in a tile about 90px wide: keep it very short."
+  },
+  "joinRewardsTooltip": {
+    "message": "Join Microsoft Rewards and earn points with Bing",
+    "description": "Tooltip on the Join Rewards tile. Microsoft Rewards and Bing are product names: keep them as they are."
+  },
+  "freeGamesTile": {
+    "message": "Free games",
+    "description": "Text of the tile that links to the developer's other extension, which claims free games. One line in a tile about 90px wide: keep it very short."
+  },
+  "crossPromoLabel": {
+    "message": "$product$ — free games from Epic, Steam, GOG & Prime",
+    "description": "Tooltip on the Free games tile. The placeholder is the other extension's name, which stays in English. Keep Epic, Steam, GOG and Prime as they are: they are store names.",
+    "placeholders": {
+      "product": { "content": "$1", "example": "Free Game Claimer" }
+    }
+  },
+  "phoneAppTile": {
+    "message": "Phone app",
+    "description": "Text of the tile that opens a panel about the Android app. One line in a tile about 90px wide: keep it very short."
+  },
+  "androidAppHeading": {
+    "message": "Get the Android app",
+    "description": "Tooltip on the Phone app tile, and the heading of the panel the tile opens."
+  },
+  "androidAppPanelLabel": {
+    "message": "Android app",
+    "description": "Screen-reader name for the panel with the Android app's QR code. Not shown on screen."
+  },
+  "androidAppQrAlt": {
+    "message": "QR code for the app on Google Play",
+    "description": "Screen-reader description of the QR code image in the Android app panel. Google Play is a product name."
+  },
+  "androidAppScanHint": {
+    "message": "Scan with your phone, or",
+    "description": "Line beside the QR code in the Android app panel. It reads on into the button below it (androidAppOpenStore): 'Scan with your phone, or' / 'Open Google Play'."
+  },
+  "androidAppOpenStore": {
+    "message": "Open Google Play",
+    "description": "Button in the Android app panel that opens the app's Google Play page. It follows the line androidAppScanHint. One line. Google Play is a product name."
+  },
+  "notNowButton": {
+    "message": "Not now",
+    "description": "Button that dismisses a one-time card (the rating or the sponsor request) for good. Shares one row with the card's main button, so keep it short."
+  },
+  "reviewCardLabel": {
+    "message": "Rate this extension",
+    "description": "Screen-reader name for the card that asks for a store rating. Not shown on screen."
+  },
+  "reviewCardTitle": {
+    "message": "Enjoying $name$?",
+    "description": "Title of the card that asks for a store rating. The placeholder is the extension's name, as translated in extName.",
+    "placeholders": {
+      "name": { "content": "$1", "example": "Search automatic rewards" }
+    }
+  },
+  "reviewCardBody": {
+    "message": "A quick rating helps other people find it.",
+    "description": "Text of the card that asks for a store rating."
+  },
+  "rateButton": {
+    "message": "Rate it",
+    "description": "Main button of the rating card; opens the store's review page. Shares one row with Not now and the report link, so keep it short."
+  },
+  "reportProblemLink": {
+    "message": "Not working? Report it",
+    "description": "Link on the rating card to the project's GitHub issues page. One line, sharing a row with two buttons, so keep it short."
+  },
+  "sponsorCardLabel": {
+    "message": "Support this extension",
+    "description": "Screen-reader name for the card that asks for a GitHub sponsorship. Not shown on screen."
+  },
+  "sponsorCardTitle_one": {
+    "message": "$count$ search run done for you",
+    "description": "Title of the card that asks for a sponsorship, used when the number of runs takes your language's 'one' (singular) form. The placeholder is the number, shown in bold.",
+    "placeholders": {
+      "count": { "content": "$1", "example": "1" }
+    }
+  },
+  "sponsorCardTitle_other": {
+    "message": "$count$ search runs done for you",
+    "description": "Title of the card that asks for a sponsorship, used for every number of runs that is not your language's 'one' form. The placeholder is the number, shown in bold.",
+    "placeholders": {
+      "count": { "content": "$1", "example": "30" }
+    }
+  },
+  "sponsorCardBody": {
+    "message": "Free and built in my spare time. Sponsoring keeps it working when Bing changes.",
+    "description": "Text of the card that asks for a sponsorship. 'My' is the developer."
+  },
+  "sponsorCardButton": {
+    "message": "Sponsor from $$2",
+    "description": "Main button of the sponsor card; opens GitHub Sponsors. $$2 is two US dollars: type $$ wherever a dollar sign should appear (a single $ breaks the message), or write the amount your language's way, such as 2 USD. One line, sharing a row with Not now."
+  },
+  "sponsorCardButtonTooltip": {
+    "message": "On GitHub, monthly or one-time",
+    "description": "Tooltip on the sponsor card's button: the sponsorship happens on GitHub and can be monthly or a one-time payment."
+  },
+  "footerRewardsLink": {
+    "message": "Rewards",
+    "description": "Footer link to the Microsoft Rewards dashboard. One word if possible: five footer links share one line."
+  },
+  "footerHelpLink": {
+    "message": "Help",
+    "description": "Footer link to the extension's help page. One word if possible: five footer links share one line."
+  },
+  "footerContactLink": {
+    "message": "Contact",
+    "description": "Footer link to the developer's contact page. One word if possible: five footer links share one line."
+  },
+  "footerDonateLink": {
+    "message": "Donate",
+    "description": "Footer link to the developer's donation page. One word if possible: five footer links share one line."
+  }
+}
