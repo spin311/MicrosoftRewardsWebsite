@@ -1,0 +1,26 @@
+{
+  "screenshot-1-main": {
+    "h": "Vos recherches quotidiennes, faites pour vous",
+    "s": "Lance vos recherches quotidiennes à l'ouverture du navigateur, ou en un clic.",
+    "c": [
+      "Lancez en un clic",
+      "Activez ou désactivez chaque tâche"
+    ]
+  },
+  "screenshot-2-progress": {
+    "h": "Suivez chaque série",
+    "s": "Les recherches s'ouvrent une par une et se ferment une fois chargées.",
+    "c": [
+      "Progression de la série",
+      "Arrêtez à tout moment"
+    ]
+  },
+  "screenshot-3-settings": {
+    "h": "Comme vous voulez",
+    "s": "Choisissez le nombre de recherches, l'intervalle entre elles et la durée d'ouverture de chaque onglet.",
+    "c": [
+      "Nombre de recherches",
+      "Pause entre les recherches"
+    ]
+  }
+}

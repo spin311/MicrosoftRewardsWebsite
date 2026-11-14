@@ -1,0 +1,26 @@
+{
+  "screenshot-1-main": {
+    "h": "Tìm kiếm hằng ngày, tự động làm giúp bạn",
+    "s": "Chạy tìm kiếm hằng ngày khi mở trình duyệt, hoặc chỉ với một cú nhấp.",
+    "c": [
+      "Bắt đầu chỉ với một cú nhấp",
+      "Bật hoặc tắt từng nhiệm vụ"
+    ]
+  },
+  "screenshot-2-progress": {
+    "h": "Theo dõi tiến độ từng lần chạy",
+    "s": "Mỗi lượt tìm mở một thẻ và tự đóng khi tải xong.",
+    "c": [
+      "Tiến độ lần chạy",
+      "Dừng bất cứ lúc nào"
+    ]
+  },
+  "screenshot-3-settings": {
+    "h": "Tùy chỉnh theo ý bạn",
+    "s": "Chọn số lượt tìm kiếm, khoảng cách giữa các lượt và thời gian mỗi thẻ được mở.",
+    "c": [
+      "Số lượt tìm kiếm",
+      "Khoảng nghỉ giữa các lượt"
+    ]
+  }
+}
