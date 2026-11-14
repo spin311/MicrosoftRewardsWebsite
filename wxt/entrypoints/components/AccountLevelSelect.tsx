@@ -1,3 +1,4 @@
+import { t, type MessageKey } from '@/entrypoints/utils/i18n';
 import InfoTip from './InfoTip';
 
 interface AccountLevelSelectProps {
@@ -5,10 +6,10 @@ interface AccountLevelSelectProps {
     onChange: (level: string) => void;
 }
 
-const LEVELS: { value: string; label: string }[] = [
-    { value: 'member', label: 'Member' },
-    { value: 'silver', label: 'Silver' },
-    { value: 'gold', label: 'Gold' },
+const LEVELS: { value: string; label: MessageKey }[] = [
+    { value: 'member', label: 'accountLevelMember' },
+    { value: 'silver', label: 'accountLevelSilver' },
+    { value: 'gold', label: 'accountLevelGold' },
 ];
 
 // The label links to the Rewards benefits page so users can check which level
@@ -18,13 +19,13 @@ function AccountLevelSelect({ value, onChange }: AccountLevelSelectProps) {
         <div className="row">
             <span className="row-label">
                 <label htmlFor="accountLevel">
-                    <a className="level-link" href="https://rewards.bing.com/about?section=benefits" target="_blank" rel="noopener noreferrer">Account level</a>
+                    <a className="level-link" href="https://rewards.bing.com/about?section=benefits" target="_blank" rel="noopener noreferrer">{t('accountLevelLabel')}</a>
                 </label>
-                <InfoTip text="Sets a default number of searches: Member 5, Silver 10, Gold 20. You can still change it below." />
+                <InfoTip text={t('accountLevelInfo')} />
             </span>
             <select id="accountLevel" className="control" value={value} onChange={(e) => onChange(e.target.value)}>
                 {LEVELS.map((level) => (
-                    <option key={level.value} value={level.value}>{level.label}</option>
+                    <option key={level.value} value={level.value}>{t(level.label)}</option>
                 ))}
             </select>
         </div>

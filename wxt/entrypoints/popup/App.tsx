@@ -18,6 +18,7 @@ import HeartIcon from '@/entrypoints/components/HeartIcon';
 import { usePromptCard } from '@/entrypoints/hooks/usePromptCard';
 import { getCrossPromoLink } from '@/entrypoints/utils/crossPromo';
 import { choosePopupSlots } from '@/entrypoints/utils/popupSlots';
+import { t } from '@/entrypoints/utils/i18n';
 
 // metadata_source shows up in GitHub Sponsors exports, so sponsorships that start
 // in this popup can be told apart from the README and website ones.
@@ -76,16 +77,16 @@ function App() {
         <>
             <header className="top-bar">
                 <img src="/imgs/logo.png" alt="" className="top-bar-logo" />
-                <h1 className="top-bar-title">Search automatic rewards</h1>
+                <h1 className="top-bar-title">{t('extName')}</h1>
                 <a
                     href={SPONSOR_URL}
                     className="sponsor-button"
                     target="_blank"
                     rel="noopener noreferrer"
-                    title="Enjoying the extension? Sponsor from $2 a month, or from $5 a month to get your name in the README."
+                    title={t('sponsorButtonTooltip')}
                 >
                     <HeartIcon className="sponsor-heart" size={14} />
-                    Sponsor
+                    {t('sponsorButton')}
                 </a>
             </header>
 
@@ -96,29 +97,29 @@ function App() {
                 )}
 
                 <section className="card" aria-labelledby="tasks-title">
-                    <h2 className="card-title" id="tasks-title">Daily tasks</h2>
-                    <ToggleRow id="autoCheckbox" label="Daily searches" checked={active} onChange={setActive}
-                               info="Runs your Bing searches once a day: when the browser opens, or within 6 hours of a new day if it stays open. While off, Get rewards skips the searches too." />
-                    <ToggleRow id="autoDaily" label="Daily set" checked={autoDaily} onChange={setAutoDaily}
-                               info="Opens the Rewards dashboard and clicks today's daily set for extra points." />
-                    <ToggleRow id="claimPoints" label="Claim points" checked={claimPoints} onChange={setClaimPoints}
-                               info="Opens the Rewards dashboard and presses Ready to claim, so earned points land in your balance. The tab briefly takes focus." />
+                    <h2 className="card-title" id="tasks-title">{t('dailyTasksHeading')}</h2>
+                    <ToggleRow id="autoCheckbox" label={t('dailySearchesLabel')} checked={active} onChange={setActive}
+                               info={t('dailySearchesInfo', t('getRewardsButton'))} />
+                    <ToggleRow id="autoDaily" label={t('dailySetLabel')} checked={autoDaily} onChange={setAutoDaily}
+                               info={t('dailySetInfo')} />
+                    <ToggleRow id="claimPoints" label={t('claimPointsLabel')} checked={claimPoints} onChange={setClaimPoints}
+                               info={t('claimPointsInfo')} />
                 </section>
 
                 <section className="card" aria-labelledby="settings-title">
-                    <h2 className="card-title" id="settings-title">Search settings</h2>
+                    <h2 className="card-title" id="settings-title">{t('searchSettingsHeading')}</h2>
                     <AccountLevelSelect value={accountLevel} onChange={handleLevelChange} />
-                    <NumberInput id="searches" label="Searches per run" value={searches} min={1} max={999} onChange={setSearches}
-                                 info="How many Bing searches each run opens, one tab at a time." />
-                    <NumberInput id="timeout" label="Seconds between searches" value={timeout} min={0} max={9999} onChange={setTimeoutValue} />
+                    <NumberInput id="searches" label={t('searchesPerRunLabel')} value={searches} min={1} max={999} onChange={setSearches}
+                                 info={t('searchesPerRunInfo')} />
+                    <NumberInput id="timeout" label={t('searchGapLabel')} value={timeout} min={0} max={9999} onChange={setTimeoutValue} />
                     {isTimeoutRisky && (
                         <p className="field-warning" role="status">
-                            Very short gaps may look automated. Try {DEFAULTS.timeout}s.
+                            {t('searchGapWarning', String(DEFAULTS.timeout))}
                         </p>
                     )}
-                    <NumberInput id="closeTime" label="Close each tab after (s)" value={closeTime} min={0} max={300} onChange={setCloseTime} />
-                    <ToggleRow id="openFirstResult" label="Open first result" checked={openFirstResult} onChange={setOpenFirstResult}
-                               info="In each search tab, opens the first result after a short random delay." />
+                    <NumberInput id="closeTime" label={t('closeTabDelayLabel')} value={closeTime} min={0} max={300} onChange={setCloseTime} />
+                    <ToggleRow id="openFirstResult" label={t('openFirstResultLabel')} checked={openFirstResult} onChange={setOpenFirstResult}
+                               info={t('openFirstResultInfo')} />
                 </section>
 
                 {/* One ask at a time: a due prompt card takes the promo tiles' place, which also keeps the
@@ -128,14 +129,14 @@ function App() {
                 ) : slots.lower === 'sponsor' ? (
                     <SponsorMilestoneCard completedRuns={prompt.completedRuns} onSponsor={() => void prompt.sponsor()} onDismiss={prompt.dismiss} />
                 ) : (
-                <nav className="promo-tiles" aria-label="More from the developer">
-                    <a href={REFERRAL_URL} className="promo-tile" title="Join Microsoft Rewards and earn points with Bing" target="_blank" rel="noopener noreferrer">
+                <nav className="promo-tiles" aria-label={t('promoTilesLabel')}>
+                    <a href={REFERRAL_URL} className="promo-tile" title={t('joinRewardsTooltip')} target="_blank" rel="noopener noreferrer">
                         <span className="promo-icon" aria-hidden="true">🎁</span>
-                        <span className="promo-text"><strong>Join Rewards</strong></span>
+                        <span className="promo-text"><strong>{t('joinRewardsTile')}</strong></span>
                     </a>
                     <a href={CROSS_PROMO_LINK.href} className="promo-tile" title={CROSS_PROMO_LINK.label} target="_blank" rel="noopener noreferrer">
                         <img src="/imgs/free-games.png" alt="" className="promo-icon" />
-                        <span className="promo-text"><strong>Free games</strong></span>
+                        <span className="promo-text"><strong>{t('freeGamesTile')}</strong></span>
                     </a>
                     <PhoneAppTile />
                 </nav>
@@ -144,11 +145,11 @@ function App() {
 
             {slots.showFooter && (
                 <footer className="footer">
-                    <a href="https://rewards.bing.com/" target="_blank" rel="noopener noreferrer">Rewards</a>
-                    <a href="https://svitspindler.com/microsoft-automatic-rewards" target="_blank" rel="noopener noreferrer">Help</a>
-                    <a href="https://svitspindler.com/contact" target="_blank" rel="noopener noreferrer">Contact</a>
+                    <a href="https://rewards.bing.com/" target="_blank" rel="noopener noreferrer">{t('footerRewardsLink')}</a>
+                    <a href="https://svitspindler.com/microsoft-automatic-rewards" target="_blank" rel="noopener noreferrer">{t('footerHelpLink')}</a>
+                    <a href="https://svitspindler.com/contact" target="_blank" rel="noopener noreferrer">{t('footerContactLink')}</a>
                     <a href="https://github.com/spin311/MicrosoftRewardsWebsite" target="_blank" rel="noopener noreferrer">GitHub</a>
-                    <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">Donate</a>
+                    <a href="https://svitspindler.com/donate" target="_blank" rel="noopener noreferrer">{t('footerDonateLink')}</a>
                 </footer>
             )}
         </>

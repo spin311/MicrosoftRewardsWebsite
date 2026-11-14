@@ -1,4 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react';
+import { t } from '@/entrypoints/utils/i18n';
 
 // The referrer shows up in Play Console's acquisition reports. The QR code
 // encodes the plain listing URL instead, so it stays sparse enough to scan off
@@ -48,22 +49,22 @@ export default function PhoneAppTile() {
                 ref={tileRef}
                 type="button"
                 className="promo-tile"
-                title="Get the Android app"
+                title={t('androidAppHeading')}
                 aria-expanded={isOpen}
                 aria-controls={panelId}
                 onClick={() => setIsOpen((wasOpen) => !wasOpen)}
             >
                 <span className="promo-icon" aria-hidden="true">📱</span>
-                <span className="promo-text"><strong>Phone app</strong></span>
+                <span className="promo-text"><strong>{t('phoneAppTile')}</strong></span>
             </button>
             {/* Always rendered (hidden when closed) so aria-controls points at something. */}
-            <div className="phone-app-panel" id={panelId} role="group" aria-label="Android app" hidden={!isOpen}>
-                <img src="/imgs/svgs/qr-code-app.svg" alt="QR code for the app on Google Play" className="phone-app-qr" width={90} height={90} />
+            <div className="phone-app-panel" id={panelId} role="group" aria-label={t('androidAppPanelLabel')} hidden={!isOpen}>
+                <img src="/imgs/svgs/qr-code-app.svg" alt={t('androidAppQrAlt')} className="phone-app-qr" width={90} height={90} />
                 <div className="phone-app-text">
-                    <p className="prompt-card-title">Get the Android app</p>
-                    <p className="prompt-card-body">Scan with your phone, or</p>
+                    <p className="prompt-card-title">{t('androidAppHeading')}</p>
+                    <p className="prompt-card-body">{t('androidAppScanHint')}</p>
                     <a href={PHONE_APP_URL} className="phone-app-link" target="_blank" rel="noopener noreferrer">
-                        Open Google Play
+                        {t('androidAppOpenStore')}
                     </a>
                 </div>
             </div>

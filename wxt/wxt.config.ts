@@ -22,14 +22,17 @@ export default defineConfig({
   zip: { includeSources: ['LICENSE'] },
   alias: { '@': '.' },
   manifest: {
-    name: 'Search automatic rewards',
-    description:
-      'Script that gives you maximum amount of microsoft rewards points every day automatically or by a click of a button.',
+    // Text comes from public/_locales/<locale>/messages.json; a language without
+    // a translation falls back to this one.
+    default_locale: 'en',
+    name: '__MSG_extName__',
+    description: '__MSG_extDescription__',
     permissions: ['storage', 'alarms'],
     icons: { 16: 'imgs/logo.png', 32: 'imgs/logo2.png', 48: 'imgs/logo2.png', 128: 'imgs/logo3.png' },
     action: {
       default_icon: { 16: 'imgs/logo.png', 32: 'imgs/logo2.png', 48: 'imgs/logo2.png', 128: 'imgs/logo3.png' },
-      default_title: 'Search automatic rewards',
+      // WXT replaces this with the popup's <title>, which holds the same placeholder.
+      default_title: '__MSG_extName__',
     },
     browser_specific_settings: {
       gecko: { id: 'microsoft_automatic_rewards@example.com', strict_min_version: '91.0' },
